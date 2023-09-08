@@ -56,3 +56,4 @@
 - [ ] Update learning progress.
 - [ ] Introduce frontend and backend logic.
 - [ ] Discuss a unified code format and commit message format.
+- [ ] if possible design the project structure according to P0 and P1
