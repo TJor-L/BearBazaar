@@ -18,6 +18,7 @@ public class User {
     private String password;
     private String email;
     private String phone;
+    private boolean enabled = false;//later used to determine if the user is admin
     private User(Builder builder) {
         this.username = builder.username;
         this.password = builder.password;

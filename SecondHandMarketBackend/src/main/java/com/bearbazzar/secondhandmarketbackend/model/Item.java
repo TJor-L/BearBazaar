@@ -16,7 +16,8 @@ public class Item {
     private String name;
     private String description;
     private String category;
-    private String status;
+    private String status;// whether the item can be put on the market
+    private long price;
     public Item(Builder builder){
         this.id = builder.id;
         this.owner = builder.owner;
@@ -24,6 +25,7 @@ public class Item {
         this.description = builder.description;
         this.category = builder.category;
         this.status = builder.status;
+        this.price = builder.price;
     }
     public Item(){}
     public long getId() {
@@ -47,6 +49,9 @@ public class Item {
     public void setStatus(String status){
         this.status = status;
     }
+    public long getPrice() {
+        return price;
+    }
     public void setOwner(String owner){
         this.owner = owner;
     }
@@ -59,9 +64,14 @@ public class Item {
     public void setCategory(String category){
         this.category = category;
     }
+    public void setPrice(long price){
+        this.price = price;
+    }
     static class Builder{
 
         private long id;
+        @JsonProperty("price")
+        private long price;
         @JsonProperty("owner")
         private String owner;
         @JsonProperty("name")
