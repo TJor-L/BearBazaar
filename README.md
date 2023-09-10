@@ -38,6 +38,31 @@
 - **Ryan Zhang** **(Todo)**
 - **Shawn Xiao** 509194
 
+## Coding format
+
+**[Google Javascript Coding Style Guide](https://google.github.io/styleguide/jsguide.html)**  
+**[Google Java Coding Style Guide](https://google.github.io/styleguide/javaguide.html)**  
+
+Recommend you to use Plugin to format your code:
+* [WebStorm Guide]("https://blog.jetbrains.com/webstorm/2017/04/using-javascript-standard-style/")
+* 
+
+## Commit Message format
+
+**[month.date.ith times you commit this day] version(eg: P2): what did you do**  
+eg: [9.10.2] P0: Finished update and delete items frontend logic
+
+## Version Plan
+
+### P0 Basic prototype
+* [ ] User register and login
+* [ ] User can update the User Info
+* [ ] Shopping page can show a list of all items
+* [ ] User can post items
+* [ ] User can update their items and delete them
+
+### P1 (Todo)
+
 ## Schedule
 
 ### Week 1 (9.5 - 9.11)
@@ -49,11 +74,11 @@
 | Zachary      | Learn HTML, CSS, Javascript.             |              |                  |
 | Ryan         | Learn Javascript, React. Build the meeting schedule |              |                  |
 
-### Week 1 meeting (**Todo**)
+### Week 1 meeting
 
 #### Goals: 
-- [ ] Design the features to be implemented in P0 and version P1.
-- [ ] Update learning progress.
-- [ ] Introduce frontend and backend logic.
-- [ ] Discuss a unified code format and commit message format.
-- [ ] if possible design the project structure according to P0 and P1
+- [X] Design the features to be implemented in P0 and version P1.
+- [X] Update learning progress.
+- [X] Introduce frontend and backend logic.
+- [X] Discuss a unified code format and commit message format.
+- [X] if possible design the project structure according to P0 and P1
