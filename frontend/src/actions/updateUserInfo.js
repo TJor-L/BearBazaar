@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext} from 'react';
 import UserContext from '../contexts/userContext';
 
 function UpdateUserInfo({onClose}) {

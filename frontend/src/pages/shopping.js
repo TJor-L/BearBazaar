@@ -4,20 +4,26 @@ function ShoppingPage() {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
-        fetch('/items')
-            .then(response => {
+        const fetchItems = async () => {
+            try {
+                const response = await fetch('/items');
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    const data = await response.json();
+                    throw new Error(data.message || 'Network response was not ok');
                 }
-                return response.json();
-            })
-            .then(data => setItems(data))
-            .catch(error => console.log('There was a problem with the fetch operation:', error.message));
+                const data = await response.json();
+                setItems(data);
+            } catch (error) {
+                console.log('There was a problem with the fetch operation:', error.message);
+            }
+        };
+
+        fetchItems();
     }, []);
+
 
     return (
         <div>
-            <p>This is the shopping page</p>
             <ul>
                 {items.map(item => (
                     <li key={item.id}>

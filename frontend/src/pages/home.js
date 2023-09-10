@@ -16,9 +16,11 @@ function HomePage() {
             {state === Const.CLOSE && contextUserID !== "" && <div>
                 <button onClick={() => setState(Const.UPDATEUSERINFO)}>Update User Info</button>
                 <button onClick={() => setState(Const.POSTITEM)}>Post Item</button>
+                <button onClick={() => setState(Const.MYSELLINGITEMS)}>My selling items</button>
             </div>}
             {state === Const.UPDATEUSERINFO && <UpdateUserInfo onClose={handleCloseUserStateClick}/>}
             {state === Const.POSTITEM && <PostItem onClose={handleCloseUserStateClick}/>}
+            {state === Const.MYSELLINGITEMS && <MySellingItems onClose={handleCloseUserStateClick}/>}
         </div>
     )
 }

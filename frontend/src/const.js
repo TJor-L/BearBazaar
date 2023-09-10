@@ -5,3 +5,4 @@ export const HOME = 'home'
 export const SHOPPING = 'shopping'
 export const UPDATEUSERINFO = "update user info"
 export const POSTITEM = "post item"
+export const MYSELLINGITEMS = "my selling items"
