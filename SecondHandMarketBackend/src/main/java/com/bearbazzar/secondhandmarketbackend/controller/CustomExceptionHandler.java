@@ -1,5 +1,6 @@
 package com.bearbazzar.secondhandmarketbackend.controller;
 
+import com.bearbazzar.secondhandmarketbackend.exception.ItemNoExistException;
 import com.bearbazzar.secondhandmarketbackend.exception.UserAlreadyExistException;
 import com.bearbazzar.secondhandmarketbackend.exception.UserNotExistException;
 import org.springframework.http.HttpStatus;
@@ -18,5 +19,9 @@ public class CustomExceptionHandler {
     @ExceptionHandler(UserNotExistException.class)
     public final ResponseEntity<String> handleUserNotExistExceptions(Exception ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+    @ExceptionHandler(ItemNoExistException.class)
+    public final ResponseEntity<String> handleItemNoExistExceptions(Exception ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

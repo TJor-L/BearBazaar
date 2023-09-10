@@ -27,7 +27,7 @@ public class UserService {
         return "Registration success";
     }
     @Transactional
-    public String updateUser(User user) {
+    public User updateUser(User user) {
         if (!userRepository.existsById(user.getUsername())) {
             throw new UserAlreadyExistException("User does not exists");
         }
@@ -36,8 +36,7 @@ public class UserService {
             User existUser = optionalUser.get();
             existUser.setPhone(user.getPhone());
             existUser.setEmail(user.getEmail());
-            userRepository.save(existUser);
-            return "Update success";
+            return userRepository.save(existUser);
         }
         return null;
     }
