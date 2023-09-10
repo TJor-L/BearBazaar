@@ -1,19 +1,36 @@
-import React, { useState } from 'react'
+import React from 'react';
+import {useContext, useState} from "react";
+import * as Const from "./const";
+import UserContext from "./contexts/userContext";
+import UserPanel from "./userPanel/userPanel";
 
-function Navigation ({ onNavigationItemClick }) {
+function Navigation({ onNavigationItemClick, onUserPanelClick }) {
 
-    function handlePageClick (pageName) {
-        onNavigationItemClick(pageName)
+    const {contextUsername, contextUserID} = useContext(UserContext);
+
+    function handlePageClick(pageName) {
+        onNavigationItemClick(pageName);
+    }
+
+    function handleUserPanelClick(panelName) {
+        onUserPanelClick(panelName);
     }
 
     return (
         <div className='nav'>
             <ul>
-                <li><a href="#" onClick={() => handlePageClick('home')}>Home</a></li>
-                <li><a href="#" onClick={() => handlePageClick('shopping')}>Shopping</a></li>
+                <li><a href="#" onClick={() => handlePageClick(Const.HOME)}>Home</a></li>
+                <li><a href="#" onClick={() => handlePageClick(Const.SHOPPING)}>Shopping</a></li>
+                {contextUsername && <p>Welcome！ {contextUsername} {contextUserID} </p> }
+                {!contextUsername && <div>
+                                        <li><a href="#" onClick={() => handleUserPanelClick(Const.LOGIN)}>Login</a></li>
+                                        <li><a href="#" onClick={() => handleUserPanelClick(Const.REGISTER)}>Register</a></li>
+                                     </div> }
+
+
             </ul>
         </div>
-    )
+    );
 }
 
-export default Navigation
+export default Navigation;
