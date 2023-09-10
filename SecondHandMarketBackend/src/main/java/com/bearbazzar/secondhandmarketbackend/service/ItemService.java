@@ -40,6 +40,9 @@ public class ItemService {
           return null;
     }
     public void deleteItem(Long id) {
+        if(!itemRepository.existsById(id)) {
+            throw new ItemNoExistException("Item does not exists");
+        }
           itemRepository.deleteById(id);
     }
 }
