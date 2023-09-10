@@ -44,7 +44,7 @@
 **[Google Java Coding Style Guide](https://google.github.io/styleguide/javaguide.html)**  
 
 Recommend you to use Plugin to format your code:
-* [WebStorm Guide]("https://blog.jetbrains.com/webstorm/2017/04/using-javascript-standard-style/")
+* [WebStorm Guide](https://blog.jetbrains.com/webstorm/2017/04/using-javascript-standard-style/)
 * 
 
 ## Commit Message format
