@@ -56,7 +56,7 @@ public class User {
         String password;
         @JsonProperty("email")
         String email;
-        @JsonProperty("phone")
+        @JsonProperty("phoneNumber")
         String phone;
         public Builder setUsername(String username){
             this.username = username;
