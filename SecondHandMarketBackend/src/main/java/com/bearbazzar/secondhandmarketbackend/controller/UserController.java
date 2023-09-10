@@ -4,6 +4,7 @@ import com.bearbazzar.secondhandmarketbackend.model.Token;
 import com.bearbazzar.secondhandmarketbackend.model.User;
 import com.bearbazzar.secondhandmarketbackend.service.AuthenticationService;
 import com.bearbazzar.secondhandmarketbackend.service.UserService;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,6 +29,7 @@ public class UserController {
     public Token login(@RequestBody User user) {
         return authenticationService.authenticate(user);
     }
+
     @PutMapping ("/update")
     public ResponseEntity<User> update(@RequestBody User user) {
         User updatedUser = UserService.updateUser(user);
@@ -35,5 +37,6 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(updatedUser);
+
     }
 }
