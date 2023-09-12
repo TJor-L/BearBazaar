@@ -10,7 +10,7 @@
 
 - [x] **User Registration and Verification**: Exclusivity is maintained by requiring members to register with their university email addresses. Post-verification, they can create personal profiles to initiate trading.
 
-- [ ] **Item Posting**: Simplified posting allows users to list items with descriptions, photos, and set prices. A categorized system, including 'Electronics', 'Apparel', 'Books', and more, ensures easy browsing.
+- [x] **Item Posting**: Simplified posting allows users to list items with descriptions, photos, and set prices. A categorized system, including 'Electronics', 'Apparel', 'Books', and more, ensures easy browsing.
 
 - [ ] **Search and Filter Functionality**: Users can swiftly pinpoint items using a potent search engine and filter results based on categories, price, and condition.
 
