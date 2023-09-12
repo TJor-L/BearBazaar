@@ -35,7 +35,7 @@
 
 - **Dijkstra Liu** 508764
 - **Zachary Wen** 509169
-- **Ryan Zhang** **(Todo)**
+- **Ryan Zhang** 509241
 - **Shawn Xiao** 509194
 
 ## Coding format
