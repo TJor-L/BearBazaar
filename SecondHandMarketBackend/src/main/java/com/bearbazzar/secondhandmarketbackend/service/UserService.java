@@ -22,6 +22,9 @@ public class UserService {
         if (userRepository.existsById(user.getUsername())) {
             throw new UserAlreadyExistException("User already exists");
         }
+        if(userRepository.existsByStudentId(user.getStudentId())){
+            throw new UserAlreadyExistException("This Student Id already have an account");
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return "Registration success";

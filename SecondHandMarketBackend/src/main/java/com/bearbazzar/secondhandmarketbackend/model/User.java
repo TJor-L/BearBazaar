@@ -6,7 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -14,12 +17,14 @@ import javax.persistence.Table;
 public class User {
     @Id
     private String username;
+    private Long studentId;
     @JsonIgnore
     private String password;
     private String email;
     private String phone;
     private boolean enabled = false;//later used to determine if the user is admin
     private User(Builder builder) {
+        this.studentId = builder.studentId;
         this.username = builder.username;
         this.password = builder.password;
         this.email = builder.email;
@@ -48,8 +53,16 @@ public class User {
     public  void setPhone(String phone){
         this.phone = phone;
     }
+    public Long getStudentId(){
+        return studentId;
+    }
+    public void setStudentId(Long studentId){
+        this.studentId = studentId;
+    }
 
     public static class Builder{
+        @JsonProperty("studentId")
+        Long studentId;
         @JsonProperty("username")
         String username;
         @JsonProperty("password")
@@ -72,6 +85,10 @@ public class User {
         }
         public Builder setPhone(String phone){
             this.phone = phone;
+            return this;
+        }
+        public Builder setStudentId(Long studentId){
+            this.studentId = studentId;
             return this;
         }
         public User build(){

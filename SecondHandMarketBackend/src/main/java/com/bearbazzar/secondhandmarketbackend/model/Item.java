@@ -12,12 +12,14 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String owner;
+    @ManyToOne
+    @JoinColumn(name = "owner")
+    private User owner;
     private String name;
     private String description;
     private String category;
-    private String status;// whether the item can be put on the market
-    private long price;
+    private Status status;// whether the item can be put on the market
+    private Double price;
     public Item(Builder builder){
         this.id = builder.id;
         this.owner = builder.owner;
@@ -31,7 +33,7 @@ public class Item {
     public long getId() {
         return id;
     }
-    public String getOwner() {
+    public User getOwner() {
         return owner;
     }
     public String getName() {
@@ -43,16 +45,16 @@ public class Item {
     public String getCategory() {
         return category;
     }
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
-    public void setStatus(String status){
+    public void setStatus(Status status){
         this.status = status;
     }
-    public long getPrice() {
+    public Double getPrice() {
         return price;
     }
-    public void setOwner(String owner){
+    public void setOwner(User owner){
         this.owner = owner;
     }
     public void setName(String name){
@@ -64,16 +66,16 @@ public class Item {
     public void setCategory(String category){
         this.category = category;
     }
-    public void setPrice(long price){
+    public void setPrice(Double price){
         this.price = price;
     }
     static class Builder{
 
         private long id;
         @JsonProperty("price")
-        private long price;
+        private Double price;
         @JsonProperty("owner")
-        private String owner;
+        private User owner;
         @JsonProperty("name")
         private String name;
         @JsonProperty("description")
@@ -81,12 +83,17 @@ public class Item {
         @JsonProperty("category")
         private String category;
         @JsonProperty("status")
-        private String status;
+        private Status status;
+        public Builder setPrice(Double price){
+            this.price = price;
+            return this;
+        }
+
         public Builder setId(long id){
             this.id = id;
             return this;
         }
-        public Builder setOwner(String owner){
+        public Builder setOwner(User owner){
             this.owner = owner;
             return this;
         }
@@ -102,7 +109,7 @@ public class Item {
             this.category = category;
             return this;
         }
-        public Builder setStatus(String status){
+        public Builder setStatus(Status status){
             this.status = status;
             return this;
         }

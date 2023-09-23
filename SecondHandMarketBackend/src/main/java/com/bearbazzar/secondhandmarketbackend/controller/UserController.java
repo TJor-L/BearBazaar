@@ -37,6 +37,6 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(updatedUser);
-
     }
+
 }
