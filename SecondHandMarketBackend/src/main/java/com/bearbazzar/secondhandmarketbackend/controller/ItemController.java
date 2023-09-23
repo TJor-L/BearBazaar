@@ -1,6 +1,8 @@
 package com.bearbazzar.secondhandmarketbackend.controller;
 
+import com.bearbazzar.secondhandmarketbackend.model.Filter;
 import com.bearbazzar.secondhandmarketbackend.model.Item;
+import com.bearbazzar.secondhandmarketbackend.model.User;
 import com.bearbazzar.secondhandmarketbackend.service.ItemService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,5 +41,12 @@ public class ItemController {
     public void deleteItem(@PathVariable("id") Long id) {
         itemService.deleteItem(id);
     }
-
+    @PostMapping("/owner")
+    public List<Item> listItemByOwner(@RequestBody User owner){
+        return itemService.GetItemByOwner(owner);
+    }
+    @PostMapping("/search")
+    public List<Item> searchItem(@RequestBody Filter filter){
+        return itemService.searchItem(filter);
+    }
 }

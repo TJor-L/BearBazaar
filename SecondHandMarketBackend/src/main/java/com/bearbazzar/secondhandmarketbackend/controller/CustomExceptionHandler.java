@@ -1,5 +1,6 @@
 package com.bearbazzar.secondhandmarketbackend.controller;
 
+import com.bearbazzar.secondhandmarketbackend.exception.IdAlreadyBeenUsedException;
 import com.bearbazzar.secondhandmarketbackend.exception.ItemNoExistException;
 import com.bearbazzar.secondhandmarketbackend.exception.UserAlreadyExistException;
 import com.bearbazzar.secondhandmarketbackend.exception.UserNotExistException;
@@ -23,5 +24,9 @@ public class CustomExceptionHandler {
     @ExceptionHandler(ItemNoExistException.class)
     public final ResponseEntity<String> handleItemNoExistExceptions(Exception ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(IdAlreadyBeenUsedException.class)
+    public final ResponseEntity<String> handleIdAlreadyBeenUsedExceptions(Exception ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 }
