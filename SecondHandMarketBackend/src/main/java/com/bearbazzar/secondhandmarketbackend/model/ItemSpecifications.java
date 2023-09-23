@@ -21,9 +21,10 @@ public class ItemSpecifications {
     public static Specification<Item> descriptionContains(String description) {
         return (root, query, criteriaBuilder) -> {
             if (description == null || description.isEmpty()) return null;
-            return criteriaBuilder.like(root.get("description"), "%" + description + "%");
+            return criteriaBuilder.like(criteriaBuilder.lower(root.get("description")), "%" + description.toLowerCase() + "%");
         };
     }
+
     public static Specification<Item> nameContains(String name) {
         return (root, query, criteriaBuilder) -> {
             if (name == null || name.isEmpty()) return null;
