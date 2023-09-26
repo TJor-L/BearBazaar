@@ -1,11 +1,9 @@
 import React, {useContext, useState} from 'react';
 import UserContext from '../contexts/userContext';
 
-//Elements that are required to fill when posting an item
 function PostItem({onClose}) {
-  //Extract UserID from UserContext
   const {userID} = useContext(UserContext);
-  //Hook for more details
+
   const [id, setId] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -14,31 +12,29 @@ function PostItem({onClose}) {
   const [price, setPrice] = useState('');
   const [error, setError] = useState(null);
 
-  
   async function handleNewItem() {
     // Check if all fields are filled
     if (!id || !name || !description || !category || !status || !price) {
       setError('All fields are required!');
       return;
     }
-    //Send post request
+
     const response = await fetch('/items', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        id: Number(id), // Convert id to number
-        owner: userID, // Use the owner from context
+        id: Number(id),
+        owner: userID, // use the owner from context
         name: name,
         description: description,
         category: category,
         status: status,
-        price: Number(price), // Convert id to number
+        price: Number(price),
       }),
     });
 
-    //Check server response
     if (response.ok) {
       onClose();
     } else {
@@ -46,7 +42,7 @@ function PostItem({onClose}) {
       setError(data.message || 'An error occurred while adding the item.');
     }
   }
-//Fields that need to be filled for posting a new item
+
   return (
       <div className="post-item">
         {error && <p className="error">{error}</p>}
@@ -71,5 +67,4 @@ function PostItem({onClose}) {
   );
 }
 
-//Exporting everything in PostItem for used elsewhere
 export default PostItem;

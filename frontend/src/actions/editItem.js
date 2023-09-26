@@ -26,10 +26,7 @@ function EditItem({item}) {
           price,
         }),
       });
-      //Get response data
       const data = await response.json();
-
-      //Reassuring update status of the item updated
       if (response.status === 200) {
         console.log('Item updated:', data);
       } else {
@@ -40,9 +37,7 @@ function EditItem({item}) {
     }
   };
 
-  //Send delete request to remove item
   const deleteItem = async () => {
-    //Sending a confirmation for deleting the item
     if (window.confirm('Are you sure you want to delete this item?')) {
       try {
         const response = await fetch(`/items/${item.id}`, {
@@ -51,8 +46,6 @@ function EditItem({item}) {
             'Content-Type': 'application/json',
           },
         });
-
-        //Check for item deletion status
         if (response.status === 200) {
           console.log('Item deleted successfully');
         } else {
@@ -64,7 +57,6 @@ function EditItem({item}) {
     }
   };
 
-  //Edit form for the items
   return (
       <div>
         <form onSubmit={(e) => {
@@ -103,5 +95,4 @@ function EditItem({item}) {
   );
 }
 
-//Export everything here to use elsewhere
 export default EditItem;
