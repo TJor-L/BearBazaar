@@ -1,12 +1,9 @@
 import UserContext from '../contexts/userContext';
 import {useContext, useState} from 'react';
 
-//Enetering the username and password
 function Login({onClose}) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
-  //Extract the infor entered
   const {
     contextUsername,
     setContextUsername,
@@ -16,13 +13,10 @@ function Login({onClose}) {
   const [error, setError] = useState(null);
 
   async function handleLogin() {
-    //Check to see if all fields are filled
     if (!username || !password) {
       setError('All fields are required!');
       return;
     }
-
-    //Make a post request
     const response = await fetch('/login', {
       method: 'POST',
       headers: {
@@ -34,7 +28,6 @@ function Login({onClose}) {
       }),
     });
 
-    //If login successful, updates the info, if not then set it to default values (DijkstraのIDと名前です)
     const data = await response.json();
     if (response.ok) {
       setContextUsername(username);
@@ -67,5 +60,4 @@ function Login({onClose}) {
   );
 }
 
-//Export Login for any other use externally
 export default Login;
