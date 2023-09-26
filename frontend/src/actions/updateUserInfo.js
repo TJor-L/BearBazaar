@@ -1,7 +1,6 @@
 import React, {useContext, useState} from 'react';
 import UserContext from '../contexts/userContext';
 
-//Components for user information
 function UpdateUserInfo({onClose}) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -11,13 +10,11 @@ function UpdateUserInfo({onClose}) {
   const [error, setError] = useState(null);
   const {setContextUsername, setContextUserID} = useContext(UserContext);
 
-  //Check to see if all fields are filled
   async function handleUpdate() {
     if (!userID || !username || !password || !phone || !email) {
       setError('All fields are required!');
       return;
     }
-    //Send a post response for updating user information
     const response = await fetch('/update', {
       method: 'POST',
       headers: {
@@ -32,7 +29,6 @@ function UpdateUserInfo({onClose}) {
       }),
     });
 
-//Check server response
     const data = await response.json();
 
     if (response.ok) {
@@ -45,7 +41,6 @@ function UpdateUserInfo({onClose}) {
     }
   }
 
-  //Items need to be filled in the user information form
   return (
       <div className="register">
         <button onClick={onClose}>close</button>
@@ -85,5 +80,4 @@ function UpdateUserInfo({onClose}) {
   );
 }
 
-//Export everything in UpdateUserInfo for used elsewhere
 export default UpdateUserInfo;
