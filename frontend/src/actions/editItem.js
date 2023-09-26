@@ -11,7 +11,7 @@ function EditItem({item}) {
   // PUT请求，更新项目
   const updateItem = async () => {
     try {
-      const response = await fetch(`/items/${item.id}`, {
+      const response = await fetch(`http://localhost:8080/items/${item.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

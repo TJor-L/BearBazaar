@@ -15,7 +15,7 @@ function Register({onClose}) {
       setError('All fields are required!');
       return;
     }
-    const response = await fetch('/register', {
+    const response = await fetch('http://localhost:8080/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -24,8 +24,8 @@ function Register({onClose}) {
         username: username,
         password: password,
         email: email,
-        phone: phone,
-        userID: userID,
+        phoneNumber: phone,
+        studentId: userID,
       }),
     });
 

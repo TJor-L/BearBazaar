@@ -2,6 +2,7 @@ import {useContext, useState} from 'react';
 import * as Const from '../const';
 import UpdateUserInfo from '../actions/updateUserInfo';
 import PostItem from '../actions/postItem';
+import MySellingItems from "./mySellingItems";
 import UserContext from '../contexts/userContext';
 
 function HomePage() {
