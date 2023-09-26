@@ -6,13 +6,19 @@ import UserContext from '../contexts/userContext';
 
 function HomePage() {
   const [state, setState] = useState(Const.CLOSE);
+
+  //Extract user details
   const {contextUsername, contextUserID} = useContext(UserContext);
 
+  //Return to the main buttons
   function handleCloseUserStateClick() {
     setState(Const.CLOSE);
   }
 
+//Components Rendering
   return (
+    //Statements of what button will appear if one thing is closed
+    //First three determines the bottons being displayed and the last three returns to HomePage when things are closed
       <div>
         {state === Const.CLOSE && contextUserID !== '' && <div>
           <button onClick={() => setState(Const.UPDATEUSERINFO)}>Update User
@@ -33,4 +39,5 @@ function HomePage() {
   );
 }
 
+//Export everything in the HomePage to be used elsewhere
 export default HomePage;
