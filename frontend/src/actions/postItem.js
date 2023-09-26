@@ -19,7 +19,7 @@ function PostItem({onClose}) {
       return;
     }
 
-    const response = await fetch('/items', {
+    const response = await fetch('http://localhost:8080/items', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
