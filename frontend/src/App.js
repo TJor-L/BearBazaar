@@ -8,19 +8,23 @@ import * as Const from './const';
 import UserContext from './contexts/userContext';
 
 function App() {
+  //initialization: page at home, user panel closed
   const [selectedPage, setSelectedPage] = useState('home');
   const [selectedUserPanel, setSelectedUserPanel] = useState(Const.CLOSE);
   const [contextUsername, setContextUsername] = useState('');
   const [contextUserID, setContextUserID] = useState('');
 
+  //go to selected page
   function handleOnNavigationItemClick(pageName) {
     setSelectedPage(pageName);
   }
 
+  //open selected user panel
   function handleOnUserPanelClick(panelName) {
     setSelectedUserPanel(panelName);
   }
 
+  //close user panel
   function handleCloseUserPanelClick() {
     setSelectedUserPanel(Const.CLOSE);
   }

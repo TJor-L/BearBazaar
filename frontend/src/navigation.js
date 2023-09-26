@@ -6,14 +6,17 @@ function Navigation({onNavigationItemClick, onUserPanelClick}) {
 
   const {contextUsername, contextUserID} = useContext(UserContext);
 
+//response to user's click to navigate on the page
   function handlePageClick(pageName) {
     onNavigationItemClick(pageName);
   }
 
+  //response to user's click on the user panel
   function handleUserPanelClick(panelName) {
     onUserPanelClick(panelName);
   }
 
+  //implementation of the two functions above
   return (
       <div className="nav">
         <ul>
