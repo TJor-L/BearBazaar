@@ -1,11 +1,14 @@
 import React, {useEffect, useState} from 'react';
 
+//Assign a state to the items displayed
 function ShoppingPage() {
   const [items, setItems] = useState([]);
 
+  //Search for the information of the item
   useEffect(() => {
     const fetchItems = async () => {
       try {
+        //Check with the server for networking and item status
         const response = await fetch('/items');
         if (!response.ok) {
           const data = await response.json();
@@ -18,7 +21,7 @@ function ShoppingPage() {
             error.message);
       }
     };
-
+//Empty array
     fetchItems();
   }, []);
 
@@ -40,4 +43,5 @@ function ShoppingPage() {
   );
 }
 
+//Export everything in ShoppingPage to be used elsewhere
 export default ShoppingPage;

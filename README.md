@@ -54,25 +54,51 @@ eg: [9.10.2] P0: Finished update and delete items frontend logic
 
 ## Version Plan
 
-### P0 Basic prototype
+### P0 Basic prototype (Need Testing)
 * [ ] User register and login
 * [ ] User can update the User Info
 * [ ] Shopping page can show a list of all items
 * [ ] User can post items
 * [ ] User can update their items and delete them
 
-### P1 (Todo)
+
+### P1 Feature (to be discussed)
+#### Search and filter
+* [ ] Filter based on categories
+* [ ] Filter based on price range
+* [ ] Search based on Name
+* [ ] Filter based on distance
+* [ ] Advanced search
+* [ ] Recommendation based on user behavior
+#### Feedback and rating system
+* [ ] Feedback after transaction
+#### Admin and review
+* [ ] Admin user can delete illegal products
+* [ ] Admin can review products and put legal products on the market
+* [ ] Admin can add admin users
+#### Message system
+* [ ] Allow buyers to leave messages to sellers
+
 
 ## Schedule
 
+### Week 2 (9.19 - 9.26)
+
+| Group Member | Weekly Contributions                     | Missed Goals |
+|--------------|------------------------------------------| ------------ |
+| Dijkstra     | Communicate with backend, Testing P0, Debug    |         |                  
+| Shawn        | Communicate with frontend, Testing P0, Debug|                 |
+| Zachary      | Learning React, add comment to frontend            |            |                  
+| Ryan         |Learning React, add comment to frontend   |            |                  
+
 ### Week 1 (9.5 - 9.11)
 
-| Group Member | Weekly Contributions                     | Missed Goals | Next Week’s Goal |
-|--------------|------------------------------------------| ------------ | ---------------- |
-| Dijkstra     | Create basic React frontend framework    |              |                  |
-| Shawn        | Create basic Spring boot back end framework |                  |
-| Zachary      | Learn HTML, CSS, Javascript.             |              |                  |
-| Ryan         | Learn Javascript, React. Build the meeting schedule |              |                  |
+| Group Member | Weekly Contributions                     | Missed Goals | 
+|--------------|------------------------------------------| ------------ | 
+| Dijkstra     | Create basic React frontend framework    |         Nothing |                  
+| Shawn        | Create basic Spring boot back end framework |      Nothing       |     
+| Zachary      | Learn HTML, CSS, Javascript.             |   Nothing           |                  
+| Ryan         | Learn Javascript, React. Build the meeting schedule |      Nothing        |                  
 
 ### Week 1 meeting
 
