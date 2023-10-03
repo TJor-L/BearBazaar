@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const SearchPanel = ({ items = [] }) => {  // Set default value for items prop
+const SearchPanel = ({ items = [] }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
@@ -8,12 +8,42 @@ const SearchPanel = ({ items = [] }) => {  // Set default value for items prop
     setSearchTerm(event.target.value);
   };
 
-  useEffect(() => {
+  const handleSearch = async () => {
+    // Uncomment below lines once backend is ready
+    /*
+    try {
+      const response = await fetch('http://localhost:8080/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ searchTerm }),
+      });
+      const data = await response.json();
+      setSearchResults(data.results); // assuming the response contains a results array
+    } catch (error) {
+      console.error('Failed to fetch search results:', error);
+    }
+    */
+
+    // Remove below line once backend is ready
+    mockSearch();
+  };
+
+  // Simulated function to mock backend search results
+  const mockSearch = () => {
     const results = items.filter(item =>
       item.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setSearchResults(results);
-  }, [searchTerm, items]);
+  };
+
+  // Uncomment below useEffect hook once backend interaction is ready
+  /*
+  useEffect(() => {
+    handleSearch();
+  }, [searchTerm]);
+  */
 
   return (
     <div>
@@ -23,6 +53,7 @@ const SearchPanel = ({ items = [] }) => {  // Set default value for items prop
         value={searchTerm}
         onChange={handleChange}
       />
+      <button onClick={handleSearch}>Search</button> {/* Added Search button */}
       <ul>
         {searchResults.map(item => (
           <li key={item}>{item}</li>
