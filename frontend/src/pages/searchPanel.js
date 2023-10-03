@@ -1,7 +1,6 @@
-// SearchPanel.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const SearchPanel = ({ items }) => {
+const SearchPanel = ({ items = [] }) => {  // Set default value for items prop
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
@@ -9,7 +8,7 @@ const SearchPanel = ({ items }) => {
     setSearchTerm(event.target.value);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const results = items.filter(item =>
       item.toLowerCase().includes(searchTerm.toLowerCase())
     );
