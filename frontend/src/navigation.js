@@ -1,44 +1,43 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import * as Const from './const';
 import UserContext from './contexts/userContext';
+import { Link } from 'react-router-dom';
+import SearchBar from './modules/searchBar';
+import { Menu } from 'antd';  // <-- Import antd Menu
 
-function Navigation({onNavigationItemClick, onUserPanelClick}) {
+function Navigation({ onUserPanelClick }) {
 
-  const {contextUsername, contextUserID} = useContext(UserContext);
+    const { contextUsername } = useContext(UserContext);
 
-//response to user's click to navigate on the page
-  function handlePageClick(pageName) {
-    onNavigationItemClick(pageName);
-  }
+    return (
+        <Menu mode="horizontal">
+            <Menu.Item key="home">
+                <Link to={Const.HOME}>Home</Link>
+            </Menu.Item>
 
-  //response to user's click on the user panel
-  function handleUserPanelClick(panelName) {
-    onUserPanelClick(panelName);
-  }
+            {contextUsername ? (
+                <>
+                    <Menu.Item key="user">
 
-  //implementation of the two functions above
-  return (
-      <div className="nav">
-        <ul>
-          <li><a href="#" onClick={() => handlePageClick(Const.HOME)}>Home</a>
-          </li>
-          <li><a href="#"
-                 onClick={() => handlePageClick(Const.SHOPPING)}>Shopping</a>
-          </li>
-          {contextUsername &&
-              <p>Welcome！ {contextUsername} {contextUserID} </p>}
-          {!contextUsername && <div>
-            <li><a href="#"
-                   onClick={() => handleUserPanelClick(Const.LOGIN)}>Login</a>
-            </li>
-            <li><a href="#" onClick={() => handleUserPanelClick(
-                Const.REGISTER)}>Register</a></li>
-          </div>}
+                        <Link to={Const.USER}>Welcome! {contextUsername}</Link>
+                    </Menu.Item>
+                </>
+            ) : (
+                <>
+                    <Menu.Item key="login" onClick={() => onUserPanelClick(Const.LOGIN)}>
+                        Login
+                    </Menu.Item>
+                    <Menu.Item key="register" onClick={() => onUserPanelClick(Const.REGISTER)}>
+                        Register
+                    </Menu.Item>
+                </>
+            )}
 
-
-        </ul>
-      </div>
-  );
+            <Menu.Item key="search">
+                <SearchBar />
+            </Menu.Item>
+        </Menu>
+    );
 }
 
 export default Navigation;

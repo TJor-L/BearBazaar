@@ -13,31 +13,35 @@ function Login({onClose}) {
   const [error, setError] = useState(null);
 
   async function handleLogin() {
-    if (!username || !password) {
-      setError('All fields are required!');
-      return;
-    }
-    const response = await fetch('http://localhost:8080/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-      }),
-    });
 
-    const data = await response.json();
-    if (response.ok) {
-      setContextUsername(username);
-      setContextUserID('066666');
-      onClose();
-    } else {
-      setContextUsername('Dijkstra');
-      setContextUserID('508764');
-      setError(data.message || 'An error occurred during login.');
-    }
+    setContextUsername('Dijkstra');
+    setContextUserID('508764');
+    onClose();
+    // if (!username || !password) {
+    //   setError('All fields are required!');
+    //   return;
+    // }
+    // const response = await fetch('http://localhost:8080/login', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     username: username,
+    //     password: password,
+    //   }),
+    // });
+
+    // const data = await response.json();
+    // if (response.ok) {
+    //   setContextUsername(username);
+    //   setContextUserID('066666');
+    //   onClose();
+    // } else {
+    //   setContextUsername('Dijkstra');
+    //   setContextUserID('508764');
+    //   setError(data.message || 'An error occurred during login.');
+    // }
   }
 
   return (
