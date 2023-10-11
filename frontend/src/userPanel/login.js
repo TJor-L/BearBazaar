@@ -13,8 +13,6 @@ function Login({onClose}) {
   const [error, setError] = useState(null);
 
   async function handleLogin() {
-//<<<<<<< HEAD
-
     setContextUsername('Dijkstra');
     setContextUserID('508764');
     onClose();

@@ -38,6 +38,7 @@ function UserPanel({ onClose, selectedUserPanel }) {
             {content}
         </Modal>
     );
+
 }
 
 export default UserPanel;

@@ -4,7 +4,7 @@ import SearchingPage from './pages/searching';
 import * as Const from './const';
 
 //equivalent use as if statement to receive the input from user to select pages
-function Body({selectedPage}) { //TODO: Thinking about how to pass those searching keys and parameters to here
+function Body({selectedPage}) {
   return (
       <div>
         {selectedPage === Const.USER && <UserPage/>}
