@@ -1,4 +1,0 @@
-0000000000000000000000000000000000000000 aad4812a71494945104ae8f4758161d87d4ec504 Dijkstra <l.tingjun@wustl.edu> 1693954978 -0500	clone: from github.com:TJor-L/BearBazaar.git
-aad4812a71494945104ae8f4758161d87d4ec504 a72fc756b45eaad4e4fe760d71175d3cd983007d Dijkstra <l.tingjun@wustl.edu> 1693955774 -0500	commit: 9.5: update readme
-a72fc756b45eaad4e4fe760d71175d3cd983007d 1ff69da6b6855c0019e2d41015e398b954383c2a Dijkstra <l.tingjun@wustl.edu> 1693971084 -0500	rebase (finish): refs/heads/main onto 1ff69da6b6855c0019e2d41015e398b954383c2a
-1ff69da6b6855c0019e2d41015e398b954383c2a b34a3e91a4140f33d01c6f952312fb033d2cd35d Dijkstra <l.tingjun@wustl.edu> 1693971873 -0500	commit (merge): 9.5: add react frontend framework
