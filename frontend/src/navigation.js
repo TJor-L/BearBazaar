@@ -21,6 +21,9 @@ function Navigation({ onUserPanelClick }) {
 
                         <Link to={Const.USER}>Welcome! {contextUsername}</Link>
                     </Menu.Item>
+                    <Menu.Item key="logout" onClick={() => onUserPanelClick(Const.LOGOUT)}>
+                        Logout
+                    </Menu.Item>
                 </>
             ) : (
                 <>

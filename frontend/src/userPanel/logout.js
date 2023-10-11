@@ -1,24 +1,27 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
+import { Button } from 'antd';
 import UserContext from '../contexts/userContext';
 
-function Logout({onClose}) {
-  const {setContextUsername, setContextUserID} = useContext(UserContext);
+function Logout({ onClose }) {
+    const { setContextUsername, setContextUserID } = useContext(UserContext);
 
-  const handleLogout = () => {
-    // Reset context values
-    setContextUsername('');
-    setContextUserID('');
-    // Add more things that need to be cleared here if needed
-    // Close the user panel or navigate to a different page as needed
-    onClose();
-  };
+    const handleLogout = () => {
+        // Reset context values
+        setContextUsername('');
+        setContextUserID('');
+        onClose();
+    };
 
-  return (
-    <div className="logout">
-      <p>Are you sure you want to logout?</p>
-      <button onClick={handleLogout}>Logout</button>
-    </div>
-  );
+    return (
+        <div className="logout">
+            <h2>Logout Confirmation</h2>
+            <p>Are you sure you want to logout?</p>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
+                <Button onClick={onClose} style={{ marginRight: '10px' }}>Cancel</Button>
+                <Button type="primary" onClick={handleLogout}>Logout</Button>
+            </div>
+        </div>
+    );
 }
 
 export default Logout;

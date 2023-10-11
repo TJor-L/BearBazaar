@@ -7,14 +7,8 @@ import UserContext from '../contexts/userContext';
 import Logout from './logout';
 
 function UserPanel({ onClose, selectedUserPanel }) {
-    const { clearUser } = useContext(UserContext);
 
     // For handling Logout
-    const handleLogout = () => {
-        clearUser();
-        onClose();
-    };
-
     // 判断是否显示 Modal
     const isVisible = [Const.LOGIN, Const.REGISTER, Const.LOGOUT].includes(selectedUserPanel);
 
@@ -25,7 +19,7 @@ function UserPanel({ onClose, selectedUserPanel }) {
     } else if (selectedUserPanel === Const.REGISTER) {
         content = <Register onClose={onClose} />;
     } else if (selectedUserPanel === Const.LOGOUT) {
-        content = <Logout onClose={handleLogout} />;
+        content = <Logout onClose={onClose} />;
     }
 
     return (

@@ -1,5 +1,6 @@
 import UserContext from '../contexts/userContext';
-import {useContext, useState} from 'react';
+import { useContext, useState } from 'react';
+import { Input, Button, Alert } from 'antd';
 
 function Login({onClose}) {
   const [username, setUsername] = useState('');
@@ -89,26 +90,30 @@ function Login({onClose}) {
 //     }
 //>>>>>>> 0e56097faf1f6f53f2b8f5da60300dc86e2dd94e
   }
-  
 
-  return (
-      <div className="login">
-        {error && <p className="error">{error}</p>}
-        <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Username"
-        />
-        <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-        />
-        <button onClick={handleLogin}>Login</button>
-      </div>
-  );
+
+    return (
+        <div className="login">
+            <h2>Login</h2>
+            {error && <Alert message={error} type="error" showIcon style={{ marginBottom: '16px' }} />}
+            <Input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Username"
+                style={{ marginBottom: '10px' }}
+            />
+            <Input.Password
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                style={{ marginBottom: '20px' }}
+            />
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button type="primary" onClick={handleLogin}>Login</Button>
+            </div>
+        </div>
+    );
 }
 
 export default Login;
