@@ -14,7 +14,6 @@ function Navigation({ onUserPanelClick }) {
             <Menu.Item key="home">
                 <Link to={Const.HOME}>Home</Link>
             </Menu.Item>
-
             {contextUsername ? (
                 <>
                     <Menu.Item key="user">
