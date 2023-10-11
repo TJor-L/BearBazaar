@@ -1,7 +1,6 @@
 import logo from './logo.png';
 import './App.css';
 import Navigation from './navigation';
-import Body from './body';
 import UserPanel from './userPanel/userPanel';
 import {useState} from 'react';
 import * as Const from './const';
@@ -42,7 +41,7 @@ function App() {
                     <Content>
                         {selectedUserPanel !== Const.CLOSE && <UserPanel onClose={handleCloseUserPanelClick} selectedUserPanel={selectedUserPanel} />}
                         <Routes>
-                            <Route path="/user" element={<UserPage />} />
+                            <Route path="/user/:urlUserID" element={<UserPage />} />
                             <Route path="/home" element={<HomePage />} />
                             <Route path="/searching" element={<SearchingPage />} />
                             <Route path="/" element={<HomePage />} exact />

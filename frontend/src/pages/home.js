@@ -6,7 +6,7 @@ function HomePage() {
       This is Home Page
     </div>
   )
-// =======
+// TODO: Create some fake data and list those items
 // import {useContext, useState} from 'react';
 // import * as Const from '../const';
 // import UpdateUserInfo from '../actions/updateUserInfo';

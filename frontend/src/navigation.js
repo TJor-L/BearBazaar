@@ -7,7 +7,7 @@ import { Menu } from 'antd';  // <-- Import antd Menu
 
 function Navigation({ onUserPanelClick }) {
 
-    const { contextUsername } = useContext(UserContext);
+    const { contextUsername, contextUserID} = useContext(UserContext);
 
     return (
         <Menu mode="horizontal">
@@ -18,7 +18,7 @@ function Navigation({ onUserPanelClick }) {
                 <>
                     <Menu.Item key="user">
 
-                        <Link to={Const.USER}>Welcome! {contextUsername}</Link>
+                        <Link to={Const.USER + `/${contextUserID}`}>Welcome! {contextUsername}</Link>
                     </Menu.Item>
                     <Menu.Item key="logout" onClick={() => onUserPanelClick(Const.LOGOUT)}>
                         Logout
