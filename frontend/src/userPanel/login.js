@@ -13,6 +13,7 @@ function Login({onClose}) {
   const [error, setError] = useState(null);
 
   async function handleLogin() {
+//<<<<<<< HEAD
 
     setContextUsername('Dijkstra');
     setContextUserID('508764');
@@ -42,7 +43,55 @@ function Login({onClose}) {
     //   setContextUserID('508764');
     //   setError(data.message || 'An error occurred during login.');
     // }
+// =======
+//     if (!username || !password) {
+//       setError('All fields are required!');
+//       return;
+//     }
+//
+//     try {
+//       // Mocking fetch response
+//       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulating network delay
+//
+//       // Replace the lines below with actual conditions for your use case
+//       if (username === 'testUser' && password === 'testPassword') {
+//         setContextUsername(username);
+//         setContextUserID('12345'); // Mock user ID
+//         setError(null);
+//         onClose(); // Trigger whatever should happen after a successful login
+//       } else {
+//         setError('Invalid credentials');
+//       }
+//
+//       // Comment or remove the following lines related to the actual fetch
+//       /*
+//       const response = await fetch('http://localhost:8080/login', {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({ username, password }),
+//       });
+//
+//       if (!response.ok) {
+//         const data = await response.json();
+//         setError(data.message || `An error occurred: ${response.status} ${response.statusText}`);
+//         return;
+//       }
+//
+//       const data = await response.json();
+//       setContextUsername(username);
+//       setContextUserID('066666'); // You may want to use real user ID from response data
+//       onClose();
+//       */
+//
+//     } catch (error) {
+//       console.error('Error during login:', error);
+//       setError('An unexpected error occurred');
+//     }
+//>>>>>>> 0e56097faf1f6f53f2b8f5da60300dc86e2dd94e
   }
+  
 
   return (
       <div className="login">

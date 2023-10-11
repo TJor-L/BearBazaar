@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Modal } from 'antd';
+import * as Const from '../const';
 import Login from './login';
 import Register from './register';
-import * as Const from '../const';
+import UserContext from '../contexts/userContext';
+import Logout from './logout';
 
 function UserPanel({ onClose, selectedUserPanel }) {
+    const { clearUser } = useContext(UserContext);
+
+    // For handling Logout
+    const handleLogout = () => {
+        clearUser();
+        onClose();
+    };
+
     // 判断是否显示 Modal
-    const isVisible = [Const.LOGIN, Const.REGISTER].includes(selectedUserPanel);
+    const isVisible = [Const.LOGIN, Const.REGISTER, Const.LOGOUT].includes(selectedUserPanel);
 
     // 根据 selectedUserPanel 确定要显示的组件内容
     let content;
@@ -14,6 +24,8 @@ function UserPanel({ onClose, selectedUserPanel }) {
         content = <Login onClose={onClose} />;
     } else if (selectedUserPanel === Const.REGISTER) {
         content = <Register onClose={onClose} />;
+    } else if (selectedUserPanel === Const.LOGOUT) {
+        content = <Logout onClose={handleLogout} />;
     }
 
     return (
