@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import UserPage from './pages/user';
 import HomePage from './pages/home';
 import SearchingPage from './pages/searching';
+import ItemPage from "./pages/itemPage";
 
 import { Layout} from 'antd';
 const { Header, Content } = Layout;
@@ -44,6 +45,7 @@ function App() {
                             <Route path="/user/:urlUserID" element={<UserPage />} />
                             <Route path="/home" element={<HomePage />} />
                             <Route path="/searching" element={<SearchingPage />} />
+                            <Route path="/item/:itemID" element={<ItemPage/>} />
                             <Route path="/" element={<HomePage />} exact />
                         </Routes>
                     </Content>
