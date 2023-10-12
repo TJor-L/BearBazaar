@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext} from 'react';
 import { useParams, Link } from 'react-router-dom';
-import {Row, Col, Image, Button, Typography, Layout, Modal, Input} from 'antd';
+import {Row, Col, Image, Button, Typography, Layout, Modal, Input, Tag} from 'antd';
 import { StarOutlined, StarFilled } from '@ant-design/icons';
 import UserContext from "../contexts/userContext";
 
@@ -137,6 +137,13 @@ function ItemPage() {
                             }
                             </span>
                         </Title>
+
+                        <div style={{ marginBottom: '15px' }}>
+                            {item.category.map((cat, index) => (
+                                <Tag key={index} color="blue">{cat}</Tag>
+                            ))}
+                        </div>
+
                         <Text strong>Estimated Price: </Text><br />${item.estimatedPrice}<br /><br />
                         <Text strong>Description: </Text><br />{item.description}<br /><br />
                         <Text strong>Owned by: </Text><br /><Link to={`/user/${item.owner.userId}`}>{item.owner.username}</Link><br /><br />

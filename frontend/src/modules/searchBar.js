@@ -13,7 +13,7 @@ function SearchBar() {
         "maxPrice" : 2147483647
     });
 
-    const [searchKey, setSearchKey] = useState('default');
+    const [searchKey, setSearchKey] = useState('');
     const [selectedFilter, setSelectedFilter] = useState(false);
 
     function handleSwitchFilterClick() {
