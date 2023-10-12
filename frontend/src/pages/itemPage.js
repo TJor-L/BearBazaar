@@ -22,6 +22,7 @@ function ItemPage() {
             userId: '508764',
             username: 'Dijkstra'
         },
+        category: ['cat1', 'cat2', 'cat3'],
         description: 'This is a sample description for the example product. It provides details about the product such as its features, benefits, and other relevant information.',
         isFavorited: true
     };
@@ -118,14 +119,14 @@ function ItemPage() {
     return (
         <Layout style={{ minHeight: '100vh' }}>
             <Content>
-                <Row justify="center" gutter={32} style={{ height: '100%', marginTop: "50px" }}>
+                <Row justify="center" gutter={32} style={{ height: '100%', marginTop: "3%" }}>
                     <Col span={6}>
                         <Image
                             width={400}
                             src={item.imageURL}
                         />
                     </Col>
-                    <Col span={6}>
+                    <Col span={8}>
                         <Title level={2} style={{ display: 'flex', alignItems: 'center' }}>
                             {item.itemName}
                             <span style={{ marginLeft: '10px' }}>
