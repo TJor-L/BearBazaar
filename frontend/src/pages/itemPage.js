@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import {Row, Col, Image, Button, Typography, Layout, Modal, Input, Tag} from 'antd';
 import { StarOutlined, StarFilled } from '@ant-design/icons';
 import UserContext from "../contexts/userContext";
+import fakeItemsMap from "../fakedata/fakeItemsMap";
 
 const { Title, Text } = Typography;
 
@@ -13,19 +14,7 @@ function ItemPage() {
     const { itemID } = useParams(); // 从URL中读取itemID
     const [item, setItem] = useState(null);
     const [isFavorited, setIsFavorited] = useState(false); // 初始值可能来自服务器
-    const fakeData = {
-        itemID: '1234567890',
-        imageURL: 'https://via.placeholder.com/400', // 使用一个占位图生成器。在实际应用中，这应该是商品图片的URL。
-        itemName: 'Example Product Name',
-        estimatedPrice: 99.99,
-        owner: {
-            userId: '508764',
-            username: 'Dijkstra'
-        },
-        category: ['cat1', 'cat2', 'cat3'],
-        description: 'This is a sample description for the example product. It provides details about the product such as its features, benefits, and other relevant information.',
-        isFavorited: true
-    };
+    const fakeData = fakeItemsMap.find(item => item.itemID ===itemID);
     const [isModalVisible, setIsModalVisible] = useState(false); // 控制Modal的可见性
     const [bidAmount, setBidAmount] = useState(''); // 用户输入的出价
 
