@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import Filter from "./filter";
 import { useNavigate } from 'react-router-dom';
-import { Button, Input, Drawer } from 'antd';
+import { Button, Input, Drawer, Menu} from 'antd';
 
 function SearchBar() {
 
     const navigate = useNavigate();
 
     const [filterData, setFilterData] = useState({
-        "categories" : 'all',
+        "categories" : '',
         "minPrice" : 0,
-        "maxPrice" : 2147483647
+        "maxPrice" : 1000
     });
 
     const [searchKey, setSearchKey] = useState('');
@@ -34,8 +34,8 @@ function SearchBar() {
     }
 
     return (
-        <div className="search-bar">
-            <Button onClick={handleSwitchFilterClick}>Filter</Button>
+        <Menu.Item style={{width: '500px'}}>
+            <Button onClick={handleSwitchFilterClick} style={{width: '20%', marginRight:'3%'}}>Filter</Button>
             <Drawer
                 title="Filter"
                 placement="left"
@@ -49,9 +49,10 @@ function SearchBar() {
                 value={searchKey}
                 onChange={(e) => setSearchKey(e.target.value)}
                 placeholder="Search Bear Bazaar"
+                style={{width: '54%'}}
             />
-            <Button onClick={handleSubmitSearch}>Submit</Button>
-        </div>
+            <Button onClick={handleSubmitSearch} style={{width: '20%', marginLeft:'3%'}}>Submit</Button>
+        </Menu.Item>
     );
 }
 

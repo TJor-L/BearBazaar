@@ -19,9 +19,15 @@ function ItemPage() {
     const [bidAmount, setBidAmount] = useState(''); // 用户输入的出价
 
     const handleOpenModal = () => {
+        if (!contextUserID) {
+            // Prompt the user to log in
+            alert("Please log in to continue.");
+            return;
+        }
         setBidAmount(item.estimatedPrice.toString()); // 使用商品估价作为默认出价，并将其转换为字符串以适应Input组件
         setIsModalVisible(true);
     }
+
 
     const handleCloseModal = () => {
         setIsModalVisible(false);
@@ -120,10 +126,11 @@ function ItemPage() {
                             {item.itemName}
                             <span style={{ marginLeft: '10px' }}>
                             {
-                                isFavorited ?
+                                contextUserID && (isFavorited ?
                                     <StarFilled style={{ color: 'gold', fontSize: '20px' }} onClick={toggleFavorite} /> :
-                                    <StarOutlined style={{ fontSize: '20px' }} onClick={toggleFavorite} />
+                                    <StarOutlined style={{ fontSize: '20px' }} onClick={toggleFavorite} />)
                             }
+
                             </span>
                         </Title>
 

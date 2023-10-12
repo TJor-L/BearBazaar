@@ -3,16 +3,19 @@ import * as Const from './const';
 import UserContext from './contexts/userContext';
 import { Link } from 'react-router-dom';
 import SearchBar from './modules/searchBar';
-import { Menu } from 'antd';  // <-- Import antd Menu
+import { Menu, Button} from 'antd';
+import logo from "./logo.png";  // <-- Import antd Menu
 
 function Navigation({ onUserPanelClick }) {
 
     const { contextUsername, contextUserID} = useContext(UserContext);
 
     return (
-        <Menu mode="horizontal">
+        <Menu mode="horizontal" style={{ width: '100%',height: '100%', marginRight: '0%'}}>
             <Menu.Item key="home">
-                <Link to={Const.HOME}>Home</Link>
+                <Link to={Const.HOME}>
+                    <img src={logo} className="App-logo" alt="logo" style={{ width: '50px', height: '50px', marginTop: '10px' }} />
+                </Link>
             </Menu.Item>
             {contextUsername ? (
                 <>
@@ -35,9 +38,17 @@ function Navigation({ onUserPanelClick }) {
                 </>
             )}
 
-            <Menu.Item key="search">
-                <SearchBar />
-            </Menu.Item>
+
+            <SearchBar />
+
+            {contextUsername && (
+                <Menu.Item key="postItem" style={{ marginLeft: 'auto', marginRight:"5%"}}>
+                    <Link to="/postitem">
+                        <Button type="primary">Sell My Item!</Button>
+                    </Link>
+                </Menu.Item>
+            )}
+
         </Menu>
     );
 }

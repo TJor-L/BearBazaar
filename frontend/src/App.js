@@ -11,6 +11,7 @@ import UserPage from './pages/user';
 import HomePage from './pages/home';
 import SearchingPage from './pages/searching';
 import ItemPage from "./pages/itemPage";
+import PostItem from "./pages/postItem";
 
 import { Layout} from 'antd';
 const { Header, Content } = Layout;
@@ -36,7 +37,6 @@ function App() {
             <Router>
                 <Layout className="layout">
                     <Header style={{ display: 'flex', alignItems: 'center' }}>
-                        <img src={logo} className="App-logo" alt="logo" style={{ width: '50px', marginRight: '20px' }} />
                         <Navigation onUserPanelClick={handleOnUserPanelClick} />
                     </Header>
                     <Content>
@@ -46,6 +46,7 @@ function App() {
                             <Route path="/home" element={<HomePage />} />
                             <Route path="/searching" element={<SearchingPage />} />
                             <Route path="/item/:itemID" element={<ItemPage/>} />
+                            <Route path="/postitem" element={<PostItem/>} />
                             <Route path="/" element={<HomePage />} exact />
                         </Routes>
                     </Content>

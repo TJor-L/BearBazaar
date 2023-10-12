@@ -29,7 +29,7 @@ function SearchingPage() {
 
 
             // Check if item matches any of the selected categories. If no categories are selected, show all items.
-            const matchesCategory = categories.includes('') || categories.some(category => item.categories.includes(category));
+            const matchesCategory = categories.includes('all') || categories.includes('') || categories.some(category => item.categories.includes(category));
 
             return matchesSearchKey && matchesPriceRange && matchesCategory;
         });
