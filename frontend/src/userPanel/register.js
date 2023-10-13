@@ -1,5 +1,6 @@
 import React, {useContext, useState} from 'react';
 import UserContext from '../contexts/userContext';
+import { Input, Button, Alert } from 'antd';
 
 function Register({onClose}) {
   const [username, setUsername] = useState('');
@@ -15,7 +16,7 @@ function Register({onClose}) {
       setError('All fields are required!');
       return;
     }
-    const response = await fetch('/register', {
+    const response = await fetch('http://localhost:8080/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -24,8 +25,8 @@ function Register({onClose}) {
         username: username,
         password: password,
         email: email,
-        phone: phone,
-        userID: userID,
+        phoneNumber: phone,
+        studentId: userID,
       }),
     });
 
@@ -41,42 +42,46 @@ function Register({onClose}) {
     }
   }
 
-  return (
-      <div className="register">
-        {error && <p className="error">{error}</p>}
-        <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Username"
-        />
-        <input
-            type="text"
-            value={userID}
-            onChange={(e) => setUserID(e.target.value)}
-            placeholder="User ID"
-        />
-        <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-        />
-        <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-        />
-        <input
-            type="tel"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="Phone Number"
-        />
-        <button onClick={handleRegister}>Register</button>
-      </div>
-  );
+    return (
+        <div className="register">
+            <h2>Register</h2>
+            {error && <Alert message={error} type="error" showIcon style={{ marginBottom: '16px' }} />}
+            <Input
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Username"
+                style={{ marginBottom: '10px' }}
+            />
+            <Input
+                value={userID}
+                onChange={(e) => setUserID(e.target.value)}
+                placeholder="User ID"
+                style={{ marginBottom: '10px' }}
+            />
+            <Input.Password
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                style={{ marginBottom: '10px' }}
+            />
+            <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                style={{ marginBottom: '10px' }}
+            />
+            <Input
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Phone Number"
+                style={{ marginBottom: '20px' }}
+            />
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button type="primary" onClick={handleRegister}>Register</Button>
+            </div>
+        </div>
+    );
 }
 
 export default Register;
