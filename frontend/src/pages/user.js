@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Avatar, Button, Input, Card, List, Row, Col, Layout, Modal } from 'antd';
+import { Avatar, Button, Input, Card, List, Row, Col, Layout, Modal, message} from 'antd';
 import { UserOutlined, EditOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import UserContext from '../contexts/userContext';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -107,7 +107,7 @@ function UserProfilePage() {
                   </Col>
                   {contextUserID === urlUserID ? (
                       <Col span={12} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                        <Button onClick={() => navigate('/A')}>A</Button>
+                        <Button onClick={() => navigate('/posteditem')}>Posted Items</Button>
                         <Button onClick={() => navigate('/B')}>B</Button>
                         <Button onClick={() => navigate('/C')}>C</Button>
                         <Button onClick={() => navigate('/D')}>D</Button>

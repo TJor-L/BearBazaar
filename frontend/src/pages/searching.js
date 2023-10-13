@@ -21,6 +21,7 @@ function SearchingPage() {
         console.log('Selected Categories:', categories);
 
         const filtered = fakeItems.filter(item => {
+            console.log(item.category)
             // Check if item matches search key
             const matchesSearchKey = item.itemName.toLowerCase().includes(searchKey) || searchKey==='';
 
@@ -29,7 +30,7 @@ function SearchingPage() {
 
 
             // Check if item matches any of the selected categories. If no categories are selected, show all items.
-            const matchesCategory = categories.includes('all') || categories.includes('') || categories.some(category => item.categories.includes(category));
+            const matchesCategory = categories.includes('all') || categories.includes('') || categories.includes(item.category);
 
             return matchesSearchKey && matchesPriceRange && matchesCategory;
         });
