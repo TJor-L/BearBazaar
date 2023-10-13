@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "item")
@@ -20,6 +22,8 @@ public class Item {
     private String category;
     private Status status;// whether the item can be put on the market
     private Double price;
+    @OneToMany(mappedBy = "item")
+    private List<Ask> asks;
     public Item(Builder builder){
         this.id = builder.id;
         this.owner = builder.owner;
@@ -28,6 +32,7 @@ public class Item {
         this.category = builder.category;
         this.status = builder.status;
         this.price = builder.price;
+        this.asks = new ArrayList<Ask>();
     }
     public Item(){}
     public long getId() {

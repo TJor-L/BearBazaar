@@ -1,5 +1,6 @@
 package com.bearbazzar.secondhandmarketbackend.controller;
 
+import com.bearbazzar.secondhandmarketbackend.model.Ask;
 import com.bearbazzar.secondhandmarketbackend.model.Filter;
 import com.bearbazzar.secondhandmarketbackend.model.Item;
 import com.bearbazzar.secondhandmarketbackend.model.User;
@@ -48,5 +49,9 @@ public class ItemController {
     @PostMapping("/search")
     public List<Item> searchItem(@RequestBody Filter filter){
         return itemService.searchItem(filter);
+    }
+    @PostMapping("/ask")
+    public void askItem(@RequestBody Ask ask){
+        //TODO: check if the asker is the owner
     }
 }
