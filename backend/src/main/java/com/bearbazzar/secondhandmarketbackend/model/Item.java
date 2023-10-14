@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "item")
 @JsonDeserialize(builder = Item.Builder.class)
-public class Item {
+public class Item implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -20,6 +23,10 @@ public class Item {
     private String category;
     private Status status;// whether the item can be put on the market
     private Double price;
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Image> image;
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ask> asks = new ArrayList<>();
     public Item(Builder builder){
         this.id = builder.id;
         this.owner = builder.owner;
@@ -28,6 +35,8 @@ public class Item {
         this.category = builder.category;
         this.status = builder.status;
         this.price = builder.price;
+        this.asks = new ArrayList<Ask>();
+        this.image = builder.image;
     }
     public Item(){}
     public long getId() {
@@ -69,7 +78,22 @@ public class Item {
     public void setPrice(Double price){
         this.price = price;
     }
-    static class Builder{
+    public List<Ask> getAsks(){
+        return asks;
+    }
+    public void addAsk(Ask ask){
+        asks.add(ask);
+    }
+    public void removeAsk(Ask ask){
+        asks.remove(ask);
+    }
+    public List<Image> getImage(){
+        return image;
+    }
+    public void setImage(List<Image> image){
+        this.image = image;
+    }
+    public static class Builder{
 
         private long id;
         @JsonProperty("price")
@@ -84,6 +108,13 @@ public class Item {
         private String category;
         @JsonProperty("status")
         private Status status;
+        @JsonProperty("image")
+        private List<Image> image;
+
+        public Builder setImage(List<Image> image){
+            this.image = image;
+            return this;
+        }
         public Builder setPrice(Double price){
             this.price = price;
             return this;

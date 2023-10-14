@@ -1,11 +1,10 @@
 package com.bearbazzar.secondhandmarketbackend.controller;
 
-import com.bearbazzar.secondhandmarketbackend.model.Filter;
-import com.bearbazzar.secondhandmarketbackend.model.Item;
-import com.bearbazzar.secondhandmarketbackend.model.User;
+import com.bearbazzar.secondhandmarketbackend.model.*;
 import com.bearbazzar.secondhandmarketbackend.service.ItemService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,8 +24,21 @@ public class ItemController {
           return itemService.GetItemById(id);
     }
     @PostMapping
-    public void placeItem(@RequestBody Item item) {
-          itemService.placeItem(item);
+    public void placeItem(@RequestParam("owner") String owner,
+                          @RequestParam("name") String name,
+                          @RequestParam("category") String category,
+                          @RequestParam("description") String description,
+                          @RequestParam("price") Double price,
+                          @RequestParam("images") MultipartFile[] images) {
+        Item item = new Item.Builder()
+                .setOwner(new User.Builder().setUsername(owner).build())
+                .setName(name)
+                .setCategory(category)
+                .setDescription(description)
+                .setPrice(price)
+                .setStatus(Status.AVAILABLE)
+                .build();
+        itemService.placeItem(item,images);
     }
     @PutMapping("/{id}")
     public ResponseEntity<Item> updateItem(@PathVariable("id") long id, @RequestBody Item item) {
@@ -48,5 +60,12 @@ public class ItemController {
     @PostMapping("/search")
     public List<Item> searchItem(@RequestBody Filter filter){
         return itemService.searchItem(filter);
+    }
+    @PostMapping("/ask")
+    public void askItem(@RequestBody Ask ask){
+        Item item = ask.getItem();
+        item.addAsk(ask);
+        User user = ask.getUser();
+        user.addAsk(ask);
     }
 }
