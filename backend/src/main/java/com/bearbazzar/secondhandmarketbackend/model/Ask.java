@@ -2,75 +2,82 @@ package com.bearbazzar.secondhandmarketbackend.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.springframework.boot.autoconfigure.info.ProjectInfoProperties;
 
 import javax.persistence.*;
+import java.nio.Buffer;
 
 @Entity
-@Table(name = "Ask")
-@JsonDeserialize(builder = Item.Builder.class)
+@Table(name = "ask")
+@JsonDeserialize(builder = Ask.Builder.class)
 public class Ask {
-    @OneToOne(cascade = CascadeType.ALL)
-    User asker;
-    @ManyToOne
-    @JoinColumn(name = "item",referencedColumnName = "id")
-    Item item;
-    Double price;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "item_id")
+    private Item item;
+
+    private Double priceOffered;
+    public Ask() {}
+    public Ask(Builder builder){
+        this.id = builder.id;
+        this.user = builder.user;
+        this.item = builder.item;
+        this.priceOffered = builder.priceOffered;
+    }
     public Long getId() {
         return id;
     }
-    public Ask(){}
-    public Ask(Builder builder){
-        this.asker = builder.asker;
-        this.item = builder.item;
-        this.price = builder.price;
-    }
-    public User getAsker() {
-        return asker;
+    public User getUser() {
+        return user;
     }
     public Item getItem() {
         return item;
     }
-    public Double getPrice() {
-        return price;
+    public Double getPriceOffered() {
+        return priceOffered;
     }
-    public void setAsker(User asker){
-        this.asker = asker;
+    public void setPriceOffered(Double priceOffered){
+        this.priceOffered = priceOffered;
     }
-    public void setItem(Item item){
-        this.item = item;
-    }
-    public void setPrice(Double price){
-        this.price = price;
-    }
-    public static class Builder {
-        @JsonProperty("asker")
-        private User asker;
+
+    static class Builder{
+        private Long id;
+        @JsonProperty("user")
+        private User user;
         @JsonProperty("item")
         private Item item;
-        @JsonProperty("price")
-        private Double price;
-        public Builder(){}
-        public Builder asker(User asker) {
-            this.asker = asker;
+        @JsonProperty("priceOffered")
+        private Double priceOffered;
+
+        public Builder setId(Long id){
+            this.id = id;
             return this;
         }
-        public Builder item(Item item) {
+
+        public Builder setUser(User user){
+            this.user = user;
+            return this;
+        }
+
+        public Builder setItem(Item item){
             this.item = item;
             return this;
         }
-        public Builder price(Double price) {
-            this.price = price;
+
+        public Builder setPriceOffered(Double priceOffered){
+            this.priceOffered = priceOffered;
             return this;
         }
-        public Ask build() {
+
+        public Ask build(){
             return new Ask(this);
         }
     }

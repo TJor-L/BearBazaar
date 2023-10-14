@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +19,8 @@ public class User {
     private String password;
     private String email;
     private String phone;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ask> asks = new ArrayList<>();
     private boolean enabled = false;//later used to determine if the user is admin
     private User(Builder builder) {
         this.studentId = builder.studentId;
@@ -59,7 +58,15 @@ public class User {
     public void setStudentId(Long studentId){
         this.studentId = studentId;
     }
-
+    public List<Ask> getAsks() {
+        return asks;
+    }
+    public void addAsk(Ask ask){
+        asks.add(ask);
+    }
+    public void removeAsk(Ask ask){
+        asks.remove(ask);
+    }
     public static class Builder{
         @JsonProperty("studentId")
         Long studentId;

@@ -4,6 +4,7 @@ import com.bearbazzar.secondhandmarketbackend.exception.IdAlreadyBeenUsedExcepti
 import com.bearbazzar.secondhandmarketbackend.exception.ItemNoExistException;
 import com.bearbazzar.secondhandmarketbackend.exception.UserAlreadyExistException;
 import com.bearbazzar.secondhandmarketbackend.exception.UserNotExistException;
+import org.ietf.jgss.GSSException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,7 +13,6 @@ import org.springframework.web.context.request.WebRequest;
 
 @ControllerAdvice
 public class CustomExceptionHandler {
-
     @ExceptionHandler(UserAlreadyExistException.class)
     public final ResponseEntity<String> handleUserAlreadyExistExceptions(Exception ex, WebRequest request) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
@@ -28,5 +28,9 @@ public class CustomExceptionHandler {
     @ExceptionHandler(IdAlreadyBeenUsedException.class)
     public final ResponseEntity<String> handleIdAlreadyBeenUsedExceptions(Exception ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+    @ExceptionHandler(GSSException.class)
+    public final ResponseEntity<String> handleGSSExceptions(Exception ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

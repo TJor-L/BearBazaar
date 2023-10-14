@@ -8,25 +8,37 @@ import com.bearbazzar.secondhandmarketbackend.repository.UserRepository;
 import net.bytebuddy.asm.Advice;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
-    public ItemService(ItemRepository itemRepository,UserRepository userRepository) {
+    private final ImageService imageService;
+    public ItemService(ItemRepository itemRepository,UserRepository userRepository,ImageService imageService) {
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
+        this.imageService = imageService;
     }
     public List<Item> GetUnsoldItem() {
-        return itemRepository.findAllByStatus(Status.ONMARKET);
+        return itemRepository.findAllByStatus(Status.TRADING);
     }
     public Item GetItemById(Long id) {
           return itemRepository.findById(id).orElse(null);
     }
-    public void placeItem(Item item) {
+    public void placeItem(Item item, MultipartFile[] images) {
+        List<Image> imagesList = Arrays.stream(images)
+                .filter(image -> !image.isEmpty())
+                .parallel()
+                .map(imageService::save)
+                .map(mediaLink -> new Image(mediaLink, item))
+                .collect(Collectors.toList());
+        item.setImage(imagesList);
         if (!userRepository.existsByUsername(item.getOwner().getUsername())) {
             throw new UserNotExistException("user does not exist");
         }
