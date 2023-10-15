@@ -3,6 +3,7 @@ import UserContext from '../contexts/userContext';
 import { Input, Button, Alert } from 'antd';
 
 function Register({onClose}) {
+    const { contextUsername, contextUserID } = useContext(UserContext);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -30,16 +31,38 @@ function Register({onClose}) {
       }),
     });
 
-    const data = await response.json();
+   // const data = await response.json();
 
-    if (response.ok) {
-      // Registration was successful. Update the context values.
-      setContextUsername(username);
-      setContextUserID(userID);
-      onClose();
-    } else {
-      setError(data.message || 'An error occurred during registration.');
-    }
+// Start by checking the response status
+      if (response.ok) {
+          // Response is OK, but there's no content to parse.
+          // Proceed with the assumption that registration was successful.
+
+          // Update context or state as necessary here
+          setContextUsername(username);
+          setContextUserID(userID);
+          // Close the modal or navigate away
+          onClose();
+
+      } else {
+          // If the request was not successful, try to parse the error and display it.
+          try {
+              const data = await response.json();
+              setError(data.message || 'An error occurred during registration.');
+          } catch (error) {
+              // If parsing the JSON failed (e.g., due to an empty body), fall back to a default error message.
+              setError('An error occurred during registration.');
+          }
+      }
+
+   //  if (response.ok) {
+   //    // Registration was successful. Update the context values.
+   //    setContextUsername(username);
+   //    setContextUserID(userID);
+   //    onClose();
+   //  } else {
+   //    setError(data.message || 'An error occurred during registration.');
+   //  }
   }
 
     return (

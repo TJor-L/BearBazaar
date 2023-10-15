@@ -5,7 +5,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import TextArea from "antd/es/input/TextArea";
 const { Content } = Layout;
 function PostItem() {
-  const { userID } = useContext(UserContext);
+  const { contextUsername, contextUserID } = useContext(UserContext);
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -13,33 +13,41 @@ function PostItem() {
   const [price, setPrice] = useState('');
   const [error, setError] = useState(null);
   const [fileList, setFileList] = useState([]);
-
   async function handleNewItem() {
     if (!name || !description || !category || !price) {
       message.error('All fields are required!');
       return;
     }
 
-    // const formData = new FormData();
-    // formData.append('image', fileList[0]);
-    // formData.append('owner', userID);
-    // formData.append('name', name);
-    // formData.append('description', description);
-    // formData.append('category', category);
-    // formData.append('price', Number(price));
-    //
-    // const response = await fetch('http://localhost:8080/items', {
-    //   method: 'POST',
-    //   body: formData,
-    // });
-    //
-    // if (response.ok) {
-    //   message.success('Item added successfully');
-    // } else {
-    //   const data = await response.json();
-    //   setError(data.message || 'An error occurred while adding the item.');
-    // }
-    message.success('Item added successfully');
+    const formData = new URLSearchParams();
+    formData.append('owner','dijkstra');
+    formData.append('name', name);
+    formData.append('description', description);
+    formData.append('category', category);
+    formData.append('price', Number(price));
+
+    // Create a new FormData object for handling file uploads
+    const fileData = new FormData();
+    fileList.forEach((file) => {
+      fileData.append('images', file.originFileObj);
+    });
+
+    // Combine the form data and file data into a single FormData
+    for (const [key, value] of formData) {
+      fileData.append(key, value);
+    }
+
+    const response = await fetch('http://localhost:8080/items', {
+      method: 'POST',
+      body: fileData,
+    });
+
+    if (response.ok) {
+      message.success('Item added successfully');
+    } else {
+      const data = await response.json();
+      setError(data.message || 'An error occurred while adding the item.');
+    }
   }
 
   const handleUploadChange = ({ fileList }) => {
