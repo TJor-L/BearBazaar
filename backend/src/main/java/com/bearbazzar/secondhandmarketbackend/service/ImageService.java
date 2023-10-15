@@ -15,8 +15,6 @@ import java.util.UUID;
 
 @Service
 public class ImageService {
-
-
     @Value("${gcs.bucket}")
     private String bucketName;
 

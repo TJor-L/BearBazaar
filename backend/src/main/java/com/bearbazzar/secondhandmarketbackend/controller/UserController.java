@@ -6,6 +6,7 @@ import com.bearbazzar.secondhandmarketbackend.model.User;
 import com.bearbazzar.secondhandmarketbackend.service.AuthenticationService;
 import com.bearbazzar.secondhandmarketbackend.service.UserService;
 
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,12 +23,17 @@ public class UserController {
         this.authenticationService = authenticationService;
     }
     @PostMapping("/register")
-    public String register(@RequestBody User user) {
-        return UserService.addUser(user);
+    public ResponseEntity register(@RequestBody User user) {
+        UserService.addUser(user);
+        return ResponseEntity.ok().build();
     }
     @PostMapping("/login")
-    public Token login(@RequestBody User user) {
-        return authenticationService.authenticate(user);
+    public ResponseEntity<Token> login(@RequestBody User user) {
+        Token token = authenticationService.authenticate(user);
+        if(token == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(token);
     }
 
     @PutMapping ("/update")
