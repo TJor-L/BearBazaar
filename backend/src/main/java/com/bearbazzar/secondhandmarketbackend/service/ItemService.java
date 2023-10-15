@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,7 +27,7 @@ public class ItemService {
         this.imageService = imageService;
     }
     public List<Item> GetUnsoldItem() {
-        return itemRepository.findAllByStatus(Status.TRADING);
+        return itemRepository.findAllByStatus(Status.AVAILABLE);
     }
     public Item GetItemById(Long id) {
           return itemRepository.findById(id).orElse(null);
@@ -44,18 +45,25 @@ public class ItemService {
         }
         itemRepository.save(item);
     }
-    public Item UpdateItem(Long id,Item item) {
+    public Item UpdateItem(Long id,String name,String category,String description,Double price,MultipartFile[] images){
           if(!itemRepository.existsById(id)){
                 throw new ItemNoExistException("Item does not exists");
           }
           Optional<Item> optionalItem = itemRepository.findById(id);
           if(optionalItem.isPresent()){
                 Item existItem = optionalItem.get();
-                existItem.setName(item.getName());
-                existItem.setCategory(item.getCategory());
-                existItem.setDescription(item.getDescription());
-                existItem.setStatus(item.getStatus());
-                existItem.setPrice(item.getPrice());
+                existItem.setName(name);
+                existItem.setCategory(category);
+                existItem.setDescription(description);
+                existItem.setPrice(price);
+                existItem.getImage().clear();
+                List<Image> imagesList = Arrays.stream(images)
+                        .filter(image -> !image.isEmpty())
+                        .parallel()
+                        .map(imageService::save)
+                        .map(mediaLink -> new Image(mediaLink, existItem))
+                        .collect(Collectors.toList());
+                existItem.setImage(imagesList);
                 return itemRepository.save(existItem);
           }
           return null;
@@ -80,4 +88,5 @@ public class ItemService {
                 .and(ItemSpecifications.nameContains(filter.getContent()));
         return itemRepository.findAll(spec);
     }
+
 }

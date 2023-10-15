@@ -1,6 +1,8 @@
 package com.bearbazzar.secondhandmarketbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -19,8 +21,26 @@ public class User {
     private String password;
     private String email;
     private String phone;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    // Add this field to your User model
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Ask> asks = new ArrayList<>();
+    public List<Ask> getAsks() {
+        return asks;
+    }
+    public void addAsk(Ask ask) {
+        if (asks == null) {
+            asks = new ArrayList<>();
+        }
+        asks.add(ask);
+        ask.setUser(this); // Set the user reference in the Ask entity
+    }
+    public void removeAsk(Ask ask) {
+        if (asks != null) {
+            asks.remove(ask);
+        }
+    }
     private boolean enabled = false;//later used to determine if the user is admin
     private User(Builder builder) {
         this.studentId = builder.studentId;
@@ -57,15 +77,6 @@ public class User {
     }
     public void setStudentId(Long studentId){
         this.studentId = studentId;
-    }
-    public List<Ask> getAsks() {
-        return asks;
-    }
-    public void addAsk(Ask ask){
-        asks.add(ask);
-    }
-    public void removeAsk(Ask ask){
-        asks.remove(ask);
     }
     public static class Builder{
         @JsonProperty("studentId")
