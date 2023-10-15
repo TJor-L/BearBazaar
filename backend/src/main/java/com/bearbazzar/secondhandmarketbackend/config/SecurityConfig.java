@@ -36,6 +36,10 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/items/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/items/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/items/owner").permitAll()
+                .antMatchers(HttpMethod.POST, "/asks/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/asks/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/asks/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/asks/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable();

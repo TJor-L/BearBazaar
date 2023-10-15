@@ -41,8 +41,13 @@ public class ItemController {
         itemService.placeItem(item,images);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Item> updateItem(@PathVariable("id") long id, @RequestBody Item item) {
-        Item updatedItem = itemService.UpdateItem(id ,item);
+    public ResponseEntity<Item> updateItem(@PathVariable("id") long id,
+                                           @RequestParam("name") String name,
+                                           @RequestParam("category") String category,
+                                           @RequestParam("description") String description,
+                                           @RequestParam("price") Double price,
+                                           @RequestParam("images") MultipartFile[] images){
+        Item updatedItem = itemService.UpdateItem(id ,name,category,description,price,images);
         if (updatedItem != null) {
             return ResponseEntity.ok(updatedItem);
         } else {
@@ -54,18 +59,12 @@ public class ItemController {
         itemService.deleteItem(id);
     }
     @PostMapping("/owner")
-    public List<Item> listItemByOwner(@RequestBody User owner){
-        return itemService.GetItemByOwner(owner);
+    public List<Item> listItemByOwner(@RequestParam("username") String owner){
+        return itemService.GetItemByOwner(new User.Builder().setUsername(owner).build());
     }
     @PostMapping("/search")
     public List<Item> searchItem(@RequestBody Filter filter){
         return itemService.searchItem(filter);
     }
-    @PostMapping("/ask")
-    public void askItem(@RequestBody Ask ask){
-        Item item = ask.getItem();
-        item.addAsk(ask);
-        User user = ask.getUser();
-        user.addAsk(ask);
-    }
+
 }

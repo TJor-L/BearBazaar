@@ -1,5 +1,7 @@
 package com.bearbazzar.secondhandmarketbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -25,8 +27,27 @@ public class Item implements Serializable {
     private Double price;
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> image;
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    // Add this field to your Item model
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    @JsonBackReference
+    @JsonIgnoreProperties("item")
     private List<Ask> asks = new ArrayList<>();
+    @JsonProperty("asks")
+    public List<Ask> getAsk(){
+        return asks;
+    }
+    public void addAsk(Ask ask) {
+        if (asks == null) {
+            asks = new ArrayList<>();
+        }
+        asks.add(ask);
+        ask.setItem(this); // Set the item reference in the Ask entity
+    }
+    public void removeAsk(Ask ask) {
+        if (asks != null) {
+            asks.remove(ask);
+        }
+    }
     public Item(Builder builder){
         this.id = builder.id;
         this.owner = builder.owner;
@@ -39,6 +60,10 @@ public class Item implements Serializable {
         this.image = builder.image;
     }
     public Item(){}
+
+    public List<Ask> getAsks() {
+        return this.asks;
+    }
     public long getId() {
         return id;
     }
@@ -78,20 +103,17 @@ public class Item implements Serializable {
     public void setPrice(Double price){
         this.price = price;
     }
-    public List<Ask> getAsks(){
-        return asks;
-    }
-    public void addAsk(Ask ask){
-        asks.add(ask);
-    }
-    public void removeAsk(Ask ask){
-        asks.remove(ask);
-    }
     public List<Image> getImage(){
         return image;
     }
     public void setImage(List<Image> image){
-        this.image = image;
+        if (this.image == null) {
+            this.image = image;
+        } else {
+            this.image.retainAll(image);
+            this.image.addAll(image);
+        }
+
     }
     public static class Builder{
 
