@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.springframework.boot.autoconfigure.info.ProjectInfoProperties;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class User {
     private String password;
     private String email;
     private String phone;
-
+    private String description;
     // Add this field to your User model
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonBackReference
@@ -48,8 +49,10 @@ public class User {
         this.password = builder.password;
         this.email = builder.email;
         this.phone = builder.phone;
+        this.description = builder.description;
     }
     public User(){}
+    public String getDescription(){return description;}
     public String getUsername() {
         return username;
     }
@@ -61,6 +64,9 @@ public class User {
     }
     public String getPhone(){
         return phone;
+    }
+    public void setDescription(String description){
+        this.description = description;
     }
 
     public  void setPassword(String password){
@@ -87,8 +93,14 @@ public class User {
         String password;
         @JsonProperty("email")
         String email;
-        @JsonProperty("phoneNumber")
+        @JsonProperty("phone")
         String phone;
+        @JsonProperty("description")
+        String description;
+        public Builder serDescription(String description){
+            this.description = description;
+            return this;
+        }
         public Builder setUsername(String username){
             this.username = username;
             return this;

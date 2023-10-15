@@ -11,7 +11,7 @@ function Filter({ onCancel, onSubmit }) {
     const [priceRange, setPriceRange] = useState([0, 1000]);
 
 
-    const categories = [...new Set(fakeItems.flatMap(item => item.categories))];
+    const categories = ["sport", "book", "fashion", "electro", "all"];
 
     function onFilterSubmit(){
         const [minPrice, maxPrice] = priceRange;
@@ -46,7 +46,7 @@ function Filter({ onCancel, onSubmit }) {
                         value={priceRange}
                         onChange={value => setPriceRange(value)}
                         min={0}
-                        max={1000} // You can adjust the max value as required
+                        max={500} // You can adjust the max value as required
                     />
                 </Col>
             </Row>

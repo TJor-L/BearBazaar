@@ -3,6 +3,7 @@ import UserContext from '../contexts/userContext';
 import { Input, Button, Alert } from 'antd';
 
 function Register({onClose}) {
+    const { contextUsername, contextUserID } = useContext(UserContext);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -12,7 +13,7 @@ function Register({onClose}) {
   const {setContextUsername, setContextUserID} = useContext(UserContext);
 
   async function handleRegister() {
-    if (!userID || !username || !password || !phone || !email) {
+    if (!userID || !username || !password || !phone) {
       setError('All fields are required!');
       return;
     }
@@ -24,22 +25,35 @@ function Register({onClose}) {
       body: JSON.stringify({
         username: username,
         password: password,
-        email: email,
+        email: "goodEmailAddress@wustl.edu",
         phoneNumber: phone,
         studentId: userID,
       }),
     });
 
-    const data = await response.json();
+   // const data = await response.json();
 
-    if (response.ok) {
-      // Registration was successful. Update the context values.
-      setContextUsername(username);
-      setContextUserID(userID);
-      onClose();
-    } else {
-      setError(data.message || 'An error occurred during registration.');
-    }
+// Start by checking the response status
+      if (response.ok) {
+          // Response is OK, but there's no content to parse.
+          // Proceed with the assumption that registration was successful.
+
+          // Update context or state as necessary here
+          setContextUsername(username);
+          setContextUserID(userID);
+          // Close the modal or navigate away
+          onClose();
+
+      } else {
+          // If the request was not successful, try to parse the error and display it.
+          try {
+              const data = await response.json();
+              setError(data.message || 'An error occurred during registration.');
+          } catch (error) {
+              // If parsing the JSON failed (e.g., due to an empty body), fall back to a default error message.
+              setError('An error occurred during registration.');
+          }
+      }
   }
 
     return (
@@ -64,13 +78,13 @@ function Register({onClose}) {
                 placeholder="Password"
                 style={{ marginBottom: '10px' }}
             />
-            <Input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
-                style={{ marginBottom: '10px' }}
-            />
+            {/*<Input*/}
+            {/*    type="email"*/}
+            {/*    value={email}*/}
+            {/*    onChange={(e) => setEmail(e.target.value)}*/}
+            {/*    placeholder="Email"*/}
+            {/*    style={{ marginBottom: '10px' }}*/}
+            {/*/>*/}
             <Input
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}

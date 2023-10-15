@@ -1,32 +1,36 @@
-import React, {useEffect, useState} from 'react';
-import {Card, Layout, List, Typography} from 'antd';
+import React, {useContext, useEffect, useState} from 'react';
+import {Layout, List, Typography, Card, message} from 'antd';
 import { Link } from 'react-router-dom';
+import fakeItems from "../fakedata/fakeitems";
+import UserContext from "../contexts/userContext";
 
 const { Content } = Layout;
 
-
-function HomePage() {
+function PostedItems() {
     const [items, setItems] = useState([]);
 
+    const { contextUserID, contextUsername } = useContext(UserContext);
+
     useEffect(() => {
-        // Fetch actual data from the backend
-        const fetchData = async () => {
-            try {
-                const response = await fetch('http://localhost:8080/items');
+        // 当组件加载时，发送POST请求
+        fetchItems();
+    }, [contextUserID]);
 
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
+    const fetchItems = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/items/owner/${contextUsername}`);
 
-                const data = await response.json();
-                setItems(data);
-            } catch (error) {
-                console.error('There was a problem fetching the items:', error);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-        };
 
-        fetchData();
-    }, []);
+            const data = await response.json();
+            setItems(data);
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error.message);
+        }
+    };
+
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
@@ -51,8 +55,6 @@ function HomePage() {
             </Content>
         </Layout>
     );
-
 }
 
-export default HomePage;
-
+export default PostedItems;

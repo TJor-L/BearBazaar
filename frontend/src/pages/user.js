@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect,} from 'react';
 import { Avatar, Button, Input, Card, List, Row, Col, Layout, Modal, message} from 'antd';
 import { UserOutlined, EditOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import UserContext from '../contexts/userContext';
@@ -11,38 +11,95 @@ function UserProfilePage() {
   const { contextUsername, contextUserID } = useContext(UserContext);
   const { urlUserID } = useParams();
   const navigate = useNavigate();
-  const [userName, setUserName] = useState('Dijkstra');
-  const [userDescription, setUserDescription] = useState('This user is very handsome!!!');
-  const [email, setEmail] = useState('fake@email.com');
-  const [phone, setPhone] = useState('123-456-7890');
-  const [password, setPassword] = useState('fakePassword123');
+  const [userName, setUserName] = useState('');
+  const [userDescription, setUserDescription] = useState('');
+  const [phone, setPhone] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
 
+
+  useEffect(() => {
+    fetch(`http://localhost:8080/user/${urlUserID}`)
+        .then(response => {
+          if (!response.ok) {
+            navigate('/home');
+          }
+          return response.json();
+        })
+        .then(data => {
+          //setEmail(data.email || 'fake@email.com'); // fake data
+          setPhone(data.phone);
+          setUserName(data.username);
+          setUserDescription(data.description)
+        })
+
+  }, [contextUserID, urlUserID]);
+
   const handleEditDescription = () => {
+
     setIsEditingDescription(true);
   };
 
   const handleSaveDescription = () => {
-    setIsEditingDescription(false);
+    fetch(`http://localhost:8080/update`, {
+      method: 'PUT',  // Or 'POST' if your API expects that for updates
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: userName,
+        description: userDescription,
+        phone: phone,
+        // Add other fields as necessary
+      }),
+    })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to update the user description.');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('User description updated successfully:', data);
+        })
+        .catch(error => {
+          console.error('There was an error updating the user description:', error);
+        });
+
+    setIsEditingDescription(false); // Exit editing mode after saving
   };
-  // useEffect(() => {
-  //   // Fetch user details from server
-  //   // fetch(`/api/users/${urlUserID}`)
-  //   //     .then(response => response.json())
-  //   //     .then(data => {
-  //   //       setEmail(data.email || 'fake@email.com'); // fake data
-  //   //       setPhone(data.phone || '123-456-7890'); // fake data
-  //   //       setPassword(data.password || 'fakePassword123'); // fake data
-  //   //     });
-  //
-  // }, [contextUserID, urlUserID]);
+
+
 
   const handleEdit = () => {
     setIsEditing(true);
   };
 
   const handleSave = () => {
+      fetch(`http://localhost:8080/update`, {
+          method: 'PUT',  // Or 'POST' if your API expects that for updates
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              username: userName,
+              description: userDescription,
+              phone: phone,
+              // Add other fields as necessary
+          }),
+      })
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error('Failed to update the user description.');
+              }
+              return response.json();
+          })
+          .then(data => {
+              console.log('User description updated successfully:', data);
+          })
+          .catch(error => {
+              console.error('There was an error updating the user description:', error);
+          });
     setIsEditing(false);
   };
 
@@ -61,42 +118,42 @@ function UserProfilePage() {
                     <Card>
                       {isEditing ? (
                           <>
-                            <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" style={{ marginBottom: '10px' }} />
+                            {/*<Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" style={{ marginBottom: '10px' }} />*/}
                             <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone Number" style={{ marginBottom: '10px' }} />
-                            <Input.Password
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Password"
-                                style={{ marginBottom: '10px' }}
-                                iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-                            />
+                            {/*<Input.Password*/}
+                            {/*    value={password}*/}
+                            {/*    onChange={(e) => setPassword(e.target.value)}*/}
+                            {/*    placeholder="Password"*/}
+                            {/*    style={{ marginBottom: '10px' }}*/}
+                            {/*    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}*/}
+                            {/*/>*/}
                             <Button type="primary" block onClick={handleSave}>Save</Button>
                           </>
                       ) : (
                           <>
                             <List>
-                              <List.Item>
-                                <List.Item.Meta title="Email" description={email} />
-                              </List.Item>
+                              {/*<List.Item>*/}
+                              {/*  <List.Item.Meta title="Email" description={email} />*/}
+                              {/*</List.Item>*/}
                               <List.Item>
                                 <List.Item.Meta title="Phone" description={phone} />
                               </List.Item>
-                              {contextUserID === urlUserID && (
+                              {contextUserID == urlUserID && (
                                   <>
-                                    <List.Item>
-                                      <List.Item.Meta
-                                          title="Password"
-                                          description={
-                                            <Input.Password
-                                                readOnly
-                                                value={password}
-                                                bordered={false}
-                                                iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-                                                visibilityToggle
-                                            />
-                                          }
-                                      />
-                                    </List.Item>
+                                    {/*<List.Item>*/}
+                                    {/*  <List.Item.Meta*/}
+                                    {/*      title="Password"*/}
+                                    {/*      description={*/}
+                                    {/*        <Input.Password*/}
+                                    {/*            readOnly*/}
+                                    {/*            value={password}*/}
+                                    {/*            bordered={false}*/}
+                                    {/*            iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}*/}
+                                    {/*            visibilityToggle*/}
+                                    {/*        />*/}
+                                    {/*      }*/}
+                                    {/*  />*/}
+                                    {/*</List.Item>*/}
                                     <Button icon={<EditOutlined />} block onClick={handleEdit}>Edit</Button>
                                   </>
                               )}
@@ -105,9 +162,9 @@ function UserProfilePage() {
                       )}
                     </Card>
                   </Col>
-                  {contextUserID === urlUserID ? (
+                  {contextUserID == urlUserID ? (
                       <Col span={12} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                        <Button onClick={() => navigate('/posteditem')}>Posted Items</Button>
+                        <Button onClick={() => navigate('/posted-item')}>My Posted Items</Button>
                         <Button onClick={() => navigate('/B')}>B</Button>
                         <Button onClick={() => navigate('/C')}>C</Button>
                         <Button onClick={() => navigate('/D')}>D</Button>
