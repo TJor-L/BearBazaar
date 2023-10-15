@@ -13,7 +13,7 @@ function Register({onClose}) {
   const {setContextUsername, setContextUserID} = useContext(UserContext);
 
   async function handleRegister() {
-    if (!userID || !username || !password || !phone || !email) {
+    if (!userID || !username || !password || !phone) {
       setError('All fields are required!');
       return;
     }
@@ -25,7 +25,7 @@ function Register({onClose}) {
       body: JSON.stringify({
         username: username,
         password: password,
-        email: email,
+        email: "goodEmailAddress@wustl.edu",
         phoneNumber: phone,
         studentId: userID,
       }),
@@ -54,15 +54,6 @@ function Register({onClose}) {
               setError('An error occurred during registration.');
           }
       }
-
-   //  if (response.ok) {
-   //    // Registration was successful. Update the context values.
-   //    setContextUsername(username);
-   //    setContextUserID(userID);
-   //    onClose();
-   //  } else {
-   //    setError(data.message || 'An error occurred during registration.');
-   //  }
   }
 
     return (
@@ -87,13 +78,13 @@ function Register({onClose}) {
                 placeholder="Password"
                 style={{ marginBottom: '10px' }}
             />
-            <Input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
-                style={{ marginBottom: '10px' }}
-            />
+            {/*<Input*/}
+            {/*    type="email"*/}
+            {/*    value={email}*/}
+            {/*    onChange={(e) => setEmail(e.target.value)}*/}
+            {/*    placeholder="Email"*/}
+            {/*    style={{ marginBottom: '10px' }}*/}
+            {/*/>*/}
             <Input
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}

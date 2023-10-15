@@ -12,4 +12,6 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, String> {
     Boolean existsByUsername(String username);
     Boolean existsByStudentId(Long studentId);
+
+    User findByStudentId(Long id);
 }

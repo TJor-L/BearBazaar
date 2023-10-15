@@ -2,6 +2,8 @@ package com.bearbazzar.secondhandmarketbackend.controller;
 
 import com.bearbazzar.secondhandmarketbackend.model.*;
 import com.bearbazzar.secondhandmarketbackend.service.ItemService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,10 +60,12 @@ public class ItemController {
     public void deleteItem(@PathVariable("id") Long id) {
         itemService.deleteItem(id);
     }
-    @PostMapping("/owner")
-    public List<Item> listItemByOwner(@RequestParam("username") String owner){
-        return itemService.GetItemByOwner(new User.Builder().setUsername(owner).build());
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemController.class);
+    @GetMapping("/owner/{username}")
+    public List<Item> listItemByOwner(@PathVariable("username") String username){
+        return itemService.GetItemByOwner(new User.Builder().setUsername(username).build());
     }
+
     @PostMapping("/search")
     public List<Item> searchItem(@RequestBody Filter filter){
         return itemService.searchItem(filter);

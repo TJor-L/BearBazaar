@@ -14,29 +14,32 @@ function Login({onClose}) {
   const [error, setError] = useState(null);
 
       const handleLogin = async () => {
-          // Reset any previous error
           setError(null);
 
-          // Check if fields are not empty (add more validation if required)
           if (!username || !password) {
               setError('Username and password are required');
               return;
           }
-
+          console.log(username, password)
           try {
-              // Send a request to the login endpoint on the server
               const response = await fetch('http://localhost:8080/login', {  // Replace with your actual login endpoint
                   method: 'POST',
                   headers: {
                       'Content-Type': 'application/json',
                   },
-                  body: JSON.stringify({ username, password }),
+                  body: JSON.stringify({
+                      username: username,
+                      password: password,
+                  }),
               });
-
+              console.log(response)
               // Check if the response indicates a successful login
               if (response.ok) {
-                  const { token } = await response.json();  // Extract token from response body (adjust depending on your backend's response structure)
+                  const { token, userId } = await response.json();  // Extract token from response body (adjust depending on your backend's response structure)
                   localStorage.setItem('authToken', token);  // Store the token (consider more secure alternatives in a production environment)
+                  onClose();
+                  setContextUserID(userId);
+                  setContextUsername(username);
 
                   // Redirect to your app's main page, or perform another appropriate action
                   // For example, using useHistory from 'react-router-dom' if you're in a React Router environment:
@@ -51,9 +54,6 @@ function Login({onClose}) {
               setError('There was a problem connecting to the server.');
           }
       };
-//>>>>>>> 0e56097faf1f6f53f2b8f5da60300dc86e2dd94e
-
-
     return (
         <div className="login">
             <h2>Login</h2>

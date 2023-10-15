@@ -12,6 +12,7 @@ import HomePage from './pages/home';
 import SearchingPage from './pages/searching';
 import ItemPage from "./pages/itemPage";
 import PostItem from "./pages/postItem";
+import PostedItems from "./pages/postedItem";
 
 import { Layout} from 'antd';
 const { Header, Content } = Layout;
@@ -47,6 +48,7 @@ function App() {
                             <Route path="/searching" element={<SearchingPage />} />
                             <Route path="/item/:itemID" element={<ItemPage/>} />
                             <Route path="/postitem" element={<PostItem/>} />
+                            <Route path="/posted-item" element={<PostedItems/>} />
                             <Route path="/" element={<HomePage />} exact />
                         </Routes>
                     </Content>
