@@ -26,7 +26,7 @@ function Register ({ onClose }) {
                 username: username,
                 password: password,
                 email: "goodEmailAddress@wustl.edu",
-                phoneNumber: phone,
+                phone: phone,
                 studentId: userID,
             }),
         })

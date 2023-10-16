@@ -231,75 +231,75 @@ function ItemPage () {
     }
 
 
-    const handleOpenModal = () => {
-        if (!contextUserID) {
-            // Prompt the user to log in
-            alert("Please log in to continue.")
-            return
-        }
-        setBidAmount(item.estimatedPrice.toString()) // 使用商品估价作为默认出价，并将其转换为字符串以适应Input组件
-        setIsModalVisible(true)
-    }
+    // const handleOpenModal = () => {
+    //     if (!contextUserID) {
+    //         // Prompt the user to log in
+    //         alert("Please log in to continue.")
+    //         return
+    //     }
+    //     setBidAmount(item.estimatedPrice.toString()) // 使用商品估价作为默认出价，并将其转换为字符串以适应Input组件
+    //     setIsModalVisible(true)
+    // }
 
 
-    const handleCloseModal = () => {
-        setIsModalVisible(false)
-        setBidAmount('') // 清除输入框内容
-    }
+    // const handleCloseModal = () => {
+    //     setIsModalVisible(false)
+    //     setBidAmount('') // 清除输入框内容
+    // }
 
-    const toggleFavorite = async () => {
-        // try {
-        //     // 更新后端的收藏状态
-        //     const response = await fetch(`yourBackendURL/favorite`, {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({
-        //             userID: contextUserID,
-        //             itemID: itemID,
-        //         }),
-        //     });
-        //
-        //     if (response.ok) {
-        //         setIsFavorited(prevState => !prevState); // 切换收藏状态
-        //     } else {
-        //         // 处理错误
-        //         const data = await response.json();
-        //         console.error('Failed to update favorite status:', data.message);
-        //     }
-        // } catch (error) {
-        //     console.error('There was an error updating the favorite status:', error);
-        // }
-        setIsFavorited(prevState => !prevState)
-    }
+    // const toggleFavorite = async () => {
+    //     // try {
+    //     //     // 更新后端的收藏状态
+    //     //     const response = await fetch(`yourBackendURL/favorite`, {
+    //     //         method: 'POST',
+    //     //         headers: {
+    //     //             'Content-Type': 'application/json',
+    //     //         },
+    //     //         body: JSON.stringify({
+    //     //             userID: contextUserID,
+    //     //             itemID: itemID,
+    //     //         }),
+    //     //     });
+    //     //
+    //     //     if (response.ok) {
+    //     //         setIsFavorited(prevState => !prevState); // 切换收藏状态
+    //     //     } else {
+    //     //         // 处理错误
+    //     //         const data = await response.json();
+    //     //         console.error('Failed to update favorite status:', data.message);
+    //     //     }
+    //     // } catch (error) {
+    //     //     console.error('There was an error updating the favorite status:', error);
+    //     // }
+    //     setIsFavorited(prevState => !prevState)
+    // }
 
-    const handleConfirmPurchase = async () => {
-        try {
-            const response = await fetch(`yourBackendURL/purchase`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userID: contextUserID, // 假设您已经在组件内部有这个context
-                    itemID: itemID,
-                    bid: bidAmount
-                }),
-            })
+    // const handleConfirmPurchase = async () => {
+    //     try {
+    //         const response = await fetch(`yourBackendURL/purchase`, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({
+    //                 userID: contextUserID, // 假设您已经在组件内部有这个context
+    //                 itemID: itemID,
+    //                 bid: bidAmount
+    //             }),
+    //         })
 
-            if (response.ok) {
-                // 这里可以处理购买成功的逻辑，例如提醒用户购买成功
-                setIsModalVisible(false) // 关闭模态窗口
-            } else {
-                // 处理错误信息
-                const data = await response.json()
-                console.error('Failed to purchase:', data.message)
-            }
-        } catch (error) {
-            console.error('There was an error making the purchase:', error)
-        }
-    }
+    //         if (response.ok) {
+    //             // 这里可以处理购买成功的逻辑，例如提醒用户购买成功
+    //             setIsModalVisible(false) // 关闭模态窗口
+    //         } else {
+    //             // 处理错误信息
+    //             const data = await response.json()
+    //             console.error('Failed to purchase:', data.message)
+    //         }
+    //     } catch (error) {
+    //         console.error('There was an error making the purchase:', error)
+    //     }
+    // }
 
 
 
@@ -321,18 +321,18 @@ function ItemPage () {
                     <Col span={8}>
                         <Title level={2} style={{ display: 'flex', alignItems: 'center' }}>
                             {item.name}
-                            <span style={{ marginLeft: '10px' }}>
+                            {/* <span style={{ marginLeft: '10px' }}>
                                 {
                                     contextUserID && (isFavorited ?
                                         <StarFilled style={{ color: 'gold', fontSize: '20px' }} onClick={toggleFavorite} /> :
                                         <StarOutlined style={{ fontSize: '20px' }} onClick={toggleFavorite} />)
                                 }
 
-                            </span>
+                            </span> */}
                         </Title>
 
                         <div style={{ marginBottom: '15px' }}>
-                            <Tag color="blue">item.category</Tag>
+                            <Tag color="blue">{item.category}</Tag>
                         </div>
 
                         <Text strong>Estimated Price: </Text><br />${item.price}<br /><br />
@@ -428,7 +428,7 @@ function ItemPage () {
                             <Form.Item label="Estimated Price" required>
                                 <Input
                                     value={editedItem.price}
-                                    onChange={(e) => setEditedItem(prev => ({ ...prev, estimatedPrice: e.target.value }))}
+                                    onChange={(e) => setEditedItem(prev => ({ ...prev, price: e.target.value }))}
                                     placeholder="Price"
                                 />
                             </Form.Item>

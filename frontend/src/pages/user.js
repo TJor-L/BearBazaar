@@ -165,9 +165,9 @@ function UserProfilePage () {
             {contextUserID == urlUserID ? (
               <Col span={12} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 <Button onClick={() => navigate('/posted-item')}>My Posted Items</Button>
-                <Button onClick={() => navigate('/B')}>B</Button>
+                {/* <Button onClick={() => navigate('/B')}>B</Button>
                 <Button onClick={() => navigate('/C')}>C</Button>
-                <Button onClick={() => navigate('/D')}>D</Button>
+                <Button onClick={() => navigate('/D')}>D</Button> */}
                 <Card title="Description" bordered={true} style={{ width: "100%" }}>
                   {isEditingDescription ? (
                     <>
