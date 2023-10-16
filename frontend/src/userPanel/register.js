@@ -1,60 +1,60 @@
-import React, {useContext, useState} from 'react';
-import UserContext from '../contexts/userContext';
-import { Input, Button, Alert } from 'antd';
+import React, { useContext, useState } from 'react'
+import UserContext from '../contexts/userContext'
+import { Input, Button, Alert } from 'antd'
 
-function Register({onClose}) {
-    const { contextUsername, contextUserID } = useContext(UserContext);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [userID, setUserID] = useState(''); // Renamed from schoolId to userID
-  const [error, setError] = useState(null);
-  const {setContextUsername, setContextUserID} = useContext(UserContext);
+function Register ({ onClose }) {
+    const { contextUsername, contextUserID } = useContext(UserContext)
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('')
+    const [phone, setPhone] = useState('')
+    const [userID, setUserID] = useState('') // Renamed from schoolId to userID
+    const [error, setError] = useState(null)
+    const { setContextUsername, setContextUserID } = useContext(UserContext)
 
-  async function handleRegister() {
-    if (!userID || !username || !password || !phone) {
-      setError('All fields are required!');
-      return;
+    async function handleRegister () {
+        if (!userID || !username || !password || !phone) {
+            setError('All fields are required!')
+            return
+        }
+        const response = await fetch('http://www.dijkstraliu.com:5000/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password,
+                email: "goodEmailAddress@wustl.edu",
+                phoneNumber: phone,
+                studentId: userID,
+            }),
+        })
+
+        // const data = await response.json();
+
+        // Start by checking the response status
+        if (response.ok) {
+            // Response is OK, but there's no content to parse.
+            // Proceed with the assumption that registration was successful.
+
+            // Update context or state as necessary here
+            setContextUsername(username)
+            setContextUserID(userID)
+            // Close the modal or navigate away
+            onClose()
+
+        } else {
+            // If the request was not successful, try to parse the error and display it.
+            try {
+                const data = await response.json()
+                setError(data.message || 'An error occurred during registration.')
+            } catch (error) {
+                // If parsing the JSON failed (e.g., due to an empty body), fall back to a default error message.
+                setError('An error occurred during registration.')
+            }
+        }
     }
-    const response = await fetch('http://localhost:8080/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-        email: "goodEmailAddress@wustl.edu",
-        phoneNumber: phone,
-        studentId: userID,
-      }),
-    });
-
-   // const data = await response.json();
-
-// Start by checking the response status
-      if (response.ok) {
-          // Response is OK, but there's no content to parse.
-          // Proceed with the assumption that registration was successful.
-
-          // Update context or state as necessary here
-          setContextUsername(username);
-          setContextUserID(userID);
-          // Close the modal or navigate away
-          onClose();
-
-      } else {
-          // If the request was not successful, try to parse the error and display it.
-          try {
-              const data = await response.json();
-              setError(data.message || 'An error occurred during registration.');
-          } catch (error) {
-              // If parsing the JSON failed (e.g., due to an empty body), fall back to a default error message.
-              setError('An error occurred during registration.');
-          }
-      }
-  }
 
     return (
         <div className="register">
@@ -95,7 +95,7 @@ function Register({onClose}) {
                 <Button type="primary" onClick={handleRegister}>Register</Button>
             </div>
         </div>
-    );
+    )
 }
 
-export default Register;
+export default Register

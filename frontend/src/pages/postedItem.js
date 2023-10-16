@@ -1,35 +1,35 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {Layout, List, Typography, Card, message} from 'antd';
-import { Link } from 'react-router-dom';
-import fakeItems from "../fakedata/fakeitems";
-import UserContext from "../contexts/userContext";
+import React, { useContext, useEffect, useState } from 'react'
+import { Layout, List, Typography, Card, message } from 'antd'
+import { Link } from 'react-router-dom'
+import fakeItems from "../fakedata/fakeitems"
+import UserContext from "../contexts/userContext"
 
-const { Content } = Layout;
+const { Content } = Layout
 
-function PostedItems() {
-    const [items, setItems] = useState([]);
+function PostedItems () {
+    const [items, setItems] = useState([])
 
-    const { contextUserID, contextUsername } = useContext(UserContext);
+    const { contextUserID, contextUsername } = useContext(UserContext)
 
     useEffect(() => {
         // 当组件加载时，发送POST请求
-        fetchItems();
-    }, [contextUserID]);
+        fetchItems()
+    }, [contextUserID])
 
     const fetchItems = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/items/owner/${contextUsername}`);
+            const response = await fetch(`http://www.dijkstraliu.com:5000/items/owner/${contextUsername}`)
 
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error('Network response was not ok')
             }
 
-            const data = await response.json();
-            setItems(data);
+            const data = await response.json()
+            setItems(data)
         } catch (error) {
-            console.error('There was a problem with the fetch operation:', error.message);
+            console.error('There was a problem with the fetch operation:', error.message)
         }
-    };
+    }
 
 
     return (
@@ -54,7 +54,7 @@ function PostedItems() {
                 />
             </Content>
         </Layout>
-    );
+    )
 }
 
-export default PostedItems;
+export default PostedItems

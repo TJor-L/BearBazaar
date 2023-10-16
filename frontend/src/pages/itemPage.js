@@ -1,61 +1,61 @@
-import React, { useEffect, useState, useContext} from 'react';
-import { useParams, Link,  useNavigate , useLocation} from 'react-router-dom';
-import {Row, Col, Image, Button, Typography, Layout, Modal, Input, Tag, message, List, Carousel,  Form, Select, Upload} from 'antd';
-import { StarOutlined, StarFilled, UploadOutlined } from '@ant-design/icons';
-import UserContext from "../contexts/userContext";
-import fakeItems from "../fakedata/fakeitems";
+import React, { useEffect, useState, useContext } from 'react'
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'
+import { Row, Col, Image, Button, Typography, Layout, Modal, Input, Tag, message, List, Carousel, Form, Select, Upload } from 'antd'
+import { StarOutlined, StarFilled, UploadOutlined } from '@ant-design/icons'
+import UserContext from "../contexts/userContext"
+import fakeItems from "../fakedata/fakeitems"
 
-const { Title, Text } = Typography;
+const { Title, Text } = Typography
 
-const { Content } = Layout;
+const { Content } = Layout
 
-function ItemPage() {
-    const { contextUsername, contextUserID } = useContext(UserContext);
-    const [isOwner, setIsOwner] = useState(false);
-    const [bids, setBids] = useState([]);
-    const { itemID } = useParams(); // 从URL中读取itemID
-    const [item, setItem] = useState(null);
-    const [fileList, setFileList] = useState([]);
-    const [isFavorited, setIsFavorited] = useState(false);
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [bidAmount, setBidAmount] = useState(''); // 用户输入的出价
-    const [editedItem, setEditedItem] = useState({ name: '', description: '' });
-    const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-    const [userBid, setUserBid] = useState(null);
-    const navigate = useNavigate();
+function ItemPage () {
+    const { contextUsername, contextUserID } = useContext(UserContext)
+    const [isOwner, setIsOwner] = useState(false)
+    const [bids, setBids] = useState([])
+    const { itemID } = useParams() // 从URL中读取itemID
+    const [item, setItem] = useState(null)
+    const [fileList, setFileList] = useState([])
+    const [isFavorited, setIsFavorited] = useState(false)
+    const [isModalVisible, setIsModalVisible] = useState(false)
+    const [bidAmount, setBidAmount] = useState('') // 用户输入的出价
+    const [editedItem, setEditedItem] = useState({ name: '', description: '' })
+    const [isEditModalVisible, setIsEditModalVisible] = useState(false)
+    const [userBid, setUserBid] = useState(null)
+    const navigate = useNavigate()
 
-    const location = useLocation();
+    const location = useLocation()
 
     useEffect(() => {
-        async function fetchData() {
+        async function fetchData () {
             try {
-                const response = await fetch(`http://localhost:8080/items/${itemID}`);
-                const data = await response.json();
+                const response = await fetch(`http://www.dijkstraliu.com:5000/items/${itemID}`)
+                const data = await response.json()
 
                 if (response.ok) {
-                    setItem(data);
+                    setItem(data)
                 } else {
-                    console.error('Failed to fetch item:', data.message);
+                    console.error('Failed to fetch item:', data.message)
                 }
             } catch (error) {
-                console.error('There was an error fetching the item:', error);
+                console.error('There was an error fetching the item:', error)
             }
         }
-        fetchData();
-    }, [itemID, contextUserID]);
+        fetchData()
+    }, [itemID, contextUserID])
 
     useEffect(() => {
         if (item) {
-            console.log(item);
+            console.log(item)
             // setIsFavorited(item.isFavorited)
             if (item.owner.username === contextUsername) {
-                setIsOwner(true);
+                setIsOwner(true)
             } else {
-                setIsOwner(false);
+                setIsOwner(false)
             }
             //fetchBidsForItem();
         }
-    }, [item, contextUsername]);
+    }, [item, contextUsername])
 
     // const fetchBidsForItem = () => {
     //
@@ -152,81 +152,81 @@ function ItemPage() {
     // }
 
 
-    async function handleDeleteItem() {
+    async function handleDeleteItem () {
         try {
-            const response = await fetch(`http://localhost:8080/items/${itemID}`, {
+            const response = await fetch(`http://www.dijkstraliu.com:5000/items/${itemID}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-            });
+            })
 
             if (response.ok) {
-                alert("Item deleted successfully");
-                navigate('/home');
+                alert("Item deleted successfully")
+                navigate('/home')
             } else {
-                const data = await response.json();
-                console.error('Failed to delete the item:', data.message);
-                alert("Failed to delete the item. Please try again later.");
+                const data = await response.json()
+                console.error('Failed to delete the item:', data.message)
+                alert("Failed to delete the item. Please try again later.")
             }
         } catch (error) {
-            console.error('There was an error deleting the item:', error);
-            alert("There was an error deleting the item. Please try again later.");
+            console.error('There was an error deleting the item:', error)
+            alert("There was an error deleting the item. Please try again later.")
         }
-        message.success("Item deleted successfully");
+        message.success("Item deleted successfully")
     }
 
     const handleOpenEditModal = () => {
-        setIsEditModalVisible(true);
+        setIsEditModalVisible(true)
         setEditedItem({
             name: item.name,
             description: item.description,
             price: item.price,
             category: item.category
-        });
+        })
     }
 
     const handleUploadChange = ({ fileList }) => {
-        setFileList(fileList);
-    };
-
-    const handleCloseEditModal = () => {
-        setIsEditModalVisible(false);
+        setFileList(fileList)
     }
 
-    async function handleSaveChanges() {
+    const handleCloseEditModal = () => {
+        setIsEditModalVisible(false)
+    }
+
+    async function handleSaveChanges () {
         if (!editedItem.name || !editedItem.description || !editedItem.category || !editedItem.price) {
-            message.error('All fields are required!');
-            return;
+            message.error('All fields are required!')
+            return
         }
 
         // Create a new FormData object for handling file uploads and form data
-        const formData = new FormData();
+        const formData = new FormData()
 
         // Append the form data in the order as seen in the screenshot
-        formData.append('name', editedItem.name);
-        formData.append('category', editedItem.category);
-        formData.append('description', editedItem.description);
-        formData.append('price', editedItem.price);
+        formData.append('name', editedItem.name)
+        formData.append('category', editedItem.category)
+        formData.append('description', editedItem.description)
+        formData.append('price', editedItem.price)
 
         // Append the images; fileList should be an array of File objects
         fileList.forEach((file) => {
-            formData.append('images', file.originFileObj);
-        });
+            formData.append('images', file.originFileObj)
+        })
 
 
-        const response = await fetch(`http://localhost:8080/items/${itemID}`, {
+        const response = await fetch(`http://www.dijkstraliu.com:5000/items/${itemID}`, {
             method: 'PUT',
             body: formData,
-        });
+        })
 
         if (response.ok) {
-            message.success('Item edited successfully');
-            handleCloseEditModal();
-            navigate(`/item/${itemID}`);
+            message.success('Item edited successfully')
+            handleCloseEditModal()
+            navigate(`/item/${itemID}`)
         } else {
-            const data = await response.json();
-            console.error('Error from server:', data);
+            const data = await response.json()
+            console.error('Error from server:', data)
         }
     }
 
@@ -234,17 +234,17 @@ function ItemPage() {
     const handleOpenModal = () => {
         if (!contextUserID) {
             // Prompt the user to log in
-            alert("Please log in to continue.");
-            return;
+            alert("Please log in to continue.")
+            return
         }
-        setBidAmount(item.estimatedPrice.toString()); // 使用商品估价作为默认出价，并将其转换为字符串以适应Input组件
-        setIsModalVisible(true);
+        setBidAmount(item.estimatedPrice.toString()) // 使用商品估价作为默认出价，并将其转换为字符串以适应Input组件
+        setIsModalVisible(true)
     }
 
 
     const handleCloseModal = () => {
-        setIsModalVisible(false);
-        setBidAmount(''); // 清除输入框内容
+        setIsModalVisible(false)
+        setBidAmount('') // 清除输入框内容
     }
 
     const toggleFavorite = async () => {
@@ -286,24 +286,24 @@ function ItemPage() {
                     itemID: itemID,
                     bid: bidAmount
                 }),
-            });
+            })
 
             if (response.ok) {
                 // 这里可以处理购买成功的逻辑，例如提醒用户购买成功
-                setIsModalVisible(false); // 关闭模态窗口
+                setIsModalVisible(false) // 关闭模态窗口
             } else {
                 // 处理错误信息
-                const data = await response.json();
-                console.error('Failed to purchase:', data.message);
+                const data = await response.json()
+                console.error('Failed to purchase:', data.message)
             }
         } catch (error) {
-            console.error('There was an error making the purchase:', error);
+            console.error('There was an error making the purchase:', error)
         }
     }
 
 
 
-    if (!item) return <p>Loading...</p>;
+    if (!item) return <p>Loading...</p>
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
@@ -322,11 +322,11 @@ function ItemPage() {
                         <Title level={2} style={{ display: 'flex', alignItems: 'center' }}>
                             {item.name}
                             <span style={{ marginLeft: '10px' }}>
-                            {
-                                contextUserID && (isFavorited ?
-                                    <StarFilled style={{ color: 'gold', fontSize: '20px' }} onClick={toggleFavorite} /> :
-                                    <StarOutlined style={{ fontSize: '20px' }} onClick={toggleFavorite} />)
-                            }
+                                {
+                                    contextUserID && (isFavorited ?
+                                        <StarFilled style={{ color: 'gold', fontSize: '20px' }} onClick={toggleFavorite} /> :
+                                        <StarOutlined style={{ fontSize: '20px' }} onClick={toggleFavorite} />)
+                                }
 
                             </span>
                         </Title>
@@ -449,7 +449,7 @@ function ItemPage() {
                 </Row>
             </Content>
         </Layout>
-    );
+    )
 }
 
-export default ItemPage;
+export default ItemPage

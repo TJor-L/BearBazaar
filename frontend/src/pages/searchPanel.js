@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 
 const SearchPanel = ({ items = [] }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('')
+  const [searchResults, setSearchResults] = useState([])
 
   const handleChange = event => {
-    setSearchTerm(event.target.value);
-  };
+    setSearchTerm(event.target.value)
+  }
 
   const handleSearch = async () => {
     // Uncomment below lines once backend is ready
     /*
     try {
-      const response = await fetch('http://localhost:8080/search', {
+      const response = await fetch('http://www.dijkstraliu.com:5000/search', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -27,16 +27,16 @@ const SearchPanel = ({ items = [] }) => {
     */
 
     // Remove below line once backend is ready
-    mockSearch();
-  };
+    mockSearch()
+  }
 
   // Simulated function to mock backend search results
   const mockSearch = () => {
     const results = items.filter(item =>
       item.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setSearchResults(results);
-  };
+    )
+    setSearchResults(results)
+  }
 
   // Uncomment below useEffect hook once backend interaction is ready
   /*
@@ -60,7 +60,7 @@ const SearchPanel = ({ items = [] }) => {
         ))}
       </ul>
     </div>
-  );
-};
+  )
+}
 
-export default SearchPanel;
+export default SearchPanel

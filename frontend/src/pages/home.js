@@ -1,32 +1,32 @@
-import React, {useEffect, useState} from 'react';
-import {Card, Layout, List, Typography} from 'antd';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { Card, Layout, List, Typography } from 'antd'
+import { Link } from 'react-router-dom'
 
-const { Content } = Layout;
+const { Content } = Layout
 
 
-function HomePage() {
-    const [items, setItems] = useState([]);
+function HomePage () {
+    const [items, setItems] = useState([])
 
     useEffect(() => {
         // Fetch actual data from the backend
         const fetchData = async () => {
             try {
-                const response = await fetch('http://localhost:8080/items');
+                const response = await fetch('http://www.dijkstraliu.com:5000/items')
 
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('Network response was not ok')
                 }
 
-                const data = await response.json();
-                setItems(data);
+                const data = await response.json()
+                setItems(data)
             } catch (error) {
-                console.error('There was a problem fetching the items:', error);
+                console.error('There was a problem fetching the items:', error)
             }
-        };
+        }
 
-        fetchData();
-    }, []);
+        fetchData()
+    }, [])
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
@@ -50,7 +50,7 @@ function HomePage() {
                 />
             </Content>
         </Layout>
-    );
+    )
 
 }
 
