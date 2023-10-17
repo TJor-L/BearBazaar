@@ -46,6 +46,7 @@ function PostItem () {
 
     if (response.ok) {
       message.success('Item added successfully')
+      navigate('/home')
     } else {
       const data = await response.json()
       setError(data.message || 'An error occurred while adding the item.')
