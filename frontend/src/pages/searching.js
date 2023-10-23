@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom'
 import fakeItems from "../fakedata/fakeitems"
 
 const { Content } = Layout
-
+const apiUrl = process.env.BACKEND_URL || 'http://localhost';
+const apiPort = process.env.BACKEND_PORT || '8080';
 function SearchingPage () {
     const [searchParams] = useSearchParams()
     const [filteredItems, setFilteredItems] = useState([])
@@ -22,7 +23,7 @@ function SearchingPage () {
                 const maxPrice = parseFloat(searchParams.get('maxPrice') || Infinity)
                 const categories = searchParams.get('categories')?.split(',') || []  // Assume categories are comma-separated in the URL
 
-                const response = await fetch('http://www.dijkstraliu.com:5000/items')
+                const response = await fetch(`${apiUrl}:${apiPort}/items`)
 
                 if (!response.ok) {
                     throw new Error('Network response was not ok')

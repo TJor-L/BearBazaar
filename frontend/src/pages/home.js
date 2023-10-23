@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { Card, Layout, List, Typography } from 'antd'
 import { Link } from 'react-router-dom'
 
+const apiUrl = process.env.BACKEND_URL || 'http://localhost';
+const apiPort = process.env.BACKEND_PORT || '8080';
+
 const { Content } = Layout
 
 
@@ -12,7 +15,7 @@ function HomePage () {
         // Fetch actual data from the backend
         const fetchData = async () => {
             try {
-                const response = await fetch('http://www.dijkstraliu.com:5000/items')
+                const response = await fetch(`${apiUrl}:${apiPort}/items`)
 
                 if (!response.ok) {
                     throw new Error('Network response was not ok')

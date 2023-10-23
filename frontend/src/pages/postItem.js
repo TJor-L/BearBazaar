@@ -1,3 +1,6 @@
+const apiUrl = process.env.BACKEND_URL || 'http://localhost'; // 默认值为'http://www.dijkstraliu.com'
+const apiPort = process.env.BACKEND_PORT || '8080'; // 默认值为'5000'
+
 import React, { useContext, useState } from 'react'
 import UserContext from '../contexts/userContext'
 import { Button, Input, message, Form, Alert, Upload, Layout, Row, Col, Select } from 'antd'
@@ -39,7 +42,7 @@ function PostItem () {
     })
 
 
-    const response = await fetch('http://www.dijkstraliu.com:5000/items', {
+    const response = await fetch(`${apiUrl}:${apiPort}/items`, {
       method: 'POST',
       body: formData,
     })

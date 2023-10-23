@@ -12,7 +12,7 @@ const SearchPanel = ({ items = [] }) => {
     // Uncomment below lines once backend is ready
     /*
     try {
-      const response = await fetch('http://www.dijkstraliu.com:5000/search', {
+      const response = await fetch('${apiUrl}:${apiPort}/search', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -4,6 +4,8 @@ import { Row, Col, Image, Button, Typography, Layout, Modal, Input, Tag, message
 import { StarOutlined, StarFilled, UploadOutlined } from '@ant-design/icons'
 import UserContext from "../contexts/userContext"
 import fakeItems from "../fakedata/fakeitems"
+const apiUrl = process.env.BACKEND_URL || 'http://localhost';
+const apiPort = process.env.BACKEND_PORT || '8080';
 
 const { Title, Text } = Typography
 
@@ -29,7 +31,7 @@ function ItemPage () {
     useEffect(() => {
         async function fetchData () {
             try {
-                const response = await fetch(`http://www.dijkstraliu.com:5000/items/${itemID}`)
+                const response = await fetch(`${apiUrl}:${apiPort}/items/${itemID}`)
                 const data = await response.json()
 
                 if (response.ok) {
@@ -154,7 +156,7 @@ function ItemPage () {
 
     async function handleDeleteItem () {
         try {
-            const response = await fetch(`http://www.dijkstraliu.com:5000/items/${itemID}`, {
+            const response = await fetch(`${apiUrl}:${apiPort}/items/${itemID}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -215,7 +217,7 @@ function ItemPage () {
         })
 
 
-        const response = await fetch(`http://www.dijkstraliu.com:5000/items/${itemID}`, {
+        const response = await fetch(`${apiUrl}:${apiPort}/items/${itemID}`, {
             method: 'PUT',
             body: formData,
         })

@@ -9,7 +9,7 @@ function ShoppingPage () {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await fetch('http://www.dijkstraliu.com:5000/items')
+        const response = await fetch('${apiUrl}:${apiPort}/items')
         if (!response.ok) {
           const data = await response.json()
           throw new Error(data.message || 'Network response was not ok')

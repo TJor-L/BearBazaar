@@ -2,6 +2,9 @@ import React, { useContext, useState } from 'react'
 import UserContext from '../contexts/userContext'
 import { Input, Button, Alert } from 'antd'
 
+const apiUrl = process.env.BACKEND_URL || 'http://localhost';
+const apiPort = process.env.BACKEND_PORT || '8080';
+
 function Register ({ onClose }) {
     const { contextUsername, contextUserID } = useContext(UserContext)
     const [username, setUsername] = useState('')
@@ -17,7 +20,7 @@ function Register ({ onClose }) {
             setError('All fields are required!')
             return
         }
-        const response = await fetch('http://www.dijkstraliu.com:5000/register', {
+        const response = await fetch(`${apiUrl}:${apiPort}/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

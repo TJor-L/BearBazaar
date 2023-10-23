@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-
+const apiUrl = process.env.BACKEND_URL || 'http://localhost';
+const apiPort = process.env.BACKEND_PORT || '8080';
 function EditItem ({ item }) {
   // 设置初始状态
   const [name, setName] = useState(item.name)
@@ -11,7 +12,7 @@ function EditItem ({ item }) {
   // PUT请求，更新项目
   const updateItem = async () => {
     try {
-      const response = await fetch(`http://www.dijkstraliu.com:5000/items/${item.id}`, {
+      const response = await fetch(`${apiUrl}:${apiPort}/items/${item.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

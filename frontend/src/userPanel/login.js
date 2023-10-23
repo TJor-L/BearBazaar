@@ -1,7 +1,8 @@
 import UserContext from '../contexts/userContext'
 import { useContext, useState } from 'react'
 import { Input, Button, Alert } from 'antd'
-
+const apiUrl = process.env.BACKEND_URL || 'http://localhost';
+const apiPort = process.env.BACKEND_PORT || '8080';
 function Login ({ onClose }) {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -22,7 +23,7 @@ function Login ({ onClose }) {
         }
         console.log(username, password)
         try {
-            const response = await fetch('http://www.dijkstraliu.com:5000/login', {  // Replace with your actual login endpoint
+            const response = await fetch(`${apiUrl}:${apiPort}/login`, {  // Replace with your actual login endpoint
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

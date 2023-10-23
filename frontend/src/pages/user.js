@@ -6,7 +6,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import * as Const from "../const"
 
 const { Content } = Layout
-
+const apiUrl = process.env.BACKEND_URL || 'http://localhost';
+const apiPort = process.env.BACKEND_PORT || '8080';
 function UserProfilePage () {
   const { contextUsername, contextUserID } = useContext(UserContext)
   const { urlUserID } = useParams()
@@ -19,7 +20,7 @@ function UserProfilePage () {
 
 
   useEffect(() => {
-    fetch(`http://www.dijkstraliu.com:5000/user/${urlUserID}`)
+    fetch(`${apiUrl}:${apiPort}/user/${urlUserID}`)
       .then(response => {
         if (!response.ok) {
           navigate('/home')
@@ -41,7 +42,7 @@ function UserProfilePage () {
   }
 
   const handleSaveDescription = () => {
-    fetch(`http://www.dijkstraliu.com:5000/update`, {
+    fetch(`${apiUrl}:${apiPort}/update`, {
       method: 'PUT',  // Or 'POST' if your API expects that for updates
       headers: {
         'Content-Type': 'application/json',
@@ -76,7 +77,7 @@ function UserProfilePage () {
   }
 
   const handleSave = () => {
-    fetch(`http://www.dijkstraliu.com:5000/update`, {
+    fetch(`${apiUrl}:${apiPort}/update`, {
       method: 'PUT',  // Or 'POST' if your API expects that for updates
       headers: {
         'Content-Type': 'application/json',

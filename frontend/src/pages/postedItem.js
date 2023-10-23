@@ -5,7 +5,8 @@ import fakeItems from "../fakedata/fakeitems"
 import UserContext from "../contexts/userContext"
 
 const { Content } = Layout
-
+const apiUrl = process.env.BACKEND_URL || 'http://localhost';
+const apiPort = process.env.BACKEND_PORT || '8080';
 function PostedItems () {
     const [items, setItems] = useState([])
 
@@ -18,7 +19,7 @@ function PostedItems () {
 
     const fetchItems = async () => {
         try {
-            const response = await fetch(`http://www.dijkstraliu.com:5000/items/owner/${contextUsername}`)
+            const response = await fetch(`${apiUrl}:${apiPort}/items/owner/${contextUsername}`)
 
             if (!response.ok) {
                 throw new Error('Network response was not ok')
