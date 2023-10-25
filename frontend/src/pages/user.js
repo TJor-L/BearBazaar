@@ -13,6 +13,7 @@ function UserProfilePage () {
   const { urlUserID } = useParams()
   const navigate = useNavigate()
   const [userName, setUserName] = useState('')
+  const [email, setEmail] = useState('fake@email.com')
   const [userDescription, setUserDescription] = useState('')
   const [phone, setPhone] = useState('')
   const [isEditing, setIsEditing] = useState(false)
@@ -28,7 +29,7 @@ function UserProfilePage () {
         return response.json()
       })
       .then(data => {
-        //setEmail(data.email || 'fake@email.com'); // fake data
+        setEmail(data.email || 'fake@email.com'); // fake data
         setPhone(data.phone)
         setUserName(data.username)
         setUserDescription(data.description)
@@ -119,7 +120,7 @@ function UserProfilePage () {
               <Card>
                 {isEditing ? (
                   <>
-                    {/*<Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" style={{ marginBottom: '10px' }} />*/}
+                    <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" style={{ marginBottom: '10px' }} />
                     <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone Number" style={{ marginBottom: '10px' }} />
                     {/*<Input.Password*/}
                     {/*    value={password}*/}
@@ -133,9 +134,9 @@ function UserProfilePage () {
                 ) : (
                   <>
                     <List>
-                      {/*<List.Item>*/}
-                      {/*  <List.Item.Meta title="Email" description={email} />*/}
-                      {/*</List.Item>*/}
+                      <List.Item>
+                        <List.Item.Meta title="Email" description={email} />
+                      </List.Item>
                       <List.Item>
                         <List.Item.Meta title="Phone" description={phone} />
                       </List.Item>
@@ -166,8 +167,8 @@ function UserProfilePage () {
             {contextUserID == urlUserID ? (
               <Col span={12} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 <Button onClick={() => navigate('/posted-item')}>My Posted Items</Button>
-                {/* <Button onClick={() => navigate('/B')}>B</Button>
-                <Button onClick={() => navigate('/C')}>C</Button>
+                <Button onClick={() => navigate('/transactions')}>Transactions</Button>
+                {/*<Button onClick={() => navigate('/C')}>C</Button>
                 <Button onClick={() => navigate('/D')}>D</Button> */}
                 <Card title="Description" bordered={true} style={{ width: "100%" }}>
                   {isEditingDescription ? (
