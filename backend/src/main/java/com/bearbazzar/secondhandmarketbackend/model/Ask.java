@@ -74,7 +74,7 @@ public class Ask {
     public static class Builder {
         @JsonProperty("id")
         private long id;
-        @JsonProperty("user")
+        @JsonProperty("buyer")
         private User user;
         @JsonProperty("item")
         private Item item;
