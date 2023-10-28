@@ -1,41 +1,54 @@
-import React, { useState } from 'react';
-import Filter from "./filter";
-import { useNavigate } from 'react-router-dom';
-import { Button, Input, Drawer, Menu} from 'antd';
+import React, { useState, useEffect } from 'react'
+import Filter from "./filter"
+import { useNavigate } from 'react-router-dom'
+import { Button, Input, Drawer, Menu } from 'antd'
 
-function SearchBar() {
+function SearchBar () {
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const [filterData, setFilterData] = useState({
-        "categories" : '',
-        "minPrice" : 0,
-        "maxPrice" : 1000
-    });
+        "categories": '',
+        "minPrice": 0,
+        "maxPrice": 1000
+    })
 
-    const [searchKey, setSearchKey] = useState('');
-    const [selectedFilter, setSelectedFilter] = useState(false);
+    const [searchKey, setSearchKey] = useState('')
+    const [selectedFilter, setSelectedFilter] = useState(false)
+    const [isFirstRender, setIsFirstRender] = useState(true)
 
-    function handleSwitchFilterClick() {
+
+    useEffect(() => {
+        if (isFirstRender) {
+            setIsFirstRender(false)
+            return
+        }
+
+        if (selectedFilter === false) {
+            handleSubmitSearch()
+        }
+    }, [filterData])
+
+    function handleSwitchFilterClick () {
         setSelectedFilter(!selectedFilter)
     }
 
-    function handleCancelFilterClick() {
+    function handleCancelFilterClick () {
         setSelectedFilter(false)
     }
 
-    function handleSubmitFilterClick(submitedFilterData) {
-        setSelectedFilter(false);
-        setFilterData(submitedFilterData);
+    function handleSubmitFilterClick (submitedFilterData) {
+        setSelectedFilter(false)
+        setFilterData(submitedFilterData)
     }
 
-    function handleSubmitSearch() {
-        navigate(`/searching?searchkey=${searchKey}&categories=${filterData.categories}&minPrice=${filterData.minPrice}&maxPrice=${filterData.maxPrice}`);
+    function handleSubmitSearch () {
+        navigate(`/searching?searchkey=${searchKey}&categories=${filterData.categories}&minPrice=${filterData.minPrice}&maxPrice=${filterData.maxPrice}`)
     }
 
     return (
-        <Menu.Item style={{width: '500px'}}>
-            <Button onClick={handleSwitchFilterClick} style={{width: '20%', marginRight:'3%'}}>Filter</Button>
+        <Menu.Item style={{ width: '500px' }}>
+            <Button onClick={handleSwitchFilterClick} style={{ width: '20%', marginRight: '3%' }}>Filter</Button>
             <Drawer
                 title="Filter"
                 placement="left"
@@ -49,11 +62,11 @@ function SearchBar() {
                 value={searchKey}
                 onChange={(e) => setSearchKey(e.target.value)}
                 placeholder="Search Bear Bazaar"
-                style={{width: '54%'}}
+                style={{ width: '54%' }}
             />
-            <Button onClick={handleSubmitSearch} style={{width: '20%', marginLeft:'3%'}}>Submit</Button>
+            <Button onClick={handleSubmitSearch} style={{ width: '20%', marginLeft: '3%' }}>Submit</Button>
         </Menu.Item>
-    );
+    )
 }
 
-export default SearchBar;
+export default SearchBar
