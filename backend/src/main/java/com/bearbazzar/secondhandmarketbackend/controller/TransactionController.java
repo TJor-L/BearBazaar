@@ -2,6 +2,7 @@ package com.bearbazzar.secondhandmarketbackend.controller;
 
 import com.bearbazzar.secondhandmarketbackend.exception.SellerErrorException;
 import com.bearbazzar.secondhandmarketbackend.exception.TransactionNoFoundException;
+import com.bearbazzar.secondhandmarketbackend.exception.TransactionStateException;
 import com.bearbazzar.secondhandmarketbackend.model.Transaction;
 import com.bearbazzar.secondhandmarketbackend.model.TransactionState;
 import com.bearbazzar.secondhandmarketbackend.model.User;
@@ -36,7 +37,7 @@ public class TransactionController {
                 .setSeller(sellerEntity)
                 .setItem(item_id)
                 .setPrice(price)
-                .setStatus(TransactionState.PENDING)
+                .setStatus(TransactionState.Pending)
                 .build();
         transactionService.createTransaction(transaction);
     }
@@ -65,6 +66,9 @@ public class TransactionController {
         Transaction transaction = transactionService.getTransactionById(id);
         if(transaction == null) {
             throw new TransactionNoFoundException("Transaction no exist");
+        }
+        if(transaction.getStatus() != TransactionState.Pending) {
+            throw new TransactionStateException("Transaction already confirmed and cannot be deleted");
         }
         transactionService.deleteTransactionById(id);
     }
