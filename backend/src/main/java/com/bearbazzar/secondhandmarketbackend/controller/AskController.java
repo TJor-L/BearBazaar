@@ -57,11 +57,11 @@ public class AskController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Ask created successfully");
     }
 
-    @PostMapping("/item/{id}")
+    @GetMapping("/item/{id}")
     public List<AskResponse> getItemAsks(@PathVariable("id") Long id){
         return askService.getItemAsks(id);
     }
-    @PostMapping("/user/{username}")
+    @GetMapping("/user/{username}")
     public List<AskResponse> getUserAsks(@PathVariable("username") String username){
         return askService.getUserAsks(username);
     }
