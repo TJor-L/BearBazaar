@@ -1,27 +1,37 @@
-import React, { useState } from 'react';
-import { Slider, Select, Button, Row, Col } from 'antd';
-import fakeItems from "../fakedata/fakeitems";
+import React, { useState } from 'react'
+import { Slider, Select, Button, Row, Col } from 'antd'
+import fakeItems from "../fakedata/fakeitems"
 
-const { Option } = Select;
+const { Option } = Select
 
-function Filter({ onCancel, onSubmit }) {
+function Filter ({ onCancel, onSubmit }) {
 
-    const [items, setItems] = useState([]);
-    const [categoryFilter, setCategoryFilter] = useState([]);
-    const [priceRange, setPriceRange] = useState([0, 1000]);
+    const [items, setItems] = useState([])
+    const [categoryFilter, setCategoryFilter] = useState(["all"])
+    const [priceRange, setPriceRange] = useState([0, 1000])
 
 
-    const categories = ["sport", "book", "fashion", "electro", "all"];
+    const categories = ["sport", "book", "fashion", "electro", "all"]
 
-    function onFilterSubmit(){
-        const [minPrice, maxPrice] = priceRange;
+    function onFilterSubmit () {
+        const [minPrice, maxPrice] = priceRange
         const filterData = {
-            "categories" : categoryFilter, // This is now an array
-            "minPrice" : minPrice,
-            "maxPrice" : maxPrice
+            "categories": categoryFilter, // This is now an array
+            "minPrice": minPrice,
+            "maxPrice": maxPrice
         }
-        onSubmit(filterData);
+        onSubmit(filterData)
     }
+
+    function handleCategoryChange (value) {
+        // If "all" is selected, reset other selections
+        if (value.includes("all")) {
+            setCategoryFilter(["all"])
+        } else {
+            setCategoryFilter(value)
+        }
+    }
+
 
     return (
         <div className='filter'>
@@ -30,9 +40,9 @@ function Filter({ onCancel, onSubmit }) {
                     <label>
                         Category:
                         <Select
-                            mode="multiple" // Add this for multiple selections
+                            mode="multiple"
                             value={categoryFilter}
-                            onChange={value => setCategoryFilter(value)}
+                            onChange={handleCategoryChange}
                             style={{ width: '100%' }}
                         >
                             {categories.map(cat => <Option key={cat} value={cat}>{cat}</Option>)}
@@ -53,11 +63,11 @@ function Filter({ onCancel, onSubmit }) {
             <Row className="filter-panel" justify="end" style={{ marginTop: '20px' }}>
                 <Col>
                     <Button className="cancel-button" onClick={() => onCancel()} style={{ marginRight: '10px' }}>Cancel</Button>
-                    <Button type="primary" className="submit-button" onClick={() => onFilterSubmit()}>Submit</Button>
+                    <Button type="primary" className="submit-button" onClick={() => onFilterSubmit()}>Save Changes</Button>
                 </Col>
             </Row>
         </div>
-    );
+    )
 }
 
-export default Filter;
+export default Filter
