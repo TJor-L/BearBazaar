@@ -1,12 +1,13 @@
-const apiUrl = process.env.BACKEND_URL || 'http://localhost'; // 默认值为'http://www.dijkstraliu.com'
-const apiPort = process.env.BACKEND_PORT || '8080'; // 默认值为'5000'
-
 import React, { useContext, useState } from 'react'
 import UserContext from '../contexts/userContext'
 import { Button, Input, message, Form, Alert, Upload, Layout, Row, Col, Select } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import TextArea from "antd/es/input/TextArea"
 import { useNavigate } from "react-router-dom"
+
+const apiUrl = process.env.BACKEND_URL || 'http://localhost'; // 默认值为'http://www.dijkstraliu.com'
+const apiPort = process.env.BACKEND_PORT || '8080'; // 默认值为'5000'
+
 const { Content } = Layout
 function PostItem () {
   const { contextUsername, contextUserID } = useContext(UserContext)

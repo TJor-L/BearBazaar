@@ -52,7 +52,7 @@ function Login ({ onClose }) {
             }
         } catch (error) {
             // Handle network errors or any other issues related to the fetch call
-            setError('There was a problem connecting to the server.')
+            setError('There was a problem logging in')
         }
     }
     return (
