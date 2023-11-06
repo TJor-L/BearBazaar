@@ -25,7 +25,10 @@ public class AskService {
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
     }
-
+    public Ask getAskById(Long id) {
+        Optional<Ask> optionalAsk = askRepository.findById(id);
+        return optionalAsk.orElse(null);
+    }
     public List<AskResponse> getItemAsks(Long id) {
         List<Ask> asks = askRepository.findByItem(new Item.Builder().setId(id).build());
         List<AskResponse> askResponses = asks.stream()
@@ -37,7 +40,6 @@ public class AskService {
                         ask.getPriceOffered(),
                         ask.getMessage()))
                 .collect(Collectors.toList());
-
         return askResponses;
     }
 

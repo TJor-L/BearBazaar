@@ -3,9 +3,11 @@ package com.bearbazzar.secondhandmarketbackend.controller;
 import com.bearbazzar.secondhandmarketbackend.exception.SellerErrorException;
 import com.bearbazzar.secondhandmarketbackend.exception.TransactionNoFoundException;
 import com.bearbazzar.secondhandmarketbackend.exception.TransactionStateException;
+import com.bearbazzar.secondhandmarketbackend.model.Ask;
 import com.bearbazzar.secondhandmarketbackend.model.Transaction;
 import com.bearbazzar.secondhandmarketbackend.model.TransactionState;
 import com.bearbazzar.secondhandmarketbackend.model.User;
+import com.bearbazzar.secondhandmarketbackend.service.AskService;
 import com.bearbazzar.secondhandmarketbackend.service.ItemService;
 import com.bearbazzar.secondhandmarketbackend.service.TransactionService;
 import org.springframework.http.ResponseEntity;
@@ -18,27 +20,25 @@ import java.util.List;
 public class TransactionController {
     private final TransactionService transactionService;
     private final ItemService itemService;
-    public TransactionController(TransactionService transactionService, ItemService itemService) {
+    private final AskService askService;
+    public TransactionController(TransactionService transactionService, ItemService itemService,AskService askService) {
         this.transactionService = transactionService;
         this.itemService = itemService;
+        this.askService = askService;
     }
     @PostMapping()
-    public void createTransaction(@RequestParam("buyer") String buyer,
-                                  @RequestParam("seller") String seller,
-                                  @RequestParam("item") Long item_id,
-                                  @RequestParam("price") Double price) {
-        User buyerEntity = new User.Builder().setUsername(buyer).build();
-        User sellerEntity = new User.Builder().setUsername(seller).build();
-        if(!itemService.GetItemById(item_id).getOwner().getUsername().equals(seller)) {
-            throw new SellerErrorException("The seller is not the owner of the item" + item_id.toString());
-        }
+    public void createTransaction(@RequestParam("ask_id") Long ask_id) {
+        Ask ask = askService.getAskById(ask_id);
+        User buyerEntity = new User.Builder().setUsername(ask.getUser().getUsername()).build();
+        User sellerEntity = new User.Builder().setUsername(ask.getItem().getOwner().getUsername()).build();
         Transaction transaction = new Transaction.Builder()
                 .setBuyer(buyerEntity)
                 .setSeller(sellerEntity)
-                .setItem(item_id)
-                .setPrice(price)
+                .setItem(ask.getItem().getId())
+                .setPrice(ask.getPriceOffered())
                 .setStatus(TransactionState.Pending)
                 .build();
+        askService.removeAsk(ask_id);
         transactionService.createTransaction(transaction);
     }
     @GetMapping("")
