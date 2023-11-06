@@ -9,6 +9,14 @@ function Logout({ onClose }) {
         // Reset context values
         setContextUsername('');
         setContextUserID('');
+        // Clear stored session data
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('username');
+        localStorage.removeItem('userID');
+
+        sessionStorage.removeItem('authToken');
+        sessionStorage.removeItem('username');
+        sessionStorage.removeItem('userID');
         onClose();
     };
 

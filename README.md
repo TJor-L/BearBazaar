@@ -48,7 +48,7 @@ Recommend you to use Plugin to format your code:
 - [WebStorm Guide](https://blog.jetbrains.com/webstorm/2017/04/using-javascript-standard-style/)
 -
 
-## Commit Message format
+## Commit Message format 
 
 **[month.date.ith times you commit this day] version(eg: P2): what did you do**  
 eg: [9.10.2] P0: Finished update and delete items frontend logic
