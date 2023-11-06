@@ -1,97 +1,77 @@
-import UserContext from '../contexts/userContext';
-import { useContext, useState } from 'react';
-import { Input, Button, Alert } from 'antd';
+import UserContext from '../contexts/userContext'
+import { useContext, useState } from 'react'
+import { Input, Button, Alert, Checkbox } from 'antd';
+import { EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons';
 
-function Login({onClose}) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const {
-    contextUsername,
-    setContextUsername,
-    contextUserID,
-    setContextUserID,
-  } = useContext(UserContext);
-  const [error, setError] = useState(null);
+const apiUrl = process.env.BACKEND_URL || 'http://localhost';
+const apiPort = process.env.BACKEND_PORT || '8080';
+function Login ({ onClose }) {
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [rememberMe, setRememberMe] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const {
+        contextUsername,
+        setContextUsername,
+        contextUserID,
+        setContextUserID,
+    } = useContext(UserContext)
+    const [error, setError] = useState(null)
 
-  async function handleLogin() {
-    setContextUsername('Dijkstra');
-    setContextUserID('508764');
-    onClose();
-    // if (!username || !password) {
-    //   setError('All fields are required!');
-    //   return;
-    // }
-    // const response = await fetch('http://localhost:8080/login', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     username: username,
-    //     password: password,
-    //   }),
-    // });
+    const handleLogin = async () => {
+        setError(null)
+        setIsLoading(true);
 
-    // const data = await response.json();
-    // if (response.ok) {
-    //   setContextUsername(username);
-    //   setContextUserID('066666');
-    //   onClose();
-    // } else {
-    //   setContextUsername('Dijkstra');
-    //   setContextUserID('508764');
-    //   setError(data.message || 'An error occurred during login.');
-    // }
-// =======
-//     if (!username || !password) {
-//       setError('All fields are required!');
-//       return;
-//     }
-//
-//     try {
-//       // Mocking fetch response
-//       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulating network delay
-//
-//       // Replace the lines below with actual conditions for your use case
-//       if (username === 'testUser' && password === 'testPassword') {
-//         setContextUsername(username);
-//         setContextUserID('12345'); // Mock user ID
-//         setError(null);
-//         onClose(); // Trigger whatever should happen after a successful login
-//       } else {
-//         setError('Invalid credentials');
-//       }
-//
-//       // Comment or remove the following lines related to the actual fetch
-//       /*
-//       const response = await fetch('http://localhost:8080/login', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({ username, password }),
-//       });
-//
-//       if (!response.ok) {
-//         const data = await response.json();
-//         setError(data.message || `An error occurred: ${response.status} ${response.statusText}`);
-//         return;
-//       }
-//
-//       const data = await response.json();
-//       setContextUsername(username);
-//       setContextUserID('066666'); // You may want to use real user ID from response data
-//       onClose();
-//       */
-//
-//     } catch (error) {
-//       console.error('Error during login:', error);
-//       setError('An unexpected error occurred');
-//     }
-//>>>>>>> 0e56097faf1f6f53f2b8f5da60300dc86e2dd94e
-  }
+        if (!username || !password) {
+            setError('Username and password are required')
+            setIsLoading(false);
+            return
+        }
+        //console.log(username, password)
+        try {
+            const response = await fetch(`${apiUrl}:${apiPort}/login`, {  // Replace with your actual login endpoint
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                }),
+            })
+            //console.log(response)
+            // Check if the response indicates a successful login
+            if (response.ok) {
+                const { token, userId } = await response.json()  // Extract token from response body (adjust depending on your backend's response structure)
+                //localStorage.setItem('authToken', token)  // Store the token (consider more secure alternatives in a production environment)
+                if (rememberMe) {
+                    localStorage.setItem('authToken', token);
+                    localStorage.setItem('username', username);
+                    localStorage.setItem('userID', userId);
+                } else {
+                    sessionStorage.setItem('authToken', token);
+                    sessionStorage.setItem('username', username);
+                    sessionStorage.setItem('userID', userId);
+                }
+                onClose()
+                setContextUserID(userId)
+                setContextUsername(username)
 
-
+                // Redirect to your app's main page, or perform another appropriate action
+                // For example, using useHistory from 'react-router-dom' if you're in a React Router environment:
+                // history.push('/main');
+            } else {
+                // If the server responded with an error status, handle it here
+                const errorInfo = await response.json()  // Try to extract more info about what went wrong
+                setError(errorInfo.message || 'Login failed. Please try again.')
+            }
+        } catch (error) {
+            // Handle network errors or any other issues related to the fetch call
+            setError('There was a problem logging in')
+        } finally {
+            setIsLoading(false);
+        }
+    }
     return (
         <div className="login">
             <h2>Login</h2>
@@ -107,13 +87,23 @@ function Login({onClose}) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
+                iconRender={(visible) =>
+                    visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                }
                 style={{ marginBottom: '20px' }}
             />
+            <Checkbox
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                style={{ marginBottom: '20px' }}
+            >
+                Remember me
+            </Checkbox>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Button type="primary" onClick={handleLogin}>Login</Button>
             </div>
         </div>
-    );
+    )
 }
 
-export default Login;
+export default Login

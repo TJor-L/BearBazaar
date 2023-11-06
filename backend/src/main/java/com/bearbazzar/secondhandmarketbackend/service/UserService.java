@@ -42,8 +42,8 @@ public class UserService {
             User existUser = optionalUser.get();
             existUser.setPhone(user.getPhone());
             existUser.setEmail(user.getEmail());
+            existUser.setDescription((user.getDescription()));
             return userRepository.save(existUser);
-
         }
         return null;
     }
@@ -60,5 +60,9 @@ public class UserService {
             // Handle the case where the user with the given username is not found
             return Collections.emptyList(); // or throw an exception, return null, etc.
         }
+    }
+    @Transactional
+    public User getUserByStudentId(Long id){
+        return userRepository.findByStudentId(id);
     }
 }

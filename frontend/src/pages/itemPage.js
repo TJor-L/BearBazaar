@@ -1,26 +1,63 @@
-import React, { useEffect, useState, useContext} from 'react';
-import { useParams, Link } from 'react-router-dom';
-import {Row, Col, Image, Button, Typography, Layout, Modal, Input, Tag, message, List} from 'antd';
-import { StarOutlined, StarFilled } from '@ant-design/icons';
-import UserContext from "../contexts/userContext";
-import fakeItemsMap from "../fakedata/fakeItemsMap";
+import React, { useEffect, useState, useContext } from 'react'
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'
+import { Row, Col, Image, Button, Typography, Layout, Modal, Input, Tag, message, List, Carousel, Form, Select, Upload } from 'antd'
+import { StarOutlined, StarFilled, UploadOutlined } from '@ant-design/icons'
+import UserContext from "../contexts/userContext"
+import fakeItems from "../fakedata/fakeitems"
+const apiUrl = process.env.BACKEND_URL || 'http://localhost';
+const apiPort = process.env.BACKEND_PORT || '8080';
 
-const { Title, Text } = Typography;
+const { Title, Text } = Typography
 
-const { Content } = Layout;
+const { Content } = Layout
 
-function ItemPage() {
-    const { contextUsername, contextUserID } = useContext(UserContext);
-    const [isOwner, setIsOwner] = useState(false);
-    const [bids, setBids] = useState([]);
-    const { itemID } = useParams(); // 从URL中读取itemID
-    const [item, setItem] = useState(fakeItemsMap.find(item => item.itemID ===itemID));
-    const [isFavorited, setIsFavorited] = useState(false);
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [bidAmount, setBidAmount] = useState(''); // 用户输入的出价
-    const [editedItem, setEditedItem] = useState({ itemName: '', description: '' });
-    const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-    const [userBid, setUserBid] = useState(null);
+function ItemPage () {
+    const { contextUsername, contextUserID } = useContext(UserContext)
+    const [isOwner, setIsOwner] = useState(false)
+    const [bids, setBids] = useState([])
+    const { itemID } = useParams() // 从URL中读取itemID
+    const [item, setItem] = useState(null)
+    const [fileList, setFileList] = useState([])
+    const [isFavorited, setIsFavorited] = useState(false)
+    const [isModalVisible, setIsModalVisible] = useState(false)
+    const [bidAmount, setBidAmount] = useState('') // 用户输入的出价
+    const [editedItem, setEditedItem] = useState({ name: '', description: '' })
+    const [isEditModalVisible, setIsEditModalVisible] = useState(false)
+    const [userBid, setUserBid] = useState(null)
+    const navigate = useNavigate()
+
+    const location = useLocation()
+
+    useEffect(() => {
+        async function fetchData () {
+            try {
+                const response = await fetch(`${apiUrl}:${apiPort}/items/${itemID}`)
+                const data = await response.json()
+
+                if (response.ok) {
+                    setItem(data)
+                } else {
+                    console.error('Failed to fetch item:', data.message)
+                }
+            } catch (error) {
+                console.error('There was an error fetching the item:', error)
+            }
+        }
+        fetchData()
+    }, [itemID, contextUserID])
+
+    useEffect(() => {
+        if (item) {
+            console.log(item)
+            // setIsFavorited(item.isFavorited)
+            if (item.owner.username === contextUsername) {
+                setIsOwner(true)
+            } else {
+                setIsOwner(false)
+            }
+            //fetchBidsForItem();
+        }
+    }, [item, contextUsername])
 
     const fetchBidsForItem = () => {
 
@@ -117,74 +154,99 @@ function ItemPage() {
     }
 
 
-    const handleDeleteItem =  () => {
-        // try {
-        //     const response = await fetch(`yourBackendURL/item/${itemID}`, {
-        //         method: 'DELETE',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         // 这里你可以根据后端的要求添加其他的请求体或者请求头
-        //     });
-        //
-        //     if (response.ok) {
-        //         // 处理成功删除的逻辑，例如：跳转到其他页面或给出成功的提示
-        //         alert("Item deleted successfully");
-        //         // 这里你可以使用`history`来导航到其他页面，例如：
-        //         history.push('/home');
-        //     } else {
-        //         // 处理错误信息
-        //         const data = await response.json();
-        //         console.error('Failed to delete the item:', data.message);
-        //         alert("Failed to delete the item. Please try again later.");
-        //     }
-        // } catch (error) {
-        //     console.error('There was an error deleting the item:', error);
-        //     alert("There was an error deleting the item. Please try again later.");
-        // }
-        message.success("Item deleted successfully");
+    async function handleDeleteItem () {
+        try {
+            const response = await fetch(`${apiUrl}:${apiPort}/items/${itemID}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+
+            if (response.ok) {
+                alert("Item deleted successfully")
+                navigate('/home')
+            } else {
+                const data = await response.json()
+                console.error('Failed to delete the item:', data.message)
+                alert("Failed to delete the item. Please try again later.")
+            }
+        } catch (error) {
+            console.error('There was an error deleting the item:', error)
+            alert("There was an error deleting the item. Please try again later.")
+        }
+        message.success("Item deleted successfully")
     }
 
     const handleOpenEditModal = () => {
-        setIsEditModalVisible(true);
+        setIsEditModalVisible(true)
         setEditedItem({
-            itemName: item.itemName,
+            name: item.name,
             description: item.description,
-            imageURL: item.imageURL,
-            estimatedPrice: item.estimatedPrice.toString(),
+            price: item.price,
             category: item.category
-        });
+        })
     }
 
-
+    const handleUploadChange = ({ fileList }) => {
+        setFileList(fileList)
+    }
 
     const handleCloseEditModal = () => {
-        setIsEditModalVisible(false);
+        setIsEditModalVisible(false)
     }
 
-    const handleSaveChanges = () => {
-        // Save changes to backend
-        // For demonstration, just updating the item locally
-        setItem(prevItem => ({ ...prevItem, itemName: editedItem.itemName, description: editedItem.description,
-            imageURL: editedItem.imageURL, estimatedPrice: editedItem.estimatedPrice, category: editedItem.category}));
-        setIsEditModalVisible(false);
+    async function handleSaveChanges () {
+        if (!editedItem.name || !editedItem.description || !editedItem.category || !editedItem.price) {
+            message.error('All fields are required!')
+            return
+        }
+
+        // Create a new FormData object for handling file uploads and form data
+        const formData = new FormData()
+
+        // Append the form data in the order as seen in the screenshot
+        formData.append('name', editedItem.name)
+        formData.append('category', editedItem.category)
+        formData.append('description', editedItem.description)
+        formData.append('price', editedItem.price)
+
+        // Append the images; fileList should be an array of File objects
+        fileList.forEach((file) => {
+            formData.append('images', file.originFileObj)
+        })
+
+
+        const response = await fetch(`${apiUrl}:${apiPort}/items/${itemID}`, {
+            method: 'PUT',
+            body: formData,
+        })
+
+        if (response.ok) {
+            message.success('Item edited successfully')
+            handleCloseEditModal()
+            navigate(`/item/${itemID}`)
+        } else {
+            const data = await response.json()
+            console.error('Error from server:', data)
+        }
     }
 
 
     const handleOpenModal = () => {
         if (!contextUserID) {
             // Prompt the user to log in
-            alert("Please log in to continue.");
-            return;
+            alert("Please log in to continue.")
+            return
         }
-        setBidAmount(item.estimatedPrice.toString()); // 使用商品估价作为默认出价，并将其转换为字符串以适应Input组件
-        setIsModalVisible(true);
+        setBidAmount(item.estimatedPrice.toString()) // 使用商品估价作为默认出价，并将其转换为字符串以适应Input组件
+        setIsModalVisible(true)
     }
 
 
     const handleCloseModal = () => {
-        setIsModalVisible(false);
-        setBidAmount(''); // 清除输入框内容
+        setIsModalVisible(false)
+        setBidAmount('') // 清除输入框内容
     }
 
     const toggleFavorite = async () => {
@@ -226,86 +288,66 @@ function ItemPage() {
                     itemID: itemID,
                     bid: bidAmount
                 }),
-            });
+            })
 
             if (response.ok) {
                 // 这里可以处理购买成功的逻辑，例如提醒用户购买成功
-                setIsModalVisible(false); // 关闭模态窗口
+                setIsModalVisible(false) // 关闭模态窗口
             } else {
                 // 处理错误信息
-                const data = await response.json();
-                console.error('Failed to purchase:', data.message);
+                const data = await response.json()
+                console.error('Failed to purchase:', data.message)
             }
         } catch (error) {
-            console.error('There was an error making the purchase:', error);
+            console.error('There was an error making the purchase:', error)
         }
     }
 
-    useEffect(() => {
-        // async function fetchData() {
-        //     try {
-        //         const response = await fetch(`yourBackendURL/item/${itemID}`);
-        //         const data = await response.json();
-        //
-        //         if (response.ok) {
-        //             setItem(data);
-        //         } else {
-        //             console.error('Failed to fetch item:', data.message);
-        //         }
-        //     } catch (error) {
-        //         console.error('There was an error fetching the item:', error);
-        //     }
-        // }
-        //
-        // fetchData();
-        setItem(fakeItemsMap.find(item => item.itemID ===itemID));
-        setIsFavorited(item.isFavorited)
-        if (item.owner.userId === contextUserID) {
-            setIsOwner(true);
-        }
-        else {
-            setIsOwner(false);
-        }
-        if (item) {
-            fetchBidsForItem();
-        }
-    }, [itemID, contextUserID]);
 
+<<<<<<< HEAD
     function generateAmazonSearchURL(query) {
         return `https://www.amazon.com/s?k=${encodeURIComponent(query)}`;
     }
     
     if (!item) return <p>Loading...</p>;
+=======
+
+    if (!item) return <p>Loading...</p>
+>>>>>>> 70850e15b9ad76d3f518a5423eb5545094a7f32f
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
             <Content>
                 <Row justify="center" gutter={32} style={{ height: '100%', marginTop: "3%" }}>
                     <Col span={6}>
-                        <Image
-                            width={400}
-                            src={item.imageURL}
-                        />
+                        <Carousel autoplay>
+                            {item.image.map((img, index) => (
+                                <div key={index}>
+                                    <Image width={400} src={img.url} />
+                                </div>
+                            ))}
+                        </Carousel>
                     </Col>
                     <Col span={8}>
                         <Title level={2} style={{ display: 'flex', alignItems: 'center' }}>
-                            {item.itemName}
-                            <span style={{ marginLeft: '10px' }}>
-                            {
-                                contextUserID && (isFavorited ?
-                                    <StarFilled style={{ color: 'gold', fontSize: '20px' }} onClick={toggleFavorite} /> :
-                                    <StarOutlined style={{ fontSize: '20px' }} onClick={toggleFavorite} />)
-                            }
+                            {item.name}
+                            {/* <span style={{ marginLeft: '10px' }}>
+                                {
+                                    contextUserID && (isFavorited ?
+                                        <StarFilled style={{ color: 'gold', fontSize: '20px' }} onClick={toggleFavorite} /> :
+                                        <StarOutlined style={{ fontSize: '20px' }} onClick={toggleFavorite} />)
+                                }
 
-                            </span>
+                            </span> */}
                         </Title>
 
                         <div style={{ marginBottom: '15px' }}>
-                            <Tag color="blue">item.category</Tag>
+                            <Tag color="blue">{item.category}</Tag>
                         </div>
 
-                        <Text strong>Estimated Price: </Text><br />${item.estimatedPrice}<br /><br />
+                        <Text strong>Estimated Price: </Text><br />${item.price}<br /><br />
                         <Text strong>Description: </Text><br />{item.description}<br /><br />
+<<<<<<< HEAD
                         <Text strong>Owned by: </Text><br /><Link to={`/user/${item.owner.userId}`}>{item.owner.username}</Link><br /><br />
                         <Text strong>Estimated Price: </Text><br />${item.estimatedPrice}<br /><br />
                         <Button 
@@ -315,6 +357,9 @@ function ItemPage() {
                         Search on Amazon
                         </Button>
                         <br /><br />
+=======
+                        <Text strong>Owned by: </Text><br /><Link to={`/user/${item.owner.studentId}`}>{item.owner.username}</Link><br /><br />
+>>>>>>> 70850e15b9ad76d3f518a5423eb5545094a7f32f
                         {!isOwner && (
                             <>
                                 <Button type="primary" style={{ marginRight: '10px' }} onClick={handleOpenModal}>Buy</Button>
@@ -371,6 +416,7 @@ function ItemPage() {
                         onOk={handleSaveChanges}
                         onCancel={handleCloseEditModal}
                     >
+<<<<<<< HEAD
                         <Input
                             placeholder="Item Name"
                             value={editedItem.itemName}
@@ -405,12 +451,64 @@ function ItemPage() {
                             onChange={(e) => setEditedItem(prev => ({ ...prev, category: e.target.value}))}
                         />
                         
+=======
+                        <Form layout="vertical">
+                            <Form.Item label="Name" required>
+                                <Input
+                                    value={editedItem.name}
+                                    onChange={(e) => setEditedItem(prev => ({ ...prev, name: e.target.value }))}
+                                    placeholder="Name"
+                                />
+                            </Form.Item>
+
+                            <Form.Item label="Description" required>
+                                <Input.TextArea
+                                    rows={4}
+                                    value={editedItem.description}
+                                    onChange={(e) => setEditedItem(prev => ({ ...prev, description: e.target.value }))}
+                                    placeholder="Description"
+                                />
+                            </Form.Item>
+
+                            <Form.Item label="Category" required>
+                                <Select
+                                    value={editedItem.category}
+                                    onChange={(value) => setEditedItem(prev => ({ ...prev, category: value }))}
+                                    placeholder="Category"
+                                >
+                                    <Select.Option value="fashion">Fashion</Select.Option>
+                                    <Select.Option value="sport">Sport</Select.Option>
+                                    <Select.Option value="electro">Electro</Select.Option>
+                                    <Select.Option value="book">Book</Select.Option>
+                                </Select>
+                            </Form.Item>
+
+                            <Form.Item label="Estimated Price" required>
+                                <Input
+                                    value={editedItem.price}
+                                    onChange={(e) => setEditedItem(prev => ({ ...prev, price: e.target.value }))}
+                                    placeholder="Price"
+                                />
+                            </Form.Item>
+
+                            <Form.Item label="Upload Image">
+                                <Upload
+                                    fileList={fileList}
+                                    onChange={handleUploadChange}
+                                    beforeUpload={() => false} // prevent auto uploading
+                                >
+                                    <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                                </Upload>
+                            </Form.Item>
+
+                        </Form>
+>>>>>>> 70850e15b9ad76d3f518a5423eb5545094a7f32f
                     </Modal>
 
                 </Row>
             </Content>
         </Layout>
-    );
+    )
 }
 
-export default ItemPage;
+export default ItemPage

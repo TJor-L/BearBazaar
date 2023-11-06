@@ -1,12 +1,16 @@
 package com.bearbazzar.secondhandmarketbackend.controller;
 
+import com.bearbazzar.secondhandmarketbackend.exception.UserNotExistException;
 import com.bearbazzar.secondhandmarketbackend.model.Ask;
+import com.bearbazzar.secondhandmarketbackend.model.LoginResponse;
 import com.bearbazzar.secondhandmarketbackend.model.Token;
 import com.bearbazzar.secondhandmarketbackend.model.User;
 import com.bearbazzar.secondhandmarketbackend.service.AuthenticationService;
 import com.bearbazzar.secondhandmarketbackend.service.UserService;
 
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,12 +26,18 @@ public class UserController {
         this.authenticationService = authenticationService;
     }
     @PostMapping("/register")
-    public String register(@RequestBody User user) {
-        return UserService.addUser(user);
+    public ResponseEntity register(@RequestBody User user) {
+        UserService.addUser(user);
+        return ResponseEntity.ok().build();
     }
     @PostMapping("/login")
-    public Token login(@RequestBody User user) {
-        return authenticationService.authenticate(user);
+    public ResponseEntity<LoginResponse> login(@RequestBody User user) {
+        Token token = authenticationService.authenticate(user);
+        if(token == null){
+            return ResponseEntity.notFound().build();
+        }
+        Long userId = UserService.getUserByUsername(user.getUsername()).getStudentId();
+        return ResponseEntity.ok(new LoginResponse(token,userId));
     }
 
     @PutMapping ("/update")
@@ -38,5 +48,12 @@ public class UserController {
         }
         return ResponseEntity.ok(updatedUser);
     }
-
+    @GetMapping("/user/{id}")
+    public User getUserById(@PathVariable Long id) {
+        User user = UserService.getUserByStudentId(id);
+        if(user == null){
+            throw new UserNotExistException("User No exist");
+        }
+        return user;
+    }
 }

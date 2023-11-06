@@ -40,6 +40,11 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/asks/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/asks/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/asks/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/user/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/transaction/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/transaction/**").permitAll()
+                .antMatchers(HttpMethod.PUT,"/transaction/**").permitAll()
+                .antMatchers(HttpMethod.DELETE,"/transaction/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable();
@@ -65,7 +70,8 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));  // 允许的源
+        //configuration.setAllowedOrigins(Arrays.asList("http://frontend:3000"));  // 允许的源
+        configuration.setAllowedOrigins(Arrays.asList("http://www.dijkstraliu.com:4000", "http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));  // 允许的HTTP方法
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));  // 允许的请求头
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

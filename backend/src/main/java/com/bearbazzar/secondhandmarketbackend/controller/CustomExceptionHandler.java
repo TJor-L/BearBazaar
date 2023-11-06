@@ -1,9 +1,6 @@
 package com.bearbazzar.secondhandmarketbackend.controller;
 
-import com.bearbazzar.secondhandmarketbackend.exception.IdAlreadyBeenUsedException;
-import com.bearbazzar.secondhandmarketbackend.exception.ItemNoExistException;
-import com.bearbazzar.secondhandmarketbackend.exception.UserAlreadyExistException;
-import com.bearbazzar.secondhandmarketbackend.exception.UserNotExistException;
+import com.bearbazzar.secondhandmarketbackend.exception.*;
 import org.ietf.jgss.GSSException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,5 +29,17 @@ public class CustomExceptionHandler {
     @ExceptionHandler(GSSException.class)
     public final ResponseEntity<String> handleGSSExceptions(Exception ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    @ExceptionHandler(SellerErrorException.class)
+    public final ResponseEntity<String> handleSellerErrorException(Exception ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(TransactionNoFoundException.class)
+    public final ResponseEntity<String> handleTransactionNoFoundException(Exception ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(TransactionStateException.class)
+    public final ResponseEntity<String> handleTransactionStateException(Exception ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

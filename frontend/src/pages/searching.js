@@ -1,42 +1,59 @@
-import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Card, Layout, List, Typography } from 'antd';
-import { Link } from 'react-router-dom';
-import fakeItems from "../fakedata/fakeitems";
+import React, { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import { Card, Layout, List, Typography } from 'antd'
+import { Link } from 'react-router-dom'
+import fakeItems from "../fakedata/fakeitems"
 
-const { Content } = Layout;
+const { Content } = Layout
+const apiUrl = process.env.BACKEND_URL || 'http://localhost';
+const apiPort = process.env.BACKEND_PORT || '8080';
+function SearchingPage () {
+    const [searchParams] = useSearchParams()
+    const [filteredItems, setFilteredItems] = useState([])
 
-function SearchingPage() {
-    const [searchParams] = useSearchParams();
-    const [filteredItems, setFilteredItems] = useState([]);
+
+    const [items, setItems] = useState([])
 
     useEffect(() => {
-        const searchKey = searchParams.get('searchkey')?.toLowerCase() || '';
-        const minPrice = parseFloat(searchParams.get('minPrice') || 0);
-        const maxPrice = parseFloat(searchParams.get('maxPrice') || Infinity);
-        const categories = searchParams.get('categories')?.split(',') || [];  // Assume categories are comma-separated in the URL
-        console.log('Search Key:', searchKey);
-        console.log('Min Price:', minPrice);
-        console.log('Max Price:', maxPrice);
-        console.log('Selected Categories:', categories);
+        // Fetch actual data from the backend
+        const fetchData = async () => {
+            try {
+                const searchKey = searchParams.get('searchkey')?.toLowerCase() || ''
+                const minPrice = parseFloat(searchParams.get('minPrice') || 0)
+                const maxPrice = parseFloat(searchParams.get('maxPrice') || Infinity)
+                const categories = searchParams.get('categories')?.split(',') || []  // Assume categories are comma-separated in the URL
 
-        const filtered = fakeItems.filter(item => {
-            console.log(item.category)
-            // Check if item matches search key
-            const matchesSearchKey = item.itemName.toLowerCase().includes(searchKey) || searchKey==='';
+                const response = await fetch(`${apiUrl}:${apiPort}/items`)
 
-            // Check if item matches price range
-            const matchesPriceRange = item.estimatedPrice >= minPrice && item.estimatedPrice <= maxPrice;
+                if (!response.ok) {
+                    throw new Error('Network response was not ok')
+                }
 
+                const data = await response.json()
+                setItems(data)
 
-            // Check if item matches any of the selected categories. If no categories are selected, show all items.
-            const matchesCategory = categories.includes('all') || categories.includes('') || categories.includes(item.category);
+                const filtered = data.filter(item => {
+                    // Check if item matches search key
+                    const matchesSearchKey = item.name.toLowerCase().includes(searchKey) || searchKey === ''
 
-            return matchesSearchKey && matchesPriceRange && matchesCategory;
-        });
+                    // Check if item matches price range
+                    const matchesPriceRange = item.price >= minPrice && item.price <= maxPrice
 
-        setFilteredItems(filtered);
-    }, [searchParams]);
+                    // Check if item matches any of the selected categories. If no categories are selected, show all items.
+                    const matchesCategory = categories.includes('all') || categories.includes(item.category)
+
+                    return matchesSearchKey && matchesPriceRange && matchesCategory
+                })
+
+                setFilteredItems(filtered)
+            } catch (error) {
+                console.error('There was a problem fetching the items:', error)
+            }
+        }
+
+        fetchData()
+    }, [searchParams])
+
 
 
     return (
@@ -47,13 +64,13 @@ function SearchingPage() {
                     dataSource={filteredItems}
                     renderItem={item => (
                         <List.Item>
-                            <Link to={`/item/${item.itemID}`}>
+                            <Link to={`/item/${item.id}`}>
                                 <Card
                                     hoverable
-                                    cover={<img alt={item.itemName} src={item.imageURL} />}
+                                    cover={<img alt={item.name} src={item.image.length === 0 ? 'https://via.placeholder.com/150' : item.image[0].url} />}
                                 >
-                                    <Typography.Title level={4}>{item.itemName}</Typography.Title>
-                                    <Typography.Text>Estimated Price: ${item.estimatedPrice}</Typography.Text>
+                                    <Typography.Title level={4}>{item.name}</Typography.Title>
+                                    <Typography.Text>Estimated Price: ${item.price}</Typography.Text>
                                 </Card>
                             </Link>
                         </List.Item>
@@ -61,7 +78,7 @@ function SearchingPage() {
                 />
             </Content>
         </Layout>
-    );
+    )
 }
 
-export default SearchingPage;
+export default SearchingPage
