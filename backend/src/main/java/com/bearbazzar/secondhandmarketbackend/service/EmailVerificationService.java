@@ -1,5 +1,8 @@
 package com.bearbazzar.secondhandmarketbackend.service;
 
+import com.bearbazzar.secondhandmarketbackend.model.Email;
+import com.bearbazzar.secondhandmarketbackend.model.Token;
+import com.bearbazzar.secondhandmarketbackend.repository.EmailRepository;
 import com.neverbounce.api.client.NeverbounceClient;
 import com.neverbounce.api.model.Result;
 import com.neverbounce.api.model.SingleCheckResponse;
@@ -9,36 +12,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailVerificationService {
 
-    private final NeverbounceClient neverbounceClient;
-
-    @Autowired
-    public EmailVerificationService(NeverbounceClient neverbounceClient) {
-        this.neverbounceClient = neverbounceClient;
+    private final EmailRepository emailRepository;
+    public EmailVerificationService(EmailRepository emailRepository) {
+        this.emailRepository = emailRepository;
     }
-
-    public boolean checkEmail(String email) {
-        SingleCheckResponse response = neverbounceClient
-                .prepareSingleCheckRequest()
-                .withEmail(email)
-                .withAddressInfo(true)
-                .withCreditsInfo(true)
-                .withTimeout(20)
-                .build()
-                .execute();
-
-        // Interpret the response and return the verification status
-        // You may need to adjust this logic based on the response structure from Neverbounce
-        if (response.getResult() == Result.VALID) {  // Assuming 4 represents a verified status
-            return true;
-        } else {
-            return false;
+    public void verifyEmail(String address, String Token){
+        Email email = emailRepository.getEmailByAddress(address);
+        if(email == null){
+            return ;
+        }
+        if(email.getToken().equals(Token)){
+            email.setVerified(true);
+            emailRepository.save(email);
         }
     }
+    public void updateToken(String token, String address){
+        Email email = emailRepository.getEmailByAddress(address);
+        email.setToken(token);
+        emailRepository.save(email);
+    }
 
-//    public String verifyEmail(String email) {
-//        // Logic for verifying an email
-//        // This will depend on how Neverbounce handles the verification process
-//        // For this example, let's assume it's similar to checking an email
-//
-//    }
 }

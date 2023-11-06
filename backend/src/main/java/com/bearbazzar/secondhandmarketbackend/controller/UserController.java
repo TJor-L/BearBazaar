@@ -48,14 +48,7 @@ public class UserController {
         }
         return ResponseEntity.ok(updatedUser);
     }
-    @GetMapping("/{username}")
-    public User getUserByUsername(@PathVariable String username) {
-        User user = UserService.getUserByUsername(username);
-        if(user == null){
-            throw new UserNotExistException("User No exist");
-        }
-        return user;
-    }
+
     @GetMapping("/user/{id}")
     public User getUserById(@PathVariable Long id) {
         User user = UserService.getUserByStudentId(id);
