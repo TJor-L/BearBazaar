@@ -271,6 +271,10 @@ function ItemPage() {
         }
     }, [itemID, contextUserID]);
 
+    function generateAmazonSearchURL(query) {
+        return `https://www.amazon.com/s?k=${encodeURIComponent(query)}`;
+    }
+    
     if (!item) return <p>Loading...</p>;
 
     return (
@@ -303,6 +307,14 @@ function ItemPage() {
                         <Text strong>Estimated Price: </Text><br />${item.estimatedPrice}<br /><br />
                         <Text strong>Description: </Text><br />{item.description}<br /><br />
                         <Text strong>Owned by: </Text><br /><Link to={`/user/${item.owner.userId}`}>{item.owner.username}</Link><br /><br />
+                        <Text strong>Estimated Price: </Text><br />${item.estimatedPrice}<br /><br />
+                        <Button 
+                        type="default" 
+                        onClick={() => window.open(generateAmazonSearchURL(item.itemName), '_blank')}
+                        >
+                        Search on Amazon
+                        </Button>
+                        <br /><br />
                         {!isOwner && (
                             <>
                                 <Button type="primary" style={{ marginRight: '10px' }} onClick={handleOpenModal}>Buy</Button>
@@ -392,6 +404,7 @@ function ItemPage() {
                             value={editedItem.category}
                             onChange={(e) => setEditedItem(prev => ({ ...prev, category: e.target.value}))}
                         />
+                        
                     </Modal>
 
                 </Row>
