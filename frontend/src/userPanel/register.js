@@ -28,7 +28,7 @@ function Register ({ onClose }) {
             body: JSON.stringify({
                 username: username,
                 password: password,
-                email: "goodEmailAddress@wustl.edu",
+                email: email,
                 phone: phone,
                 studentId: userID,
             }),
@@ -40,7 +40,6 @@ function Register ({ onClose }) {
         if (response.ok) {
             // Response is OK, but there's no content to parse.
             // Proceed with the assumption that registration was successful.
-
             // Update context or state as necessary here
             setContextUsername(username)
             setContextUserID(userID)
@@ -81,13 +80,13 @@ function Register ({ onClose }) {
                 placeholder="Password"
                 style={{ marginBottom: '10px' }}
             />
-            {/*<Input*/}
-            {/*    type="email"*/}
-            {/*    value={email}*/}
-            {/*    onChange={(e) => setEmail(e.target.value)}*/}
-            {/*    placeholder="Email"*/}
-            {/*    style={{ marginBottom: '10px' }}*/}
-            {/*/>*/}
+            <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                style={{ marginBottom: '10px' }}
+            />
             <Input
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}

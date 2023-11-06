@@ -301,8 +301,16 @@ function ItemPage () {
     }
 
 
+<<<<<<< HEAD
+    function generateAmazonSearchURL(query) {
+        return `https://www.amazon.com/s?k=${encodeURIComponent(query)}`;
+    }
+    
+    if (!item) return <p>Loading...</p>;
+=======
 
     if (!item) return <p>Loading...</p>
+>>>>>>> 70850e15b9ad76d3f518a5423eb5545094a7f32f
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
@@ -336,7 +344,19 @@ function ItemPage () {
 
                         <Text strong>Estimated Price: </Text><br />${item.price}<br /><br />
                         <Text strong>Description: </Text><br />{item.description}<br /><br />
+<<<<<<< HEAD
+                        <Text strong>Owned by: </Text><br /><Link to={`/user/${item.owner.userId}`}>{item.owner.username}</Link><br /><br />
+                        <Text strong>Estimated Price: </Text><br />${item.estimatedPrice}<br /><br />
+                        <Button 
+                        type="default" 
+                        onClick={() => window.open(generateAmazonSearchURL(item.itemName), '_blank')}
+                        >
+                        Search on Amazon
+                        </Button>
+                        <br /><br />
+=======
                         <Text strong>Owned by: </Text><br /><Link to={`/user/${item.owner.studentId}`}>{item.owner.username}</Link><br /><br />
+>>>>>>> 70850e15b9ad76d3f518a5423eb5545094a7f32f
                         {!isOwner && (
                             <>
                                 <Button type="primary" style={{ marginRight: '10px' }} onClick={handleOpenModal}>Buy</Button>
@@ -393,6 +413,42 @@ function ItemPage () {
                         onOk={handleSaveChanges}
                         onCancel={handleCloseEditModal}
                     >
+<<<<<<< HEAD
+                        <Input
+                            placeholder="Item Name"
+                            value={editedItem.itemName}
+                            onChange={(e) => setEditedItem(prev => ({ ...prev, itemName: e.target.value }))}
+                        />
+                        <br /><br />
+                        <Input
+                            placeholder="Image URL"
+                            value={editedItem.imageURL}
+                            onChange={(e) => setEditedItem(prev => ({ ...prev, imageURL: e.target.value }))}
+                        />
+                        {/*TODO: Debug here*/}
+                        <br /><br />
+                        <Input
+                            placeholder="Estimated Price"
+                            type="number"
+                            prefix="$"
+                            value={editedItem.estimatedPrice}
+                            onChange={(e) => setEditedItem(prev => ({ ...prev, estimatedPrice: e.target.value }))}
+                        />
+                        <br /><br />
+                        <Input.TextArea
+                            rows={4}
+                            placeholder="Description"
+                            value={editedItem.description}
+                            onChange={(e) => setEditedItem(prev => ({ ...prev, description: e.target.value }))}
+                        />
+                        <br /><br />
+                        <Input
+                            placeholder="Category (comma separated)"
+                            value={editedItem.category}
+                            onChange={(e) => setEditedItem(prev => ({ ...prev, category: e.target.value}))}
+                        />
+                        
+=======
                         <Form layout="vertical">
                             <Form.Item label="Name" required>
                                 <Input
@@ -443,6 +499,7 @@ function ItemPage () {
                             </Form.Item>
 
                         </Form>
+>>>>>>> 70850e15b9ad76d3f518a5423eb5545094a7f32f
                     </Modal>
 
                 </Row>
