@@ -21,13 +21,26 @@ function Transactions() {
 
 
     useEffect(() => {
-        // Replace this with your fetchTransactions when ready
-        const userID = contextUserID;
-        const filteredTransactions = faketransactions.filter(transaction =>
-            transaction.seller.userID == userID || transaction.buyer.userID == userID
-        );
-        setTransactions(filteredTransactions);
+        const fetchTransactions = async () => {
+            try {
+
+                const buyerResponse = await fetch(`${apiUrl}:${apiPort}/buyer/${contextUsername}`);
+                const buyerTransactions = await buyerResponse.json();
+
+                const sellerResponse = await fetch(`${apiUrl}:${apiPort}/seller/${contextUsername}`);
+                const sellerTransactions = await sellerResponse.json();
+
+                const combinedTransactions = [...buyerTransactions, ...sellerTransactions];
+
+                setTransactions(combinedTransactions);
+            } catch (error) {
+                console.error('Failed to fetch transactions:', error);
+            }
+        };
+
+        fetchTransactions();
     }, [contextUserID]);
+
 
     useEffect(() => {
         const fetchItemData = async () => {
