@@ -9,6 +9,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.FilterChainProxy;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -35,7 +38,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/items/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/items/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/items/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/items/owner").permitAll()
+                .antMatchers(HttpMethod.POST, "/items/owner/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/asks/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/asks/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/asks/**").permitAll()
@@ -45,6 +48,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/transaction/**").permitAll()
                 .antMatchers(HttpMethod.PUT,"/transaction/**").permitAll()
                 .antMatchers(HttpMethod.DELETE,"/transaction/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/email-verification/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable();
@@ -57,6 +61,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .usersByUsernameQuery("SELECT username, password, 1 as enabled FROM user WHERE username = ?")
                 .authoritiesByUsernameQuery("SELECT username, 'ROLE_USER' FROM user WHERE username = ?");
     }
+
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
