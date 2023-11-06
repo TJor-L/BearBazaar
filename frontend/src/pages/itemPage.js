@@ -49,36 +49,35 @@ function ItemPage () {
     useEffect(() => {
         if (item) {
             console.log(item)
-            // setIsFavorited(item.isFavorited)
+            setIsFavorited(item.isFavorited)
             if (item.owner.username === contextUsername) {
                 setIsOwner(true)
             } else {
                 setIsOwner(false)
             }
-            //fetchBidsForItem();
+            fetchBidsForItem();
         }
     }, [item, contextUsername])
 
-    const fetchBidsForItem = () => {
+    const fetchBidsForItem = async () => {
 
-        //TODO: 这里是样例代码，是错的。总之获取到用户对于这个商品的出价，和所有对这个商品的出价
-        // try {
-        //     const response = await fetch(`yourBackendURL/item/${itemID}/bids`);
-        //     if (response.ok) {
-        //         const data = await response.json();
-        //         setBids(data);
-        //
-        //         const currentUserBid = data.find(bid => bid.buyerID === contextUserID);
-        //         if (currentUserBid) {
-        //             setUserBid(currentUserBid.price);
-        //         }
-        //     } else {
-        //         const data = await response.json();
-        //         console.error('Failed to fetch bids for item:', data.message);
-        //     }
-        // } catch (error) {
-        //     console.error('There was an error fetching the bids for the item:', error);
-        // }
+        try {
+            const response = await fetch(`${apiUrl}:${apiPort}/item/${itemID}/bids`);
+            if (response.ok) {
+                const data = await response.json();
+                setBids(data);
+
+                const currentUserBid = data.find(bid => bid.buyerID === contextUserID);
+                if (currentUserBid) {
+                    setUserBid(currentUserBid.price);
+                }
+            } else {
+                const data = await response.json();
+                console.error('Failed to fetch bids for item:', data.message);
+            }
+        } catch (error) {
+            console.error('There was an error fetching the bids for the item:', error);
+        }
         const fakeBids = [
             {
                 bidID: '1',
@@ -113,7 +112,7 @@ function ItemPage () {
 
     const handleAcceptBid = async (bidID) => {
         try {
-            const response = await fetch(`yourBackendURL/bids/${bidID}/accept`, {
+            const response = await fetch(`${apiUrl}:${apiPort}/bids/${bidID}/accept`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -121,7 +120,7 @@ function ItemPage () {
             });
 
             if (response.ok) {
-                // 这里可以处理接受出价成功的逻辑，例如从bids中移除这个出价
+                //TODO: delete all bids
                 setBids(prevBids => prevBids.filter(bid => bid.bidID !== bidID));
             } else {
                 const data = await response.json();
@@ -134,7 +133,7 @@ function ItemPage () {
 
     const handleRejectBid = async (bidID) => {
         try {
-            const response = await fetch(`yourBackendURL/bids/${bidID}/reject`, {
+            const response = await fetch(`${apiUrl}:${apiPort}/bids/${bidID}/reject`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -142,7 +141,7 @@ function ItemPage () {
             });
 
             if (response.ok) {
-                // 这里可以处理拒绝出价成功的逻辑，例如从bids中移除这个出价
+                //TODO:
                 setBids(prevBids => prevBids.filter(bid => bid.bidID !== bidID));
             } else {
                 const data = await response.json();
@@ -235,11 +234,10 @@ function ItemPage () {
 
     const handleOpenModal = () => {
         if (!contextUserID) {
-            // Prompt the user to log in
             alert("Please log in to continue.")
             return
         }
-        setBidAmount(item.estimatedPrice.toString()) // 使用商品估价作为默认出价，并将其转换为字符串以适应Input组件
+        setBidAmount(item.estimatedPrice.toString())
         setIsModalVisible(true)
     }
 
@@ -250,30 +248,29 @@ function ItemPage () {
     }
 
     const toggleFavorite = async () => {
-        // try {
-        //     // 更新后端的收藏状态
-        //     const response = await fetch(`yourBackendURL/favorite`, {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({
-        //             userID: contextUserID,
-        //             itemID: itemID,
-        //         }),
-        //     });
-        //
-        //     if (response.ok) {
-        //         setIsFavorited(prevState => !prevState); // 切换收藏状态
-        //     } else {
-        //         // 处理错误
-        //         const data = await response.json();
-        //         console.error('Failed to update favorite status:', data.message);
-        //     }
-        // } catch (error) {
-        //     console.error('There was an error updating the favorite status:', error);
-        // }
-        setIsFavorited(prevState => !prevState)
+        try {
+            // 更新后端的收藏状态
+            const response = await fetch(`${apiUrl}:${apiPort}/favorite`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userID: contextUserID,
+                    itemID: itemID,
+                }),
+            });
+
+            if (response.ok) {
+                setIsFavorited(prevState => !prevState); // 切换收藏状态
+            } else {
+                // 处理错误
+                const data = await response.json();
+                console.error('Failed to update favorite status:', data.message);
+            }
+        } catch (error) {
+            console.error('There was an error updating the favorite status:', error);
+        }
     }
 
     const handleConfirmPurchase = async () => {
@@ -323,14 +320,14 @@ function ItemPage () {
                     <Col span={8}>
                         <Title level={2} style={{ display: 'flex', alignItems: 'center' }}>
                             {item.name}
-                            {/* <span style={{ marginLeft: '10px' }}>
+                            {<span style={{ marginLeft: '10px' }}>
                                 {
                                     contextUserID && (isFavorited ?
                                         <StarFilled style={{ color: 'gold', fontSize: '20px' }} onClick={toggleFavorite} /> :
                                         <StarOutlined style={{ fontSize: '20px' }} onClick={toggleFavorite} />)
                                 }
 
-                            </span> */}
+                            </span>}
                         </Title>
 
                         <div style={{ marginBottom: '15px' }}>
