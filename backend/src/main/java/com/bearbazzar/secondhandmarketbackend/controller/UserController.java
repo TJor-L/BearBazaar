@@ -48,6 +48,7 @@ public class UserController {
         }
         return ResponseEntity.ok(updatedUser);
     }
+
     @GetMapping("/user/{id}")
     public User getUserById(@PathVariable Long id) {
         User user = UserService.getUserByStudentId(id);

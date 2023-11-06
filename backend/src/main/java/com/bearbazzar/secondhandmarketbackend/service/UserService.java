@@ -41,7 +41,7 @@ public class UserService {
         if(optionalUser.isPresent()){
             User existUser = optionalUser.get();
             existUser.setPhone(user.getPhone());
-            existUser.setEmail(user.getEmail());
+            existUser.setEmail(user.getEmail().getAddress());
             existUser.setDescription((user.getDescription()));
             return userRepository.save(existUser);
         }

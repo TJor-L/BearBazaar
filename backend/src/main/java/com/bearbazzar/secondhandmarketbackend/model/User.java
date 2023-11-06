@@ -20,7 +20,8 @@ public class User {
     private Long studentId;
     @JsonIgnore
     private String password;
-    private String email;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Email email;
     private String phone;
     private String description;
     // Add this field to your User model
@@ -47,7 +48,7 @@ public class User {
         this.studentId = builder.studentId;
         this.username = builder.username;
         this.password = builder.password;
-        this.email = builder.email;
+        this.email = new Email.Builder().email(builder.email).build();
         this.phone = builder.phone;
         this.description = builder.description;
     }
@@ -59,7 +60,7 @@ public class User {
     public String getPassword() {
         return password;
     }
-    public String getEmail(){
+    public Email getEmail(){
         return email;
     }
     public String getPhone(){
@@ -73,7 +74,7 @@ public class User {
         this.password = password;
     }
     public  void setEmail(String email){
-        this.email = email;
+        this.email.setEmail(email);
     }
     public  void setPhone(String phone){
         this.phone = phone;
