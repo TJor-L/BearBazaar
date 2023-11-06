@@ -83,18 +83,18 @@ function ItemPage () {
 
     const handleAcceptBid = async (bidID) => {
         try {
+            const formData = new URLSearchParams();
+            formData.append('ask_id', parseInt(bidID, 10));
+            console.log(bidID)
             const response = await fetch(`${apiUrl}:${apiPort}/transaction`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: JSON.stringify({
-                    'ask_id': bidID
-                }),
+                body: formData,
             });
-
             if (response.ok) {
-                setBids(prevBids => prevBids.filter(bid => bid.bidID !== bidID));
+                setBids("");
             } else {
                 const data = await response.json();
                 console.error('Failed to accept the bid:', data.message);
@@ -106,16 +106,15 @@ function ItemPage () {
 
     const handleRejectBid = async (bidID) => {
         try {
-            const response = await fetch(`${apiUrl}:${apiPort}/bids/${bidID}/reject`, {
-                method: 'POST',
+            const response = await fetch(`${apiUrl}:${apiPort}/asks/${bidID}`, {
+                method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
 
             if (response.ok) {
-                //TODO:
-                setBids(prevBids => prevBids.filter(bid => bid.bidID !== bidID));
+                setBids(prevBids => prevBids.filter(bid => bid.ask_id !== bidID));
             } else {
                 const data = await response.json();
                 console.error('Failed to reject the bid:', data.message);
@@ -357,8 +356,8 @@ function ItemPage () {
                                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                                                 <Text strong><span>Buyer: <Link onClick={()=>{handleNavigationBuyer(bid.user)}}> {bid.user}</Link>, Price: ${bid.price}</span></Text>
                                                 <div>
-                                                    <Button type="primary" style={{ marginRight: '10px' }} onClick={() => handleAcceptBid(bid.bidID)}>Accept</Button>
-                                                    <Button type="default" danger onClick={() => handleRejectBid(bid.bidID)}>Reject</Button>
+                                                    <Button type="primary" style={{ marginRight: '10px' }} onClick={() => handleAcceptBid(bid.ask_id)}>{bid.id}Accept</Button>
+                                                    <Button type="default" danger onClick={() => handleRejectBid(bid.ask_id)}>Reject</Button>
                                                 </div>
                                             </div>
                                         </List.Item>
