@@ -48,6 +48,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/transaction/**").permitAll()
                 .antMatchers(HttpMethod.PUT,"/transaction/**").permitAll()
                 .antMatchers(HttpMethod.DELETE,"/transaction/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/user/byname/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/email-verification/**").permitAll()
                 .anyRequest().authenticated()
                 .and()

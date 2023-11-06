@@ -4,6 +4,7 @@ import { Row, Col, Image, Button, Typography, Layout, Modal, Input, Tag, message
 import { StarOutlined, StarFilled, UploadOutlined } from '@ant-design/icons'
 import UserContext from "../contexts/userContext"
 import fakeItems from "../fakedata/fakeitems"
+import {type} from "@testing-library/user-event/dist/type";
 const apiUrl = process.env.BACKEND_URL || 'http://localhost';
 const apiPort = process.env.BACKEND_PORT || '8080';
 
@@ -20,7 +21,8 @@ function ItemPage () {
     const [fileList, setFileList] = useState([])
     const [isFavorited, setIsFavorited] = useState(false)
     const [isModalVisible, setIsModalVisible] = useState(false)
-    const [bidAmount, setBidAmount] = useState('') // 用户输入的出价
+    const [bidAmount, setBidAmount] = useState(0) // 用户输入的出价
+    const [bidMessage, setBidMessage] = useState('') // 用户输入的出价
     const [editedItem, setEditedItem] = useState({ name: '', description: '' })
     const [isEditModalVisible, setIsEditModalVisible] = useState(false)
     const [userBid, setUserBid] = useState(null)
@@ -49,80 +51,50 @@ function ItemPage () {
     useEffect(() => {
         if (item) {
             console.log(item)
-            // setIsFavorited(item.isFavorited)
+            setIsFavorited(item.isFavorited)
             if (item.owner.username === contextUsername) {
                 setIsOwner(true)
             } else {
                 setIsOwner(false)
             }
-            //fetchBidsForItem();
+            fetchBidsForItem();
         }
     }, [item, contextUsername])
 
-    const fetchBidsForItem = () => {
+    const fetchBidsForItem = async () => {
 
-        //TODO: 这里是样例代码，是错的。总之获取到用户对于这个商品的出价，和所有对这个商品的出价
-        // try {
-        //     const response = await fetch(`yourBackendURL/item/${itemID}/bids`);
-        //     if (response.ok) {
-        //         const data = await response.json();
-        //         setBids(data);
-        //
-        //         const currentUserBid = data.find(bid => bid.buyerID === contextUserID);
-        //         if (currentUserBid) {
-        //             setUserBid(currentUserBid.price);
-        //         }
-        //     } else {
-        //         const data = await response.json();
-        //         console.error('Failed to fetch bids for item:', data.message);
-        //     }
-        // } catch (error) {
-        //     console.error('There was an error fetching the bids for the item:', error);
-        // }
-        const fakeBids = [
-            {
-                bidID: '1',
-                buyerID: 'user001',
-                buyerUsername: 'Alice',
-                price: 100.00
-            },
-            {
-                bidID: '2',
-                buyerID: 'user002',
-                buyerUsername: 'Bob',
-                price: 105.00
-            },
-            {
-                bidID: '3',
-                buyerID: 'user003',
-                buyerUsername: 'Charlie',
-                price: 110.00
-            },
-            {
-                bidID: '4',
-                buyerID: 'user004',
-                buyerUsername: 'David',
-                price: 120.00
+        try {
+            const response = await fetch(`${apiUrl}:${apiPort}/asks/item/${itemID}`);
+            if (response.ok) {
+                const data = await response.json();
+                setBids(data);
+                const currentUserBid = data.find(bid => bid.buyerID === contextUserID);
+                if (currentUserBid) {
+                    setUserBid(currentUserBid.price);
+                }
+            } else {
+                const data = await response.json();
+                console.error('Failed to fetch bids for item:', data.message);
             }
-        ];
-
-
-        setBids(fakeBids);
-        setUserBid(100);
+        } catch (error) {
+            console.error('There was an error fetching the bids for the item:', error);
+        }
     }
 
     const handleAcceptBid = async (bidID) => {
         try {
-            const response = await fetch(`yourBackendURL/bids/${bidID}/accept`, {
+            const formData = new URLSearchParams();
+            formData.append('ask_id', parseInt(bidID, 10));
+            console.log(bidID)
+            const response = await fetch(`${apiUrl}:${apiPort}/transaction`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
+                body: formData,
             });
-
             if (response.ok) {
-                // 这里可以处理接受出价成功的逻辑，例如从bids中移除这个出价
-                setBids(prevBids => prevBids.filter(bid => bid.bidID !== bidID));
+                setBids("");
             } else {
                 const data = await response.json();
                 console.error('Failed to accept the bid:', data.message);
@@ -134,16 +106,15 @@ function ItemPage () {
 
     const handleRejectBid = async (bidID) => {
         try {
-            const response = await fetch(`yourBackendURL/bids/${bidID}/reject`, {
-                method: 'POST',
+            const response = await fetch(`${apiUrl}:${apiPort}/asks/${bidID}`, {
+                method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
 
             if (response.ok) {
-                // 这里可以处理拒绝出价成功的逻辑，例如从bids中移除这个出价
-                setBids(prevBids => prevBids.filter(bid => bid.bidID !== bidID));
+                setBids(prevBids => prevBids.filter(bid => bid.ask_id !== bidID));
             } else {
                 const data = await response.json();
                 console.error('Failed to reject the bid:', data.message);
@@ -235,85 +206,98 @@ function ItemPage () {
 
     const handleOpenModal = () => {
         if (!contextUserID) {
-            // Prompt the user to log in
             alert("Please log in to continue.")
             return
         }
-        setBidAmount(item.estimatedPrice.toString()) // 使用商品估价作为默认出价，并将其转换为字符串以适应Input组件
+        setBidAmount(item.price.toString())
         setIsModalVisible(true)
     }
 
 
     const handleCloseModal = () => {
         setIsModalVisible(false)
-        setBidAmount('') // 清除输入框内容
+        setBidAmount(0) // 清除输入框内容
     }
+
+    const handleNavigationBuyer = async (buyername) => {
+        try {
+            const response = await fetch(`${apiUrl}:${apiPort}/user/byname/${buyername}`);
+            if (response.ok) {
+                const user = await response.json();
+                console.log(user)
+                navigate(`/user/${user.studentId}`);
+            } else {
+                throw new Error('User not found');
+            }
+        } catch (error) {
+            console.error('Error fetching user:', error);
+        }
+    };
 
     const toggleFavorite = async () => {
-        // try {
-        //     // 更新后端的收藏状态
-        //     const response = await fetch(`yourBackendURL/favorite`, {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({
-        //             userID: contextUserID,
-        //             itemID: itemID,
-        //         }),
-        //     });
-        //
-        //     if (response.ok) {
-        //         setIsFavorited(prevState => !prevState); // 切换收藏状态
-        //     } else {
-        //         // 处理错误
-        //         const data = await response.json();
-        //         console.error('Failed to update favorite status:', data.message);
-        //     }
-        // } catch (error) {
-        //     console.error('There was an error updating the favorite status:', error);
-        // }
-        setIsFavorited(prevState => !prevState)
-    }
-
-    const handleConfirmPurchase = async () => {
         try {
-            const response = await fetch(`yourBackendURL/purchase`, {
+            // 更新后端的收藏状态
+            const response = await fetch(`${apiUrl}:${apiPort}/favorite`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    userID: contextUserID, // 假设您已经在组件内部有这个context
+                    userID: contextUserID,
                     itemID: itemID,
-                    bid: bidAmount
                 }),
-            })
+            });
 
             if (response.ok) {
-                // 这里可以处理购买成功的逻辑，例如提醒用户购买成功
-                setIsModalVisible(false) // 关闭模态窗口
+                setIsFavorited(prevState => !prevState); // 切换收藏状态
             } else {
-                // 处理错误信息
-                const data = await response.json()
-                console.error('Failed to purchase:', data.message)
+                // 处理错误
+                const data = await response.json();
+                console.error('Failed to update favorite status:', data.message);
             }
         } catch (error) {
-            console.error('There was an error making the purchase:', error)
+            console.error('There was an error updating the favorite status:', error);
+        }
+    }
+
+    const handleConfirmPurchase = async () => {
+        try {
+            // 使用URLSearchParams构造表单数据
+            const formData = new URLSearchParams();
+            formData.append('item_id', itemID);
+            formData.append('buyer', contextUsername);
+            formData.append('price', bidAmount);
+            formData.append('message', bidMessage);
+
+            const response = await fetch(`${apiUrl}:${apiPort}/asks`, {
+                method: 'POST',
+                // 设置头部为表单数据类型
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                // 发送表单数据作为请求主体
+                body: formData,
+            });
+
+            if (response.ok) {
+                setIsModalVisible(false)
+            } else {
+                const data = await response.json();
+                console.error('Failed to purchase:', data.message);
+            }
+        } catch (error) {
+            console.error('There was an error making the purchase:', error);
         }
     }
 
 
-<<<<<<< HEAD
+
     function generateAmazonSearchURL(query) {
         return `https://www.amazon.com/s?k=${encodeURIComponent(query)}`;
     }
     
     if (!item) return <p>Loading...</p>;
-=======
 
-    if (!item) return <p>Loading...</p>
->>>>>>> 70850e15b9ad76d3f518a5423eb5545094a7f32f
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
@@ -331,14 +315,14 @@ function ItemPage () {
                     <Col span={8}>
                         <Title level={2} style={{ display: 'flex', alignItems: 'center' }}>
                             {item.name}
-                            {/* <span style={{ marginLeft: '10px' }}>
+                            {<span style={{ marginLeft: '10px' }}>
                                 {
                                     contextUserID && (isFavorited ?
                                         <StarFilled style={{ color: 'gold', fontSize: '20px' }} onClick={toggleFavorite} /> :
                                         <StarOutlined style={{ fontSize: '20px' }} onClick={toggleFavorite} />)
                                 }
 
-                            </span> */}
+                            </span>}
                         </Title>
 
                         <div style={{ marginBottom: '15px' }}>
@@ -347,19 +331,14 @@ function ItemPage () {
 
                         <Text strong>Estimated Price: </Text><br />${item.price}<br /><br />
                         <Text strong>Description: </Text><br />{item.description}<br /><br />
-<<<<<<< HEAD
-                        <Text strong>Owned by: </Text><br /><Link to={`/user/${item.owner.userId}`}>{item.owner.username}</Link><br /><br />
-                        <Text strong>Estimated Price: </Text><br />${item.estimatedPrice}<br /><br />
+                        <Text strong>Owned by: </Text><br /><Link to={`/user/${item.owner.studentId}`}>{item.owner.username}</Link><br /><br />
                         <Button 
                         type="default" 
-                        onClick={() => window.open(generateAmazonSearchURL(item.itemName), '_blank')}
+                        onClick={() => window.open(generateAmazonSearchURL(item.name), '_blank')}
                         >
-                        Search on Amazon
+                            Search on Amazon
                         </Button>
                         <br /><br />
-=======
-                        <Text strong>Owned by: </Text><br /><Link to={`/user/${item.owner.studentId}`}>{item.owner.username}</Link><br /><br />
->>>>>>> 70850e15b9ad76d3f518a5423eb5545094a7f32f
                         {!isOwner && (
                             <>
                                 <Button type="primary" style={{ marginRight: '10px' }} onClick={handleOpenModal}>Buy</Button>
@@ -375,10 +354,10 @@ function ItemPage () {
                                     renderItem={bid => (
                                         <List.Item>
                                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                                                <Text strong><span>Buyer ID: <Link to={`/user/${bid.buyerID}`}> {bid.buyerUsername}</Link>, Price: ${bid.price}</span></Text>
+                                                <Text strong><span>Buyer: <Link onClick={()=>{handleNavigationBuyer(bid.user)}}> {bid.user}</Link>, Price: ${bid.price}</span></Text>
                                                 <div>
-                                                    <Button type="primary" style={{ marginRight: '10px' }} onClick={() => handleAcceptBid(bid.bidID)}>Accept</Button>
-                                                    <Button type="default" danger onClick={() => handleRejectBid(bid.bidID)}>Reject</Button>
+                                                    <Button type="primary" style={{ marginRight: '10px' }} onClick={() => handleAcceptBid(bid.ask_id)}>{bid.id}Accept</Button>
+                                                    <Button type="default" danger onClick={() => handleRejectBid(bid.ask_id)}>Reject</Button>
                                                 </div>
                                             </div>
                                         </List.Item>
@@ -400,6 +379,12 @@ function ItemPage () {
                                 value={bidAmount}
                                 onChange={(e) => setBidAmount(e.target.value)}
                             />
+                            <Input
+                                type="text"
+                                placeholder="Enter your message"
+                                value={bidMessage}
+                                onChange={(e) => setBidMessage(e.target.value)}
+                            />
                         </Modal>
                     </Col>
                     {
@@ -416,42 +401,6 @@ function ItemPage () {
                         onOk={handleSaveChanges}
                         onCancel={handleCloseEditModal}
                     >
-<<<<<<< HEAD
-                        <Input
-                            placeholder="Item Name"
-                            value={editedItem.itemName}
-                            onChange={(e) => setEditedItem(prev => ({ ...prev, itemName: e.target.value }))}
-                        />
-                        <br /><br />
-                        <Input
-                            placeholder="Image URL"
-                            value={editedItem.imageURL}
-                            onChange={(e) => setEditedItem(prev => ({ ...prev, imageURL: e.target.value }))}
-                        />
-                        {/*TODO: Debug here*/}
-                        <br /><br />
-                        <Input
-                            placeholder="Estimated Price"
-                            type="number"
-                            prefix="$"
-                            value={editedItem.estimatedPrice}
-                            onChange={(e) => setEditedItem(prev => ({ ...prev, estimatedPrice: e.target.value }))}
-                        />
-                        <br /><br />
-                        <Input.TextArea
-                            rows={4}
-                            placeholder="Description"
-                            value={editedItem.description}
-                            onChange={(e) => setEditedItem(prev => ({ ...prev, description: e.target.value }))}
-                        />
-                        <br /><br />
-                        <Input
-                            placeholder="Category (comma separated)"
-                            value={editedItem.category}
-                            onChange={(e) => setEditedItem(prev => ({ ...prev, category: e.target.value}))}
-                        />
-                        
-=======
                         <Form layout="vertical">
                             <Form.Item label="Name" required>
                                 <Input
@@ -502,7 +451,6 @@ function ItemPage () {
                             </Form.Item>
 
                         </Form>
->>>>>>> 70850e15b9ad76d3f518a5423eb5545094a7f32f
                     </Modal>
 
                 </Row>

@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/asks")
-public class AskController {
+public class    AskController {
     ItemService itemService;
     UserService userService;
     AskService askService;

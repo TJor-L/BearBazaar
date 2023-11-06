@@ -64,4 +64,12 @@ public class UserController {
         }
         return user;
     }
+    @GetMapping("/user/byname/{username}")
+    public User getUserByUsername(@PathVariable String username) {
+        User user = UserService.getUserByUsername(username);
+        if(user == null){
+            throw new UserNotExistException("User No exist");
+        }
+        return user;
+    }
 }

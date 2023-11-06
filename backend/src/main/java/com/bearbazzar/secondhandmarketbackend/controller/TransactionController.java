@@ -36,7 +36,7 @@ public class TransactionController {
                 .setSeller(sellerEntity)
                 .setItem(ask.getItem().getId())
                 .setPrice(ask.getPriceOffered())
-                .setStatus(TransactionState.Pending)
+                .setStatus(TransactionState.Confirmed)
                 .build();
         askService.removeAsk(ask_id);
         transactionService.createTransaction(transaction);
