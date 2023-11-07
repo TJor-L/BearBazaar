@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom'
 import fakeItems from "../fakedata/fakeitems"
 
 const { Content } = Layout
-const apiUrl = process.env.BACKEND_URL || 'http://localhost';
-const apiPort = process.env.BACKEND_PORT || '8080';
+const apiUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost'
+const apiPort = process.env.REACT_APP_BACKEND_PORT || '8080'
 function SearchingPage () {
     const [searchParams] = useSearchParams()
     const [filteredItems, setFilteredItems] = useState([])
@@ -39,7 +39,7 @@ function SearchingPage () {
                     const matchesPriceRange = item.price >= minPrice && item.price <= maxPrice
 
                     // Check if item matches any of the selected categories. If no categories are selected, show all items.
-                    const matchesCategory = categories.includes('all') || categories.includes(item.category)  || categories.includes("")
+                    const matchesCategory = categories.includes('all') || categories.includes(item.category) || categories.includes("")
 
                     return matchesSearchKey && matchesPriceRange && matchesCategory
                 })

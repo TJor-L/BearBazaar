@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-const apiUrl = process.env.BACKEND_URL || 'http://localhost';
-const apiPort = process.env.BACKEND_PORT || '8080';
+const apiUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost'
+const apiPort = process.env.BACKEND_PORT || '8080'
 function EditItem ({ item }) {
   // 设置初始状态
   const [name, setName] = useState(item.name)

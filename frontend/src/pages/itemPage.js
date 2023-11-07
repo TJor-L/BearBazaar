@@ -4,9 +4,9 @@ import { Row, Col, Image, Button, Typography, Layout, Modal, Input, Tag, message
 import { StarOutlined, StarFilled, UploadOutlined } from '@ant-design/icons'
 import UserContext from "../contexts/userContext"
 import fakeItems from "../fakedata/fakeitems"
-import {type} from "@testing-library/user-event/dist/type";
-const apiUrl = process.env.BACKEND_URL || 'http://localhost';
-const apiPort = process.env.BACKEND_PORT || '8080';
+import { type } from "@testing-library/user-event/dist/type"
+const apiUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost'
+const apiPort = process.env.REACT_APP_BACKEND_PORT || '8080'
 
 const { Title, Text } = Typography
 
@@ -57,34 +57,34 @@ function ItemPage () {
             } else {
                 setIsOwner(false)
             }
-            fetchBidsForItem();
+            fetchBidsForItem()
         }
     }, [item, contextUsername])
 
     const fetchBidsForItem = async () => {
 
         try {
-            const response = await fetch(`${apiUrl}:${apiPort}/asks/item/${itemID}`);
+            const response = await fetch(`${apiUrl}:${apiPort}/asks/item/${itemID}`)
             if (response.ok) {
-                const data = await response.json();
-                setBids(data);
-                const currentUserBid = data.find(bid => bid.buyerID === contextUserID);
+                const data = await response.json()
+                setBids(data)
+                const currentUserBid = data.find(bid => bid.buyerID === contextUserID)
                 if (currentUserBid) {
-                    setUserBid(currentUserBid.price);
+                    setUserBid(currentUserBid.price)
                 }
             } else {
-                const data = await response.json();
-                console.error('Failed to fetch bids for item:', data.message);
+                const data = await response.json()
+                console.error('Failed to fetch bids for item:', data.message)
             }
         } catch (error) {
-            console.error('There was an error fetching the bids for the item:', error);
+            console.error('There was an error fetching the bids for the item:', error)
         }
     }
 
     const handleAcceptBid = async (bidID) => {
         try {
-            const formData = new URLSearchParams();
-            formData.append('ask_id', parseInt(bidID, 10));
+            const formData = new URLSearchParams()
+            formData.append('ask_id', parseInt(bidID, 10))
             console.log(bidID)
             const response = await fetch(`${apiUrl}:${apiPort}/transaction`, {
                 method: 'POST',
@@ -92,15 +92,15 @@ function ItemPage () {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body: formData,
-            });
+            })
             if (response.ok) {
-                setBids("");
+                setBids("")
             } else {
-                const data = await response.json();
-                console.error('Failed to accept the bid:', data.message);
+                const data = await response.json()
+                console.error('Failed to accept the bid:', data.message)
             }
         } catch (error) {
-            console.error('There was an error accepting the bid:', error);
+            console.error('There was an error accepting the bid:', error)
         }
     }
 
@@ -111,16 +111,16 @@ function ItemPage () {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-            });
+            })
 
             if (response.ok) {
-                setBids(prevBids => prevBids.filter(bid => bid.ask_id !== bidID));
+                setBids(prevBids => prevBids.filter(bid => bid.ask_id !== bidID))
             } else {
-                const data = await response.json();
-                console.error('Failed to reject the bid:', data.message);
+                const data = await response.json()
+                console.error('Failed to reject the bid:', data.message)
             }
         } catch (error) {
-            console.error('There was an error rejecting the bid:', error);
+            console.error('There was an error rejecting the bid:', error)
         }
     }
 
@@ -221,18 +221,18 @@ function ItemPage () {
 
     const handleNavigationBuyer = async (buyername) => {
         try {
-            const response = await fetch(`${apiUrl}:${apiPort}/user/byname/${buyername}`);
+            const response = await fetch(`${apiUrl}:${apiPort}/user/byname/${buyername}`)
             if (response.ok) {
-                const user = await response.json();
+                const user = await response.json()
                 console.log(user)
-                navigate(`/user/${user.studentId}`);
+                navigate(`/user/${user.studentId}`)
             } else {
-                throw new Error('User not found');
+                throw new Error('User not found')
             }
         } catch (error) {
-            console.error('Error fetching user:', error);
+            console.error('Error fetching user:', error)
         }
-    };
+    }
 
     const toggleFavorite = async () => {
         try {
@@ -246,28 +246,28 @@ function ItemPage () {
                     userID: contextUserID,
                     itemID: itemID,
                 }),
-            });
+            })
 
             if (response.ok) {
-                setIsFavorited(prevState => !prevState); // 切换收藏状态
+                setIsFavorited(prevState => !prevState) // 切换收藏状态
             } else {
                 // 处理错误
-                const data = await response.json();
-                console.error('Failed to update favorite status:', data.message);
+                const data = await response.json()
+                console.error('Failed to update favorite status:', data.message)
             }
         } catch (error) {
-            console.error('There was an error updating the favorite status:', error);
+            console.error('There was an error updating the favorite status:', error)
         }
     }
 
     const handleConfirmPurchase = async () => {
         try {
             // 使用URLSearchParams构造表单数据
-            const formData = new URLSearchParams();
-            formData.append('item_id', itemID);
-            formData.append('buyer', contextUsername);
-            formData.append('price', bidAmount);
-            formData.append('message', bidMessage);
+            const formData = new URLSearchParams()
+            formData.append('item_id', itemID)
+            formData.append('buyer', contextUsername)
+            formData.append('price', bidAmount)
+            formData.append('message', bidMessage)
 
             const response = await fetch(`${apiUrl}:${apiPort}/asks`, {
                 method: 'POST',
@@ -277,26 +277,26 @@ function ItemPage () {
                 },
                 // 发送表单数据作为请求主体
                 body: formData,
-            });
+            })
 
             if (response.ok) {
                 setIsModalVisible(false)
             } else {
-                const data = await response.json();
-                console.error('Failed to purchase:', data.message);
+                const data = await response.json()
+                console.error('Failed to purchase:', data.message)
             }
         } catch (error) {
-            console.error('There was an error making the purchase:', error);
+            console.error('There was an error making the purchase:', error)
         }
     }
 
 
 
-    function generateAmazonSearchURL(query) {
-        return `https://www.amazon.com/s?k=${encodeURIComponent(query)}`;
+    function generateAmazonSearchURL (query) {
+        return `https://www.amazon.com/s?k=${encodeURIComponent(query)}`
     }
-    
-    if (!item) return <p>Loading...</p>;
+
+    if (!item) return <p>Loading...</p>
 
 
     return (
@@ -342,7 +342,7 @@ function ItemPage () {
                         {!isOwner && (
                             <>
                                 <Button type="primary" style={{ marginRight: '10px' }} onClick={handleOpenModal}>Buy</Button>
-                                {contextUserID!=='' && userBid!==0 && <Text>Your previous bid: {userBid}</Text>}
+                                {contextUserID !== '' && userBid !== 0 && <Text>Your previous bid: {userBid}</Text>}
                             </>
                         )}
                         {isOwner && (
@@ -354,7 +354,7 @@ function ItemPage () {
                                     renderItem={bid => (
                                         <List.Item>
                                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                                                <Text strong><span><Link onClick={()=>{handleNavigationBuyer(bid.user)}}> {bid.user}</Link>: "{bid.message}" Price: ${bid.price}</span></Text>
+                                                <Text strong><span><Link onClick={() => { handleNavigationBuyer(bid.user) }}> {bid.user}</Link>: "{bid.message}" Price: ${bid.price}</span></Text>
                                                 <div>
                                                     <Button type="primary" style={{ marginRight: '10px' }} onClick={() => handleAcceptBid(bid.ask_id)}>{bid.id}Accept</Button>
                                                     <Button type="default" danger onClick={() => handleRejectBid(bid.ask_id)}>Reject</Button>

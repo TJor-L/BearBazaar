@@ -6,8 +6,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import * as Const from "../const"
 
 const { Content } = Layout
-const apiUrl = process.env.BACKEND_URL || 'http://localhost';
-const apiPort = process.env.BACKEND_PORT || '8080';
+const apiUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost'
+const apiPort = process.env.REACT_APP_BACKEND_PORT || '8080'
 function UserProfilePage () {
   const { contextUsername, contextUserID } = useContext(UserContext)
   const { urlUserID } = useParams()
@@ -30,7 +30,7 @@ function UserProfilePage () {
       })
       .then(data => {
         console.log(data)
-        setEmail(data.email.address || 'fake@email.com'); // fake data
+        setEmail(data.email.address || 'fake@email.com') // fake data
         setPhone(data.phone)
         setUserName(data.username)
         setUserDescription(data.description)
@@ -121,7 +121,7 @@ function UserProfilePage () {
               <Card>
                 {isEditing ? (
                   <>
-                    <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" style={{ marginBottom: '10px' }} readOnly={true}/>
+                    <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" style={{ marginBottom: '10px' }} readOnly={true} />
                     <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone Number" style={{ marginBottom: '10px' }} />
                     {/*<Input.Password*/}
                     {/*    value={password}*/}

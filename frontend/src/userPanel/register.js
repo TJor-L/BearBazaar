@@ -2,10 +2,10 @@ import React, { useContext, useState } from 'react'
 import UserContext from '../contexts/userContext'
 import { Input, Button, Alert } from 'antd'
 
-const apiUrl = process.env.BACKEND_URL || 'http://localhost';
-const apiPort = process.env.BACKEND_PORT || '8080';
+const apiUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost'
+const apiPort = process.env.REACT_APP_BACKEND_PORT || '8080'
 
-function Register({ onClose }) {
+function Register ({ onClose }) {
     const { setContextUsername, setContextUserID } = useContext(UserContext)
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -18,22 +18,22 @@ function Register({ onClose }) {
 
     const generateVerificationCode = () => {
         // Function to generate a random 6-digit code
-        return Math.floor(100000 + Math.random() * 900000).toString();
+        return Math.floor(100000 + Math.random() * 900000).toString()
     }
 
     const sendVerificationCode = async () => {
         if (!email) {
-            setError('Please enter your email to receive a verification code.');
-            return;
+            setError('Please enter your email to receive a verification code.')
+            return
         }
-        const code = generateVerificationCode();
-        setVerificationCode(code);
+        const code = generateVerificationCode()
+        setVerificationCode(code)
 
         try {
             // 编码请求参数
-            const params = new URLSearchParams();
-            params.append('email', email);
-            params.append('code', code);
+            const params = new URLSearchParams()
+            params.append('email', email)
+            params.append('code', code)
 
             // 发送请求
             const response = await fetch(`${apiUrl}:${apiPort}/email-verification/send-code`, {
@@ -42,24 +42,24 @@ function Register({ onClose }) {
                     'Content-Type': 'application/x-www-form-urlencoded', // 确保发送正确的内容类型
                 },
                 body: params
-            });
+            })
 
-            if (!response.ok) throw new Error('Failed to send verification code.');
+            if (!response.ok) throw new Error('Failed to send verification code.')
             // 这里可以进一步处理响应或通知用户
         } catch (error) {
-            setError(error.message || 'Failed to send verification code.');
+            setError(error.message || 'Failed to send verification code.')
         }
-    };
+    }
 
 
-    async function handleRegister() {
+    async function handleRegister () {
         if (!userID || !username || !password || !phone || !verificationCode || !inputCode) {
-            setError('All fields are required, including the verification code!');
-            return;
+            setError('All fields are required, including the verification code!')
+            return
         }
         if (inputCode !== verificationCode) {
-            setError('Verification code is incorrect!');
-            return;
+            setError('Verification code is incorrect!')
+            return
         }
         const response = await fetch(`${apiUrl}:${apiPort}/register`, {
             method: 'POST',
@@ -73,19 +73,19 @@ function Register({ onClose }) {
                 phone: phone,
                 studentId: userID, // Changed from studentId to userID to match the state name
             }),
-        });
+        })
 
         if (response.ok) {
             // console.log("OKK")
             // setContextUsername(username);
             // setContextUserID(userID);
-            onClose();
+            onClose()
         } else {
             try {
-                const data = await response.json();
-                setError(data.message || 'An error occurred during registration.');
+                const data = await response.json()
+                setError(data.message || 'An error occurred during registration.')
             } catch (error) {
-                setError('An error occurred during registration.');
+                setError('An error occurred during registration.')
             }
         }
     }

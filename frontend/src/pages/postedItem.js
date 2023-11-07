@@ -5,8 +5,8 @@ import fakeItems from "../fakedata/fakeitems"
 import UserContext from "../contexts/userContext"
 
 const { Content } = Layout
-const apiUrl = process.env.BACKEND_URL || 'http://localhost';
-const apiPort = process.env.BACKEND_PORT || '8080';
+const apiUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost'
+const apiPort = process.env.REACT_APP_BACKEND_PORT || '8080'
 function PostedItems () {
     const [items, setItems] = useState([])
 
