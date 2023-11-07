@@ -30,22 +30,19 @@ function Register ({ onClose }) {
         setVerificationCode(code)
 
         try {
-            // 编码请求参数
             const params = new URLSearchParams()
             params.append('email', email)
             params.append('code', code)
 
-            // 发送请求
             const response = await fetch(`${apiUrl}:${apiPort}/email-verification/send-code`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded', // 确保发送正确的内容类型
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body: params
             })
 
             if (!response.ok) throw new Error('Failed to send verification code.')
-            // 这里可以进一步处理响应或通知用户
         } catch (error) {
             setError(error.message || 'Failed to send verification code.')
         }
@@ -103,7 +100,7 @@ function Register ({ onClose }) {
             <Input
                 value={userID}
                 onChange={(e) => setUserID(e.target.value)}
-                placeholder="User ID"
+                placeholder="WashU Student ID"
                 style={{ marginBottom: '10px' }}
             />
             <Input.Password

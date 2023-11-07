@@ -168,7 +168,7 @@ function UserProfilePage () {
             {contextUserID == urlUserID ? (
               <Col span={12} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 <Button onClick={() => navigate('/posted-item')}>My Posted Items</Button>
-                <Button onClick={() => navigate('/transactions')}>Transactions</Button>
+                <Button onClick={() => navigate('/transactions')}>My Transactions</Button>
                 {/*<Button onClick={() => navigate('/C')}>C</Button>
                 <Button onClick={() => navigate('/D')}>D</Button> */}
                 <Card title="Description" bordered={true} style={{ width: "100%" }}>
@@ -179,7 +179,7 @@ function UserProfilePage () {
                         onChange={(e) => setUserDescription(e.target.value)}
                         placeholder="User Description"
                         style={{ marginBottom: '10px' }}
-                        rows={4} // 你可以根据需要设置这个值来调整高度
+                        rows={4}
                       />
                       <Button type="primary" onClick={handleSaveDescription}>Save</Button>
 

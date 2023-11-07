@@ -76,7 +76,7 @@ function App() {
                             <Route path="/user/:urlUserID" element={<UserPage />} />
                             <Route path="/home" element={<HomePage />} />
                             <Route path="/searching" element={<SearchingPage />} />
-                            <Route path="/item/:itemID" element={<PrivateRoute><ItemPage/></PrivateRoute>} />
+                            <Route path="/item/:itemID" element={<ItemPage/>} />
                             <Route path="/postitem" element={<PrivateRoute><PostItem/></PrivateRoute>} />
                             <Route path="/posted-item" element={<PrivateRoute><PostedItems/></PrivateRoute>} />
                             <Route path="/transactions" element={<PrivateRoute><Transactions/></PrivateRoute>} />

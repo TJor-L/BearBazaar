@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Slider, Select, Button, Row, Col } from 'antd'
 import fakeItems from "../fakedata/fakeitems"
+import categories from "../categories";
 
 const { Option } = Select
 
@@ -11,7 +12,7 @@ function Filter ({ onCancel, onSubmit }) {
     const [priceRange, setPriceRange] = useState([0, 1000])
 
 
-    const categories = ["sport", "book", "fashion", "electro", "all"]
+    const categoryValues = ['all', ...categories.map(cat => cat.value)];
 
     function onFilterSubmit () {
         const [minPrice, maxPrice] = priceRange
@@ -45,7 +46,7 @@ function Filter ({ onCancel, onSubmit }) {
                             onChange={handleCategoryChange}
                             style={{ width: '100%' }}
                         >
-                            {categories.map(cat => <Option key={cat} value={cat}>{cat}</Option>)}
+                            {categoryValues.map(cat => <Option key={cat} value={cat}>{cat}</Option>)}
                         </Select>
                     </label>
                 </Col>

@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'
 import { Row, Col, Image, Button, Typography, Layout, Modal, Input, Tag, message, List, Carousel, Form, Select, Upload } from 'antd'
 import { StarOutlined, StarFilled, UploadOutlined } from '@ant-design/icons'
 import UserContext from "../contexts/userContext"
+import categories from "../categories";
 import fakeItems from "../fakedata/fakeitems"
 import { type } from "@testing-library/user-event/dist/type"
 const apiUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost'
@@ -25,7 +26,7 @@ function ItemPage () {
     const [bidMessage, setBidMessage] = useState('') // 用户输入的出价
     const [editedItem, setEditedItem] = useState({ name: '', description: '' })
     const [isEditModalVisible, setIsEditModalVisible] = useState(false)
-    const [userBid, setUserBid] = useState(null)
+    const [userBid, setUserBid] = useState(0)
     const navigate = useNavigate()
 
     const location = useLocation()
@@ -58,6 +59,7 @@ function ItemPage () {
                 setIsOwner(false)
             }
             fetchBidsForItem()
+
         }
     }, [item, contextUsername])
 
@@ -68,7 +70,8 @@ function ItemPage () {
             if (response.ok) {
                 const data = await response.json()
                 setBids(data)
-                const currentUserBid = data.find(bid => bid.buyerID === contextUserID)
+                const currentUserBid = data.find(bid => bid.user === contextUsername)
+                console.log(data)
                 if (currentUserBid) {
                     setUserBid(currentUserBid.price)
                 }
@@ -339,13 +342,18 @@ function ItemPage () {
                             Search on Amazon
                         </Button>
                         <br /><br />
-                        {!isOwner && (
+                        {!isOwner && item.status === "AVAILABLE" && (
                             <>
                                 <Button type="primary" style={{ marginRight: '10px' }} onClick={handleOpenModal}>Buy</Button>
-                                {contextUserID !== '' && userBid !== 0 && <Text>Your previous bid: {userBid}</Text>}
+                                {contextUserID !== '' && userBid !== 0 && <Text>Your previous bid: ${userBid}</Text>}
                             </>
                         )}
-                        {isOwner && (
+                        {item.status === "SOLD" && (
+                            <>
+                                <Tag color="red" style={{ fontSize: '16px', padding: '5px 10px', borderRadius: '4px' }}>SOLD</Tag>
+                            </>
+                        )}
+                        {isOwner && item.status === "AVAILABLE" && (
                             <div style={{ marginTop: '20px' }}>
                                 <Title level={3}>All Bids</Title>
                                 <List
@@ -388,7 +396,7 @@ function ItemPage () {
                         </Modal>
                     </Col>
                     {
-                        isOwner &&
+                        isOwner && item.status === "AVAILABLE" &&
                         <>
                             <Button onClick={handleOpenEditModal} style={{ marginRight: '10px' }}>Edit</Button>
                             <Button type="default" danger onClick={handleDeleteItem}>Delete</Button>
@@ -425,10 +433,9 @@ function ItemPage () {
                                     onChange={(value) => setEditedItem(prev => ({ ...prev, category: value }))}
                                     placeholder="Category"
                                 >
-                                    <Select.Option value="fashion">Fashion</Select.Option>
-                                    <Select.Option value="sport">Sport</Select.Option>
-                                    <Select.Option value="electro">Electro</Select.Option>
-                                    <Select.Option value="book">Book</Select.Option>
+                                    {categories.map(cat => (
+                                        <Select.Option key={cat.value} value={cat.value}>{cat.label}</Select.Option>
+                                    ))}
                                 </Select>
                             </Form.Item>
 
