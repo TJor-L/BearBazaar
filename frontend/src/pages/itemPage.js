@@ -332,9 +332,9 @@ function ItemPage () {
                         <Text strong>Estimated Price: </Text><br />${item.price}<br /><br />
                         <Text strong>Description: </Text><br />{item.description}<br /><br />
                         <Text strong>Owned by: </Text><br /><Link to={`/user/${item.owner.studentId}`}>{item.owner.username}</Link><br /><br />
-                        <Button 
-                        type="default" 
-                        onClick={() => window.open(generateAmazonSearchURL(item.name), '_blank')}
+                        <Button
+                            type="default"
+                            onClick={() => window.open(generateAmazonSearchURL(item.name), '_blank')}
                         >
                             Search on Amazon
                         </Button>
@@ -354,7 +354,7 @@ function ItemPage () {
                                     renderItem={bid => (
                                         <List.Item>
                                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                                                <Text strong><span>Buyer: <Link onClick={()=>{handleNavigationBuyer(bid.user)}}> {bid.user}</Link>, Price: ${bid.price}</span></Text>
+                                                <Text strong><span><Link onClick={()=>{handleNavigationBuyer(bid.user)}}> {bid.user}</Link>: "{bid.message}" Price: ${bid.price}</span></Text>
                                                 <div>
                                                     <Button type="primary" style={{ marginRight: '10px' }} onClick={() => handleAcceptBid(bid.ask_id)}>{bid.id}Accept</Button>
                                                     <Button type="default" danger onClick={() => handleRejectBid(bid.ask_id)}>Reject</Button>

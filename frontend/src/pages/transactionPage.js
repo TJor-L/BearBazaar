@@ -223,7 +223,11 @@ function Transactions() {
                             renderItem={item => (
                                 <List.Item actions={buyerActions(item.status, item)}>
                                     <List.Item.Meta
-                                        title={`${itemsData[item.item]?.name || ''}`}
+                                        title={
+                                            <Link to={`/item/${itemsData[item.item]?.id}`}>
+                                                {itemsData[item.item]?.name || ''}
+                                            </Link>
+                                        }
                                         description={
                                             <div>
                                                 <div>Seller: {item.seller.username}</div>
