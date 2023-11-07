@@ -121,7 +121,7 @@ function UserProfilePage () {
               <Card>
                 {isEditing ? (
                   <>
-                    <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" style={{ marginBottom: '10px' }} />
+                    <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" style={{ marginBottom: '10px' }} readOnly={true}/>
                     <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone Number" style={{ marginBottom: '10px' }} />
                     {/*<Input.Password*/}
                     {/*    value={password}*/}

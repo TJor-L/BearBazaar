@@ -245,7 +245,11 @@ function Transactions() {
                             renderItem={item => (
                                 <List.Item actions={sellerActions(item.status, item)}>
                                     <List.Item.Meta
-                                        title={`${itemsData[item.item]?.name || ''}`}
+                                        title={
+                                            <Link to={`/item/${itemsData[item.item]?.id}`}>
+                                                {itemsData[item.item]?.name || ''}
+                                            </Link>
+                                        }
                                         description={
                                             <div>
                                                 <div>Seller: {item.seller.username}</div>
@@ -253,8 +257,11 @@ function Transactions() {
                                                 <div>Status: {item.status}</div>
                                             </div>
                                         }
-                                        avatar={<img src={itemsData[item.item]?.image[0].url} alt={itemsData[item.item]?.name} style={{ width: 70 }} />}
+                                        avatar={
+                                            <img src={itemsData[item.item]?.image[0].url} alt={itemsData[item.item]?.name} style={{ width: 70 }} />
+                                        }
                                     />
+
                                 </List.Item>
                             )}
                         />

@@ -69,7 +69,7 @@ function PostItem () {
         <Row justify="center" gutter={32} style={{ height: '100%', marginTop: "3%" }}>
           <Col span={12}>
             <Form layout="vertical">
-              <Form.Item label="Name" required>
+              <Form.Item label="Item Name" required>
                 <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" />
               </Form.Item>
               <Form.Item label="Description" required>
