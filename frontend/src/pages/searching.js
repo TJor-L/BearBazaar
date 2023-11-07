@@ -22,7 +22,6 @@ function SearchingPage () {
                 const minPrice = parseFloat(searchParams.get('minPrice') || 0)
                 const maxPrice = parseFloat(searchParams.get('maxPrice') || Infinity)
                 const categories = searchParams.get('categories')?.split(',') || []  // Assume categories are comma-separated in the URL
-
                 const response = await fetch(`${apiUrl}:${apiPort}/items`)
 
                 if (!response.ok) {
@@ -40,7 +39,7 @@ function SearchingPage () {
                     const matchesPriceRange = item.price >= minPrice && item.price <= maxPrice
 
                     // Check if item matches any of the selected categories. If no categories are selected, show all items.
-                    const matchesCategory = categories.includes('all') || categories.includes(item.category)
+                    const matchesCategory = categories.includes('all') || categories.includes(item.category)  || categories.includes("")
 
                     return matchesSearchKey && matchesPriceRange && matchesCategory
                 })

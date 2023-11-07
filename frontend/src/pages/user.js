@@ -29,7 +29,8 @@ function UserProfilePage () {
         return response.json()
       })
       .then(data => {
-        setEmail(data.email || 'fake@email.com'); // fake data
+        console.log(data)
+        setEmail(data.email.address || 'fake@email.com'); // fake data
         setPhone(data.phone)
         setUserName(data.username)
         setUserDescription(data.description)

@@ -310,7 +310,7 @@ function Transactions() {
                         </Button>,
                     ]}
                 >
-                    {(curTransaction===null)?null:<p>Have you received ${curTransaction.price} from <Link to={`user/transaction/${curTransaction.buyer.studentId}`}>{curTransaction.buyer.username}?</Link></p>}
+                    {(curTransaction===null)?null:<p>Have you received ${curTransaction.price} from <Link to={`/user/${curTransaction.buyer.studentId}`}>{curTransaction.buyer.username}?</Link></p>}
                 </Modal>
             </Content>
         </Layout>
