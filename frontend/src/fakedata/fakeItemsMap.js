@@ -1,4 +1,4 @@
-import fakeItems from "./fakeitems";
+import fakeItems from "./fakeItems";
 const fakeItemsMap = fakeItems.map(item => ({
     itemID: item.itemID,
     imageURL: item.imageURL,

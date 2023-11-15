@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Card, Layout, List, Typography } from 'antd'
 import { Link } from 'react-router-dom'
-import fakeItems from "../fakedata/fakeitems"
+import fakeItems from "../fakedata/fakeItems"
 
 const { Content } = Layout
 const apiUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost'

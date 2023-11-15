@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Slider, Select, Button, Row, Col } from 'antd'
-import fakeItems from "../fakedata/fakeitems"
+import fakeItems from "../fakedata/fakeItems"
 import categories from "../categories";
 
 const { Option } = Select

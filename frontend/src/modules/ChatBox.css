@@ -1,0 +1,61 @@
+.chat-box-container {
+    display: flex;
+}
+
+.user-list {
+    width: 200px; /* 或您需要的宽度 */
+    overflow-y: auto;
+}
+
+.user-list-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.username {
+    margin-left: 10px;
+}
+
+.message-area {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.message {
+    padding: 10px;
+    margin: 10px;
+    border-radius: 8px;
+    max-width: 70%;
+}
+
+.message.sent {
+    background-color: #DCF8C6; /* 微信发送消息的背景颜色 */
+    margin-left: auto;
+}
+
+.message.received {
+    background-color: #F5F5F5; /* 稍微灰一点的颜色 */
+}
+
+.message-date {
+    font-size: 10px;
+    color: #B3B3B3; /* 日期的颜色 */
+    margin-bottom: 5px;
+}
+
+.message-content {
+    word-wrap: break-word;
+}
+
+.message-area {
+    position: relative; /* 设置父容器的相对定位 */
+    height: 100%; /* 确保这个容器填满父容器的高度 */
+}
+
+.message-input {
+    position: absolute; /* 绝对定位 */
+    bottom: 0; /* 定位到容器的底部 */
+    width: 100%; /* 输入区域的宽度与父容器相同 */
+    display: flex; /* 保留现有的flex布局 */
+}

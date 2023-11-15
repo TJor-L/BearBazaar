@@ -4,7 +4,7 @@ import { Row, Col, Image, Button, Typography, Layout, Modal, Input, Tag, message
 import { StarOutlined, StarFilled, UploadOutlined } from '@ant-design/icons'
 import UserContext from "../contexts/userContext"
 import categories from "../categories";
-import fakeItems from "../fakedata/fakeitems"
+import fakeItems from "../fakedata/fakeItems"
 import { type } from "@testing-library/user-event/dist/type"
 const apiUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost'
 const apiPort = process.env.REACT_APP_BACKEND_PORT || '8080'

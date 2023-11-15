@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Layout, List, Typography, Card, message } from 'antd'
 import { Link } from 'react-router-dom'
-import fakeItems from "../fakedata/fakeitems"
+import fakeItems from "../fakedata/fakeItems"
 import UserContext from "../contexts/userContext"
 
 const { Content } = Layout
