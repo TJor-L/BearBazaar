@@ -9,6 +9,8 @@ import com.bearbazzar.secondhandmarketbackend.service.AuthenticationService;
 import com.bearbazzar.secondhandmarketbackend.service.UserService;
 
 import org.apache.coyote.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,7 @@ import static org.springframework.http.ResponseEntity.notFound;
 @RestController
 public class UserController {
    UserService UserService;
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
    AuthenticationService authenticationService;
     public UserController(UserService registerService, AuthenticationService authenticationService) {
         this.UserService = registerService;
@@ -27,6 +30,7 @@ public class UserController {
     }
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody User user) {
+        logger.info("Registering user {}", user.getUsername());
         UserService.addUser(user);
         return ResponseEntity.ok().build();
     }

@@ -50,6 +50,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE,"/transaction/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/user/byname/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/email-verification/**").permitAll()
+                .antMatchers("/chat/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable();
@@ -72,14 +73,13 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        //configuration.setAllowedOrigins(Arrays.asList("http://frontend:3000"));  // 允许的源
-        configuration.setAllowedOrigins(Arrays.asList("http://www.dijkstraliu.com:4000", "http://localhost:3000"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","null"));  // 允许的源
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));  // 允许的HTTP方法
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));  // 允许的请求头
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
