@@ -56,6 +56,10 @@ public class ItemController {
             return ResponseEntity.notFound().build();
         }
     }
+//    @DeleteMapping("/image/{id}")
+//    public void deleteImage(@PathVariable("id") Long id) {
+//        itemService.deleteImage(id);
+//    }
     @DeleteMapping("/{id}")
     public void deleteItem(@PathVariable("id") Long id) {
         itemService.deleteItem(id);
