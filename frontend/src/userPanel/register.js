@@ -2,22 +2,60 @@ import React, { useContext, useState } from 'react'
 import UserContext from '../contexts/userContext'
 import { Input, Button, Alert } from 'antd'
 
-const apiUrl = process.env.BACKEND_URL || 'http://localhost';
-const apiPort = process.env.BACKEND_PORT || '8080';
+const apiUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost'
+const apiPort = process.env.REACT_APP_BACKEND_PORT || '8080'
 
 function Register ({ onClose }) {
-    const { contextUsername, contextUserID } = useContext(UserContext)
+    const { setContextUsername, setContextUserID } = useContext(UserContext)
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
-    const [userID, setUserID] = useState('') // Renamed from schoolId to userID
+    const [userID, setUserID] = useState('')
+    const [verificationCode, setVerificationCode] = useState('') // To store the verification code sent to the user
+    const [inputCode, setInputCode] = useState('') // To store the user's input for verification
     const [error, setError] = useState(null)
-    const { setContextUsername, setContextUserID } = useContext(UserContext)
+
+    const generateVerificationCode = () => {
+        // Function to generate a random 6-digit code
+        return Math.floor(100000 + Math.random() * 900000).toString()
+    }
+
+    const sendVerificationCode = async () => {
+        if (!email) {
+            setError('Please enter your email to receive a verification code.')
+            return
+        }
+        const code = generateVerificationCode()
+        setVerificationCode(code)
+
+        try {
+            const params = new URLSearchParams()
+            params.append('email', email)
+            params.append('code', code)
+
+            const response = await fetch(`${apiUrl}:${apiPort}/email-verification/send-code`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: params
+            })
+
+            if (!response.ok) throw new Error('Failed to send verification code.')
+        } catch (error) {
+            setError(error.message || 'Failed to send verification code.')
+        }
+    }
+
 
     async function handleRegister () {
-        if (!userID || !username || !password || !phone) {
-            setError('All fields are required!')
+        if (!userID || !username || !password || !phone || !verificationCode || !inputCode) {
+            setError('All fields are required, including the verification code!')
+            return
+        }
+        if (inputCode !== verificationCode) {
+            setError('Verification code is incorrect!')
             return
         }
         const response = await fetch(`${apiUrl}:${apiPort}/register`, {
@@ -30,29 +68,20 @@ function Register ({ onClose }) {
                 password: password,
                 email: email,
                 phone: phone,
-                studentId: userID,
+                studentId: userID, // Changed from studentId to userID to match the state name
             }),
         })
 
-        // const data = await response.json();
-
-        // Start by checking the response status
         if (response.ok) {
-            // Response is OK, but there's no content to parse.
-            // Proceed with the assumption that registration was successful.
-            // Update context or state as necessary here
-            setContextUsername(username)
-            setContextUserID(userID)
-            // Close the modal or navigate away
+            // console.log("OKK")
+            // setContextUsername(username);
+            // setContextUserID(userID);
             onClose()
-
         } else {
-            // If the request was not successful, try to parse the error and display it.
             try {
                 const data = await response.json()
                 setError(data.message || 'An error occurred during registration.')
             } catch (error) {
-                // If parsing the JSON failed (e.g., due to an empty body), fall back to a default error message.
                 setError('An error occurred during registration.')
             }
         }
@@ -71,7 +100,7 @@ function Register ({ onClose }) {
             <Input
                 value={userID}
                 onChange={(e) => setUserID(e.target.value)}
-                placeholder="User ID"
+                placeholder="WashU Student ID"
                 style={{ marginBottom: '10px' }}
             />
             <Input.Password
@@ -80,19 +109,31 @@ function Register ({ onClose }) {
                 placeholder="Password"
                 style={{ marginBottom: '10px' }}
             />
-            <Input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
-                style={{ marginBottom: '10px' }}
-            />
-            <Input
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="Phone Number"
-                style={{ marginBottom: '20px' }}
-            />
+            <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '10px' }}>
+                <Input
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="Phone Number"
+                    style={{ marginBottom: '10px' }}
+                />
+                <Input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email"
+                    style={{ marginBottom: '10px' }}
+                />
+                <div style={{ display: 'flex', marginBottom: '20px' }}>
+                    <Input
+                        value={inputCode}
+                        onChange={(e) => setInputCode(e.target.value)}
+                        placeholder="Email Verification Code"
+                        style={{ flexGrow: 1, marginRight: '10px' }}
+                    />
+                    <Button onClick={sendVerificationCode}>Send Verification Code</Button>
+                </div>
+            </div>
+
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Button type="primary" onClick={handleRegister}>Register</Button>
             </div>

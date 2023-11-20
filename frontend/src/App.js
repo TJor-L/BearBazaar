@@ -2,11 +2,13 @@ import logo from './logo.png';
 import './App.css';
 import Navigation from './navigation';
 import UserPanel from './userPanel/userPanel';
-import {useContext, useState} from 'react';
+import React, {useContext, useState} from 'react';
+import Draggable from 'react-draggable';
 import * as Const from './const';
 import UserContext from './contexts/userContext';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 
+import ChatBox from "./modules/chatBox";
 import UserPage from './pages/user';
 import HomePage from './pages/home';
 import SearchingPage from './pages/searching';
@@ -15,7 +17,7 @@ import PostItem from "./pages/postItem";
 import PostedItems from "./pages/postedItem";
 import Transactions from "./pages/transactionPage";
 
-import { Layout} from 'antd';
+import {Layout, Button, Modal} from 'antd';
 const { Header, Content } = Layout;
 
 function App() {
@@ -32,10 +34,10 @@ function App() {
     const initialUserID = storedUserIDSession || storedUserIDLocal;
 
     const [selectedUserPanel, setSelectedUserPanel] = useState(Const.CLOSE);
+    const [showChatBox, setShowChatBox] = useState(false);
     const [contextUsername, setContextUsername] = useState(initialUsername || '');
     const [contextUserID, setContextUserID] = useState(initialUserID || '');
 
-  //open selected user panel
   function handleOnUserPanelClick(panelName) {
     setSelectedUserPanel(panelName);
   }
@@ -54,7 +56,9 @@ function App() {
 
         return children;
     }
-
+    const toggleChatBox = () => {
+        setShowChatBox(!showChatBox);
+    };
     function checkAuthFunction() {
         // Check if an auth token exists in local or session storage
         const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
@@ -76,12 +80,30 @@ function App() {
                             <Route path="/user/:urlUserID" element={<UserPage />} />
                             <Route path="/home" element={<HomePage />} />
                             <Route path="/searching" element={<SearchingPage />} />
-                            <Route path="/item/:itemID" element={<PrivateRoute><ItemPage/></PrivateRoute>} />
+                            <Route path="/item/:itemID" element={<ItemPage/>} />
                             <Route path="/postitem" element={<PrivateRoute><PostItem/></PrivateRoute>} />
                             <Route path="/posted-item" element={<PrivateRoute><PostedItems/></PrivateRoute>} />
                             <Route path="/transactions" element={<PrivateRoute><Transactions/></PrivateRoute>} />
                             <Route path="/" element={<HomePage />} exact />
                         </Routes>
+                        {
+                            showChatBox && (
+                               <ChatBox onClose={toggleChatBox}/>
+                            )
+                        }
+
+
+                            {contextUsername!=='' &&
+                                <Draggable>
+                                    <Button className="chat-toggle-button" onClick={toggleChatBox}  style={{
+                                        position: 'fixed',
+                                        left: `${window.innerWidth - 200}px`,
+                                        top: `${window.innerHeight - 100}px`
+                                    }} type="primary" shape="round" size={'large'}>
+                                        Chat
+                                    </Button>
+                                </Draggable>
+                            }
                     </Content>
                 </Layout>
             </Router>

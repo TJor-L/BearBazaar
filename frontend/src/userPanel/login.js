@@ -1,15 +1,15 @@
 import UserContext from '../contexts/userContext'
 import { useContext, useState } from 'react'
-import { Input, Button, Alert, Checkbox } from 'antd';
-import { EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons';
+import { Input, Button, Alert, Checkbox } from 'antd'
+import { EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons'
 
-const apiUrl = process.env.BACKEND_URL || 'http://localhost';
-const apiPort = process.env.BACKEND_PORT || '8080';
+const apiUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost'
+const apiPort = process.env.REACT_APP_BACKEND_PORT || '8080'
 function Login ({ onClose }) {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [rememberMe, setRememberMe] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const {
         contextUsername,
         setContextUsername,
@@ -20,11 +20,11 @@ function Login ({ onClose }) {
 
     const handleLogin = async () => {
         setError(null)
-        setIsLoading(true);
+        setIsLoading(true)
 
         if (!username || !password) {
             setError('Username and password are required')
-            setIsLoading(false);
+            setIsLoading(false)
             return
         }
         //console.log(username, password)
@@ -45,13 +45,13 @@ function Login ({ onClose }) {
                 const { token, userId } = await response.json()  // Extract token from response body (adjust depending on your backend's response structure)
                 //localStorage.setItem('authToken', token)  // Store the token (consider more secure alternatives in a production environment)
                 if (rememberMe) {
-                    localStorage.setItem('authToken', token);
-                    localStorage.setItem('username', username);
-                    localStorage.setItem('userID', userId);
+                    localStorage.setItem('authToken', token)
+                    localStorage.setItem('username', username)
+                    localStorage.setItem('userID', userId)
                 } else {
-                    sessionStorage.setItem('authToken', token);
-                    sessionStorage.setItem('username', username);
-                    sessionStorage.setItem('userID', userId);
+                    sessionStorage.setItem('authToken', token)
+                    sessionStorage.setItem('username', username)
+                    sessionStorage.setItem('userID', userId)
                 }
                 onClose()
                 setContextUserID(userId)
@@ -69,7 +69,7 @@ function Login ({ onClose }) {
             // Handle network errors or any other issues related to the fetch call
             setError('There was a problem logging in')
         } finally {
-            setIsLoading(false);
+            setIsLoading(false)
         }
     }
     return (

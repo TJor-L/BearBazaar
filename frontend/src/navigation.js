@@ -1,17 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useContext} from 'react';
 import * as Const from './const';
 import UserContext from './contexts/userContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import SearchBar from './modules/searchBar';
 import { Menu, Button} from 'antd';
+import { LeftOutlined } from '@ant-design/icons';
 import logo from "./logo.png";  // <-- Import antd Menu
 
 function Navigation({ onUserPanelClick }) {
 
     const { contextUsername, contextUserID} = useContext(UserContext);
+    const navigate = useNavigate();
 
     return (
         <Menu mode="horizontal" style={{ width: '100%',height: '100%', marginRight: '0%'}}>
+            <Menu.Item key="back" style={{ marginRight: '10px' }}>
+                <Button icon={<LeftOutlined />} onClick={() => navigate(-1)}></Button>
+            </Menu.Item>
             <Menu.Item key="home">
                 <Link to={Const.HOME}>
                     <img src={logo} className="App-logo" alt="logo" style={{ width: '50px', height: '50px', marginTop: '10px' }} />

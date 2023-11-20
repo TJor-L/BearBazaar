@@ -6,8 +6,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import * as Const from "../const"
 
 const { Content } = Layout
-const apiUrl = process.env.BACKEND_URL || 'http://localhost';
-const apiPort = process.env.BACKEND_PORT || '8080';
+const apiUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost'
+const apiPort = process.env.REACT_APP_BACKEND_PORT || '8080'
 function UserProfilePage () {
   const { contextUsername, contextUserID } = useContext(UserContext)
   const { urlUserID } = useParams()
@@ -29,7 +29,8 @@ function UserProfilePage () {
         return response.json()
       })
       .then(data => {
-        setEmail(data.email || 'fake@email.com'); // fake data
+        console.log(data)
+        setEmail(data.email.address || 'fake@email.com') // fake data
         setPhone(data.phone)
         setUserName(data.username)
         setUserDescription(data.description)
@@ -120,7 +121,7 @@ function UserProfilePage () {
               <Card>
                 {isEditing ? (
                   <>
-                    <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" style={{ marginBottom: '10px' }} />
+                    <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" style={{ marginBottom: '10px' }} readOnly={true} />
                     <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone Number" style={{ marginBottom: '10px' }} />
                     {/*<Input.Password*/}
                     {/*    value={password}*/}
@@ -167,7 +168,7 @@ function UserProfilePage () {
             {contextUserID == urlUserID ? (
               <Col span={12} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 <Button onClick={() => navigate('/posted-item')}>My Posted Items</Button>
-                <Button onClick={() => navigate('/transactions')}>Transactions</Button>
+                <Button onClick={() => navigate('/transactions')}>My Transactions</Button>
                 {/*<Button onClick={() => navigate('/C')}>C</Button>
                 <Button onClick={() => navigate('/D')}>D</Button> */}
                 <Card title="Description" bordered={true} style={{ width: "100%" }}>
@@ -178,7 +179,7 @@ function UserProfilePage () {
                         onChange={(e) => setUserDescription(e.target.value)}
                         placeholder="User Description"
                         style={{ marginBottom: '10px' }}
-                        rows={4} // 你可以根据需要设置这个值来调整高度
+                        rows={4}
                       />
                       <Button type="primary" onClick={handleSaveDescription}>Save</Button>
 

@@ -4,9 +4,10 @@ import { Button, Input, message, Form, Alert, Upload, Layout, Row, Col, Select }
 import { UploadOutlined } from '@ant-design/icons'
 import TextArea from "antd/es/input/TextArea"
 import { useNavigate } from "react-router-dom"
+import categories from "../categories";
 
-const apiUrl = process.env.BACKEND_URL || 'http://localhost'; // 默认值为'http://www.dijkstraliu.com'
-const apiPort = process.env.BACKEND_PORT || '8080'; // 默认值为'5000'
+const apiUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost' // 默认值为'http://www.dijkstraliu.com'
+const apiPort = process.env.REACT_APP_BACKEND_PORT || '8080' // 默认值为'5000'
 
 const { Content } = Layout
 function PostItem () {
@@ -69,7 +70,7 @@ function PostItem () {
         <Row justify="center" gutter={32} style={{ height: '100%', marginTop: "3%" }}>
           <Col span={12}>
             <Form layout="vertical">
-              <Form.Item label="Name" required>
+              <Form.Item label="Item Name" required>
                 <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" />
               </Form.Item>
               <Form.Item label="Description" required>
@@ -77,14 +78,15 @@ function PostItem () {
               </Form.Item>
               <Form.Item label="Category" required>
                 <Select
-                  value={category}
-                  onChange={(value) => setCategory(value)}
-                  placeholder="Category"
+                    value={category}
+                    onChange={setCategory} // Simplified for brevity
+                    placeholder="Category"
                 >
-                  <Option value="fashion">Fashion</Option>
-                  <Option value="sport">Sport</Option>
-                  <Option value="electro">Electro</Option>
-                  <Option value="book">Book</Option>
+                  {categories.map(cat => (
+                      <Select.Option key={cat.value} value={cat.value}>
+                        {cat.label}
+                      </Select.Option>
+                  ))}
                 </Select>
               </Form.Item>
               <Form.Item label="Estimated Price" required>

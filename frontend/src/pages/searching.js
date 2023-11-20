@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Card, Layout, List, Typography } from 'antd'
 import { Link } from 'react-router-dom'
-import fakeItems from "../fakedata/fakeitems"
+import fakeItems from "../fakedata/fakeItems"
 
 const { Content } = Layout
-const apiUrl = process.env.BACKEND_URL || 'http://localhost';
-const apiPort = process.env.BACKEND_PORT || '8080';
+const apiUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost'
+const apiPort = process.env.REACT_APP_BACKEND_PORT || '8080'
 function SearchingPage () {
     const [searchParams] = useSearchParams()
     const [filteredItems, setFilteredItems] = useState([])
@@ -22,7 +22,6 @@ function SearchingPage () {
                 const minPrice = parseFloat(searchParams.get('minPrice') || 0)
                 const maxPrice = parseFloat(searchParams.get('maxPrice') || Infinity)
                 const categories = searchParams.get('categories')?.split(',') || []  // Assume categories are comma-separated in the URL
-
                 const response = await fetch(`${apiUrl}:${apiPort}/items`)
 
                 if (!response.ok) {
@@ -40,7 +39,7 @@ function SearchingPage () {
                     const matchesPriceRange = item.price >= minPrice && item.price <= maxPrice
 
                     // Check if item matches any of the selected categories. If no categories are selected, show all items.
-                    const matchesCategory = categories.includes('all') || categories.includes(item.category)
+                    const matchesCategory = categories.includes('all') || categories.includes(item.category) || categories.includes("")
 
                     return matchesSearchKey && matchesPriceRange && matchesCategory
                 })

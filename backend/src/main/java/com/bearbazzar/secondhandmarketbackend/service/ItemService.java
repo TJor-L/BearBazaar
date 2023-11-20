@@ -72,7 +72,14 @@ public class ItemService {
         if(!itemRepository.existsById(id)) {
             throw new ItemNoExistException("Item does not exists");
         }
-          itemRepository.deleteById(id);
+        Optional<Item> optionalItem = itemRepository.findById(id);
+        if(optionalItem.isPresent()) {
+            Item existItem = optionalItem.get();
+            if( existItem.getStatus() != Status.AVAILABLE) {
+                throw new ItemNoExistException("Item is sold, you can't delete it!");
+            }
+        }
+        itemRepository.deleteById(id);
     }
     public List<Item> GetItemByOwner(User owner){
         if(!userRepository.existsByUsername(owner.getUsername())){

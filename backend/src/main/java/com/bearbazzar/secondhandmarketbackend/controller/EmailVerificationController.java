@@ -3,6 +3,7 @@ package com.bearbazzar.secondhandmarketbackend.controller;
 import com.bearbazzar.secondhandmarketbackend.model.Email;
 import com.bearbazzar.secondhandmarketbackend.service.EmailVerificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,12 +14,14 @@ public class EmailVerificationController {
     public EmailVerificationController(EmailVerificationService emailVerificationService) {
         this.emailVerificationService = emailVerificationService;
     }
-    @PostMapping ("/token")
-    public void updateToken(@RequestParam("token") String token, @RequestParam("address") String email) {
-        emailVerificationService.updateToken(token,email);
-    }
-    @PostMapping("/verify")
-    public void verifyEmail(@RequestParam("address") String email,@RequestParam("token") String token) {
-        emailVerificationService.verifyEmail(email,token);
+    @PostMapping("/send-code")
+    public ResponseEntity<String> sendVerificationCode(@RequestParam("email") String email,@RequestParam("code") String code) {
+        boolean isSent = emailVerificationService.sendEmail(email, code);
+        if (isSent) {
+            return ResponseEntity.ok("Verification code sent successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Failed to send verification code.");
+        }
     }
 }

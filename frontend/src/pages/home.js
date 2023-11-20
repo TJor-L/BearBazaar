@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Card, Layout, List, Typography } from 'antd'
 import { Link } from 'react-router-dom'
 
-const apiUrl = process.env.BACKEND_URL || 'http://localhost';
-const apiPort = process.env.BACKEND_PORT || '8080';
+const apiUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost'
+const apiPort = process.env.REACT_APP_BACKEND_PORT || '8080'
 
 const { Content } = Layout
 
