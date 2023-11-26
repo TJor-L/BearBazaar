@@ -48,8 +48,15 @@ function Register ({ onClose }) {
         }
     }
 
-
     async function handleRegister () {
+        if (!userID.match(/^\d{6}$/)) {
+            setError('Student ID illegal!');
+            return;
+        }
+        if (!phone.match(/^\d{10,13}$/)) {
+            setError('Phone number illegal!');
+            return;
+        }
         if (!userID || !username || !password || !phone || !verificationCode || !inputCode) {
             setError('All fields are required, including the verification code!')
             return

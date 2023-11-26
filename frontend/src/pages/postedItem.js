@@ -32,7 +32,6 @@ function PostedItems () {
         }
     }
 
-
     return (
         <Layout style={{ minHeight: '100vh' }}>
             <Content style={{ padding: '3%' }}>
