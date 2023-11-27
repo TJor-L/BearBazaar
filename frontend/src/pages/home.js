@@ -7,7 +7,6 @@ const apiPort = process.env.REACT_APP_BACKEND_PORT || '8080'
 
 const { Content } = Layout
 
-
 function HomePage () {
     const [items, setItems] = useState([])
 
@@ -58,4 +57,3 @@ function HomePage () {
 }
 
 export default HomePage;
-
