@@ -11,7 +11,6 @@ function Filter ({ onCancel, onSubmit }) {
     const [categoryFilter, setCategoryFilter] = useState(["all"])
     const [priceRange, setPriceRange] = useState([0, 1000])
 
-
     const categoryValues = ['all', ...categories.map(cat => cat.value)];
 
     function onFilterSubmit () {
@@ -24,15 +23,20 @@ function Filter ({ onCancel, onSubmit }) {
         onSubmit(filterData)
     }
 
-    function handleCategoryChange (value) {
-        // If "all" is selected, reset other selections
-        if (value.includes("all")) {
-            setCategoryFilter(["all"])
+    function handleCategoryChange(value) {
+        // If 'all' is in the selection and it's not the only selected value
+        if (value.includes('all') && value.length > 1) {
+            if (value[value.length - 1] === 'all') {
+                // User has just clicked 'all', reset to only 'all'
+                setCategoryFilter(['all']);
+            } else {
+                // User has selected a category, remove 'all' from the selection
+                setCategoryFilter(value.filter(cat => cat !== 'all'));
+            }
         } else {
-            setCategoryFilter(value)
+            setCategoryFilter(value);
         }
     }
-
 
     return (
         <div className='filter'>
@@ -51,7 +55,7 @@ function Filter ({ onCancel, onSubmit }) {
                     </label>
                 </Col>
                 <Col span={16} style={{ marginTop: '20px' }}>
-                    <label>Price Range:</label>
+                    <label>Price Range: {priceRange[0]} - {priceRange[1]}</label>
                     <Slider
                         range
                         value={priceRange}
