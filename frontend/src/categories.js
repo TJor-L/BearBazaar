@@ -1,18 +1,18 @@
 const categories = [
-    { label: "Fashion", value: "fashion" },
-    { label: "Sport", value: "sport" },
-    { label: "Electro", value: "electro" },
-    { label: "Book", value: "book" },
-    { label: "Home & Garden", value: "home_garden" },
-    { label: "Beauty & Health", value: "beauty_health" },
-    { label: "Toys & Games", value: "toys_games" },
-    { label: "Food & Grocery", value: "food_grocery" },
-    { label: "Tech & Gadgets", value: "tech_gadgets" },
-    { label: "Art & Crafts", value: "art_crafts" },
-    { label: "Pets", value: "pets" },
-    { label: "Automotive", value: "automotive" },
-    { label: "Music", value: "music" },
-    { label: "Office Supplies", value: "office_supplies" }
+    { label: "Fashion", value: "Fashion" },
+    { label: "Sport", value: "Sport" },
+    { label: "Electro", value: "Electro" },
+    { label: "Book", value: "Book" },
+    { label: "Home & Garden", value: "Home & Garden" },
+    { label: "Beauty & Health", value: "Beauty & Health" },
+    { label: "Toys & Games", value: "Toys & Games" },
+    { label: "Food & Grocery", value: "Food & Grocery" },
+    { label: "Tech & Gadgets", value: "Tech & Gadgets" },
+    { label: "Art & Crafts", value: "Art & Crafts" },
+    { label: "Pets", value: "Pets" },
+    { label: "Automotive", value: "Automotive" },
+    { label: "Music", value: "Music" },
+    { label: "Office Supplies", value: "Office Supplies" }
 ];
 
 export default categories;
