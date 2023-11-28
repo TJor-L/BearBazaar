@@ -20,9 +20,18 @@ public class chatController {
      * @return
      * @throws Exception
      */
+//    @MessageMapping("/send")
+//    @SendTo("/topic/chatspace")
+//    public Message send(@Param("sender")String sender,@Param("receiver") String receiver,@Param("content") String content) throws Exception {
+//        System.out.println(sender + receiver + content);
+//        return new Message(sender, receiver, content);
+//    }
     @MessageMapping("/send")
     @SendTo("/topic/chatspace")
-    public Message send(@Param("sender")String sender,@Param("receiver") String receiver,@Param("content") String content) throws Exception {
-        return new Message(sender, receiver, content);
+    public Message send(Message message) throws Exception {
+        // 处理消息
+        System.out.println("123123123" + message.toString());
+        return message;
     }
+
 }

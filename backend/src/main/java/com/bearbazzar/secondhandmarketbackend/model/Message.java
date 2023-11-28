@@ -24,17 +24,13 @@ public class Message {
     @Column(name = "content", length = 500)
     private String content;
 
+    @Column(name = "send_date", length = 1000)
+    private String send_date;
+
+
     public Message() {
     }
 
-    // Constructor: Full constructor
-    public Message(String sender, String  receiver, String content) {
-        this.sender = sender;
-        this.receiver = receiver;
-        this.content = content;
-    }
-
-    // Getters and Setters
 
     public Long getId() {
         return id;
@@ -48,16 +44,24 @@ public class Message {
         return sender;
     }
 
-    public void setSenderId(String senderId) {
-        this.sender = senderId;
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 
-    public String getReceiverId() {
+    public String getReceiver() {
         return receiver;
     }
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
+    }
 
-    public void setReceiverId(String receiverId) {
-        this.receiver = receiverId;
+    public String getSend_date() {
+        return send_date;
+    }
+
+
+    public void setSend_date(String send_date) {
+        this.send_date = send_date;
     }
 
     public String getContent() {
