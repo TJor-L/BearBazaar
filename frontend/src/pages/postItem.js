@@ -59,8 +59,49 @@ function PostItem () {
     }
   }
 
-  const handleUploadChange = ({ fileList }) => {
-    setFileList(fileList)
+  const handleUploadChange = async ({ fileList: newFileList }) => {
+    const processedFiles = await Promise.all(newFileList.map(async file => {
+      if (!file.originFileObj) return file; // 如果文件没有originFileObj属性，则直接返回
+
+      const processedFile = await processImage(file.originFileObj);
+      return {
+        ...file,
+        originFileObj: processedFile,
+      };
+    }));
+
+    setFileList(processedFiles);
+  };
+
+  async function processImage(file) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        let [newWidth, newHeight] = img.width / img.height < 3 / 4 ?
+            [img.height * (3 / 4), img.height] :
+            [img.width, img.width * (4 / 3)];
+
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, newWidth, newHeight);
+
+        ctx.drawImage(img, (newWidth - img.width) / 2, (newHeight - img.height) / 2);
+
+        canvas.toBlob(blob => {
+          const newFile = new File([blob], file.name, { type: file.type });
+          resolve(newFile);
+        }, file.type);
+      };
+
+      img.onerror = reject;
+    });
   }
 
   return (

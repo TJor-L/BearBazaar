@@ -256,7 +256,7 @@ function Transactions () {
                                         }
                                         description={
                                             <div>
-                                                <div>Seller: {item.seller.username}</div>
+                                                <div>Buyer: {item.buyer.username}</div>
                                                 <div>Amount: {item.price}$</div>
                                                 <div>Status: {item.status}</div>
                                             </div>

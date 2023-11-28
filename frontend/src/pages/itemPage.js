@@ -98,6 +98,7 @@ function ItemPage () {
             })
             if (response.ok) {
                 setBids("")
+                message.success("Bid accepted successfully, go to User-> My Transactions to continue your progress!");
             } else {
                 const data = await response.json()
                 console.error('Failed to accept the bid:', data.message)

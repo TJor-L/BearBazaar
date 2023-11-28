@@ -96,15 +96,17 @@ function ChatBox({ ws, messages, onClose }) {
         let itemsDescription = '';
         if (items.length > 0) {
             // 取列表中前十个商品
+            console.log(items)
             const topItems = items.slice(0, 10);
             topItems.forEach((item, index) => {
-                itemsDescription += `\n${index + 1}. ${item.name} - ${item.description} (Price: $${item.price})`;
+                itemsDescription += `\n${index + 1}.  id: ${item.id} name: ${item.name} - description ${item.description} (Price: $${item.price}) img: ${item.image[0].url}`;
             });
         }
 
         const systemPrompt = {
             role: "system",
-            content: `You are 'BearAgent', a guide assistant for the WashU second-hand trading platform Bear Bazaar. Your role is to help recommend products to users. Here are some items you can recommend: ${itemsDescription}`
+            content: `You are 'BearAgent', a guide assistant for the WashU second-hand trading platform Bear Bazaar. Your role is to help recommend products to users. Here are some items you can recommend: ${itemsDescription}
+            \n Your output should be a JSON in this format: {"reply":"", "img":"", "id":""}, for the reply, you should put your reply message in it, for "img", you should put the link of image of the product you recommend, for the "id", you should put the id of the product you recommended"`
         };
 
         // 筛选与 Agent 的对话
@@ -132,7 +134,7 @@ function ChatBox({ ws, messages, onClose }) {
         // 调用 OpenAI API
         const completion = await openai.chat.completions.create({
             messages: history,
-            model: "gpt-3.5-turbo",
+            model: "gpt-4",
         });
 
         return completion.choices[0].message.content;
@@ -155,7 +157,8 @@ function ChatBox({ ws, messages, onClose }) {
         if (selectedUser === "Agent") {
             setSelectedUserMessages(prevMessages => [...prevMessages, newMsg]);
             const aiResponse = await getResponse(newMessage);
-
+            //const aiResponse = JSON.parse(aiResponseJSON);
+            console.log(aiResponse)
             // Create a message object for the AI response
             const responseMsg = {
                 sender: "Agent",
@@ -228,13 +231,39 @@ function ChatBox({ ws, messages, onClose }) {
                 </div>
                 <div className="message-area" >
                     <div className="messages" style={{ height: '50vh', overflowY: 'auto' }}>
-                    {selectedUserMessages.map((msg, index) => (
-                        <div key={index} className={`message ${msg.sender === contextUsername ? 'sent' : 'received'}`}>
-                            <div className="message-date">{msg.send_date}</div>
-                            <div className="message-content">{msg.content}</div>
-                        </div>
-                    ))}
+                        {selectedUserMessages.map((msg, index) => {
+                            // 尝试解析msg.content为JSON，如果失败则保留原始字符串
+                            let content, isJson = false;
+                            try {
+                                content = JSON.parse(msg.content);
+                                isJson = true;
+                            } catch (e) {
+                                content = msg.content;
+                            }
+
+                            return (
+                                <div key={index} className={`message ${msg.sender === contextUsername ? 'sent' : 'received'}`}>
+                                    <div className="message-date">{msg.send_date}</div>
+                                    <div className="message-content">
+                                        {isJson ? (
+                                            // 如果是JSON，则显示JSON中的reply和图片
+                                            <>
+                                                <div>{content.reply}</div>
+                                                <img src={content.img} alt="content" style={{ maxWidth: '30%', maxHeight: '50%' }} />
+                                                <br/>
+                                                <Button onClick={() => window.location.href = `/item/${content.id}`}>Go to Item</Button>
+                                            </>
+
+                                        ) : (
+                                            // 如果不是JSON，则显示原始字符串
+                                            <div>{content}</div>
+                                        )}
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
+
                     {selectedUser && <div className="message-input">
                         <Input value={newMessage} onChange={e => setNewMessage(e.target.value)} />
                         <Button onClick={handleSendMessage}>Send</Button>
