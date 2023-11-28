@@ -47,7 +47,7 @@ function HomePage () {
                                 <Card
                                     hoverable
                                     style={cardStyle}
-                                    cover={<img alt={item.name} src={item.image.length === 0 ? 'https://via.placeholder.com/150' : item.image[0].url} style={{ width: '100%', height: 'auto' }} />}
+                                    cover={<img alt={item.name} src={item.image.length === 0 ? 'https://via.placeholder.com/150' : item.image[0].url} style={{ width: '100%', height: '100%' }} />}
                                 >
                                     <Typography.Title level={4}>{item.itemName}</Typography.Title>
                                     <Typography.Text>Estimated Price: ${item.estimatedPrice}</Typography.Text>
