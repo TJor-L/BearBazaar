@@ -209,12 +209,19 @@ function ChatBox({ ws, messages, onClose }) {
             <div className="chat-box-container">
                 <div className="user-list" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
                     <div key="Agent" className="user-list-item" onClick={() => setSelectedUser("Agent")}>
-                        <Avatar icon={<UserOutlined />} />
+                        <Avatar
+                            src={`/agent.jpg`}
+                            size={36}
+                        />
                         <div className="username">BearAgent</div>
                     </div>
                     {usersWithChat.map(user => (
                         <div key={user} className="user-list-item" onClick={() => setSelectedUser(user)}>
-                            <Avatar icon={<UserOutlined />} />
+                            <Avatar
+                                src={user ? `https://ui-avatars.com/api/?name=${user}` : undefined}
+                                size={36}
+                                icon={!user && <UserOutlined />}
+                            />
                             <div className="username">{user}</div>
                         </div>
                     ))}

@@ -134,7 +134,7 @@ function App() {
         <UserContext.Provider value={{ contextUsername, setContextUsername, contextUserID, setContextUserID }}>
             <Router>
                 <Layout className="layout">
-                    <Header style={{ display: 'flex', alignItems: 'center' }}>
+                    <Header style={{ display: 'flex', alignItems: 'center', backgroundColor: 'white' }}>
                         <Navigation onUserPanelClick={handleOnUserPanelClick} />
                     </Header>
                     <Content>

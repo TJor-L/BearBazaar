@@ -114,7 +114,12 @@ function UserProfilePage () {
           <Row justify="center" gutter={32} style={{ height: '100%', marginTop: "50px" }}>
             <Col span={6}>
               <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-                <Avatar size={128} icon={<UserOutlined />} />
+                <Avatar
+                    src={userName ? `https://ui-avatars.com/api/?name=${userName}` : undefined}
+                    size={128}
+                    icon={!userName && <UserOutlined />}
+                />
+
                 <h2 style={{ marginTop: '20px' }}>{userName}</h2>
                 <p>ID: {urlUserID}</p>
               </div>
@@ -136,7 +141,10 @@ function UserProfilePage () {
                   <>
                     <List>
                       <List.Item>
-                        <List.Item.Meta title="Email" description={email} />
+                        <List.Item.Meta
+                            title="Email"
+                            description={<a href={`mailto:${email}`}>{email}</a>}
+                        />
                       </List.Item>
                       <List.Item>
                         <List.Item.Meta title="Phone" description={phone} />

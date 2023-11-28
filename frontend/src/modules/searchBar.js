@@ -61,11 +61,14 @@ function SearchBar () {
             <Input
                 value={searchKey}
                 onChange={(e) => setSearchKey(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSubmitSearch()}  // 使用 onKeyDown 检测回车键
                 placeholder="Search Bear Bazaar"
                 style={{ width: '54%' }}
             />
             <Button onClick={handleSubmitSearch} style={{ width: '20%', marginLeft: '3%' }}>Submit</Button>
         </Menu.Item>
+
+
     )
 }
 
