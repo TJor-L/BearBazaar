@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Slider, Select, Button, Row, Col } from 'antd'
+import { Slider, Select, Button, Row, Col, InputNumber } from 'antd'
 import fakeItems from "../fakedata/fakeItems"
 import categories from "../categories";
 
@@ -21,6 +21,18 @@ function Filter ({ onCancel, onSubmit }) {
             "maxPrice": maxPrice
         }
         onSubmit(filterData)
+    }
+
+    function onMinPriceChange(value) {
+        if (value <= priceRange[1]) { // Prevent the minimum price from being greater than the maximum
+            setPriceRange([value, priceRange[1]]);
+        }
+    }
+
+    function onMaxPriceChange(value) {
+        if (value >= priceRange[0]) { // Prevent the maximum price from being less than the minimum
+            setPriceRange([priceRange[0], value]);
+        }
     }
 
     function handleCategoryChange(value) {
@@ -54,14 +66,34 @@ function Filter ({ onCancel, onSubmit }) {
                         </Select>
                     </label>
                 </Col>
-                <Col span={16} style={{ marginTop: '20px' }}>
+                <Col span={24} style={{ marginTop: '20px' }}>
                     <label>Price Range: {priceRange[0]} - {priceRange[1]}</label>
+                    <Row>
+                        <Col span={12}>
+                            <InputNumber
+                                min={0}
+                                max={1000} // Can be adjusted as required
+                                value={priceRange[0]}
+                                onChange={onMinPriceChange}
+                                style={{ margin: '0 0px' }}
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <InputNumber
+                                min={0}
+                                max={1000} // Can be adjusted as required
+                                value={priceRange[1]}
+                                onChange={onMaxPriceChange}
+                                style={{ margin: '0 72px' }}
+                            />
+                        </Col>
+                    </Row>
                     <Slider
                         range
                         value={priceRange}
                         onChange={value => setPriceRange(value)}
                         min={0}
-                        max={500} // You can adjust the max value as required
+                        max={1000} // You can adjust the max value as required
                     />
                 </Col>
             </Row>

@@ -11,7 +11,6 @@ function SearchingPage () {
     const [searchParams] = useSearchParams()
     const [filteredItems, setFilteredItems] = useState([])
 
-
     const [items, setItems] = useState([])
 
     useEffect(() => {
@@ -52,8 +51,6 @@ function SearchingPage () {
 
         fetchData()
     }, [searchParams])
-
-
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
